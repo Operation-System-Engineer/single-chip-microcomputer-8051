@@ -1,0 +1,92 @@
+C51 COMPILER V6.23a  MAIN                                                                  11/13/2002 23:46:25 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c LARGE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <REG52.H>                /* special function register declarations   */
+   2                                            /* for the intended 8051 derivative         */
+   3          
+   4          #include <stdio.h>                /* prototype declarations for I/O functions */
+   5          
+   6          #ifdef MONITOR51                         /* Debugging with Monitor-51 needs   */
+              char code reserve [3] _at_ 0x23;         /* space for serial interrupt if     */
+              #endif                                   /* Stop Exection with Serial Intr.   */
+   9                                                   /* is enabled                        */
+  10          /*------------------------------------------------
+  11          The main C function.  Program execution starts
+  12          here after stack initialization.
+  13          ------------------------------------------------*/
+  14          void main (void) {
+  15   1      
+  16   1              int a[10],b[3][4],*p1,*p2,**p3,i,j;/*p3 是指向指针的指针变量*/
+  17   1      /*------------------------------------------------
+  18   1      Setup the serial port for 1200 baud at 16MHz.
+  19   1      ------------------------------------------------*/
+  20   1      #ifndef MONITOR51
+  21   1          SCON  = 0x50;                       /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  22   1          TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
+  23   1          TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
+  24   1          TR1   = 1;                  /* TR1:  timer 1 run                          */
+  25   1          TI    = 1;                  /* TI:   set TI to send first char of UART    */
+  26   1      #endif
+  27   1      /*------------------------------------------------
+  28   1      Note that an embedded program never exits (because
+  29   1      there is no operating system to return to).  It
+  30   1      must loop and execute forever.
+  31   1      ------------------------------------------------*/
+  32   1              for( i = 0 ; i < 10 ; i++)
+  33   1                      scanf( "%d", &a[i]) ;/*一维数组的输入*/
+  34   1              for (i=0;i<3;i++)
+  35   1                      for( j = 0 ; j < 4 ; j++ )
+  36   1                              scanf( "%d" , &b[i][j]) ;/*二维数组输入*/
+  37   1              for (p1=a,p3=&p1,i=0;i<10;i++)
+  38   1                      printf( "%4d" , *(*p3+i) ) ;/*用指向指针的指针变量输出一维数组*/
+  39   1              printf( "\n" ) ;
+  40   1              for (p1=a;p1-a<10;p1++)/* 用指向指针的指针变量输出一维数组*/
+  41   1                      {
+  42   2                              p3 =&p1 ;
+  43   2                              printf("%4d",**p3);
+  44   2                      }
+  45   1              printf( "\n" ) ;
+  46   1              for(i=0;i<3;i++)/* 用指向指针的指针变量输出二维数组*/
+  47   1                      {
+  48   2                              p2=b[i];
+  49   2                              p3=&p2;
+  50   2                              for (j=0;j<4;j++)
+  51   2                                      printf("%4d",*(*p3+j));
+  52   2                              printf("\n");
+  53   2                      }
+  54   1              for(i= 0 ; i < 3 ;i++)/*用指向指针的指针变量输出二维数组*/
+  55   1                      {
+C51 COMPILER V6.23a  MAIN                                                                  11/13/2002 23:46:25 PAGE 2   
+
+  56   2                              p2 =b[i];
+  57   2                              for(p2 =b[i] ; p2-b[i]<4;p2++)
+  58   2                              {
+  59   3                                      p3 =&p2;
+  60   3                                      printf("%4d",**p3) ;
+  61   3                              }
+  62   2                              printf("\n");
+  63   2                      }
+  64   1          while (1) {};
+  65   1      }
+  66          
+  67          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    876    ----
+   CONSTANT SIZE    =      9    ----
+   XDATA SIZE       =   ----      57
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

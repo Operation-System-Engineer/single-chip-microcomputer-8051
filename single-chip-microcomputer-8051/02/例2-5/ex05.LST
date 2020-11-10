@@ -1,0 +1,71 @@
+C51 COMPILER V6.23a  EX05                                                                  11/05/2002 20:02:14 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE EX05
+OBJECT MODULE PLACED IN ex05.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ex05.c DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <REG52.H>                /* special function register declarations   */
+   2                                            /* for the intended 8051 derivative         */
+   3          
+   4          #include <stdio.h>                /* prototype declarations for I/O functions */
+   5          #include <float.h>
+   6          
+   7          #ifdef MONITOR51                         /* Debugging with Monitor-51 needs   */
+              char code reserve [3] _at_ 0x23;         /* space for serial interrupt if     */
+              #endif                                   /* Stop Exection with Serial Intr.   */
+  10                                                   /* is enabled                        */
+  11          
+  12          #define LOWER 0 /* 表的下限*/
+  13          #define UPPER 300 /* 表的上限*/
+  14          #define STEP 20 /* 步长*/
+  15          
+  16          /*------------------------------------------------
+  17          The main C function.  Program execution starts
+  18          here after stack initialization.
+  19          ------------------------------------------------*/
+  20          /* 打印华氏-摄氏温度对照表*/
+  21          void main (void) {
+  22   1      
+  23   1      int fahr;
+  24   1      /*------------------------------------------------
+  25   1      Setup the serial port for 1200 baud at 16MHz.
+  26   1      ------------------------------------------------*/
+  27   1      #ifndef MONITOR51
+  28   1          SCON  = 0x50;                       /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  29   1          TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
+  30   1          TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
+  31   1          TR1   = 1;                  /* TR1:  timer 1 run                          */
+  32   1          TI    = 1;                  /* TI:   set TI to send first char of UART    */
+  33   1      #endif
+  34   1      
+  35   1      /*------------------------------------------------
+  36   1      Note that an embedded program never exits (because
+  37   1      there is no operating system to return to).  It
+  38   1      must loop and execute forever.
+  39   1      ------------------------------------------------*/
+  40   1      
+  41   1              for ( fahr = LOWER; fahr <= UPPER; fahr = fahr + STEP )
+  42   1                      printf ( "%3d %6.1f\n", fahr, (5.0 / 9.0) * (fahr - 32 ) );
+  43   1      
+  44   1              while (1) {};
+  45   1      }
+  46          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     91    ----
+   CONSTANT SIZE    =     11    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V6.23a  EX05                                                                  11/05/2002 20:02:14 PAGE 2   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

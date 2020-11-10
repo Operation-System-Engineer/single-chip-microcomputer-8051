@@ -1,0 +1,308 @@
+BL51 BANKED LINKER/LOCATER V4.23                                                        09/08/2003  17:02:34  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V4.23, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE withPC.obj TO withpc
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  withPC.obj (WITHPC)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDOPTR)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?IMUL)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  withpc (WITHPC)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0013H     UNIT         _DATA_GROUP_
+            DATA    001BH     0001H     UNIT         ?DT?WITHPC
+                    001CH     0004H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?WITHPC
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0006H     UNIT         ?C_INITSEG
+                    0009H     0002H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    009AH     006DH     UNIT         ?PR?MAIN?WITHPC
+            CODE    0107H     004CH     UNIT         ?PR?_SEND?WITHPC
+            CODE    0153H     003FH     UNIT         ?C?LIB_CODE
+            CODE    0192H     002AH     UNIT         ?PR?INITIAL?WITHPC
+            CODE    01BCH     0020H     UNIT         ?PR?RCV_INT?WITHPC
+            CODE    01DCH     001EH     UNIT         ?PR?_DELAY?WITHPC
+
+
+
+OVERLAY MAP OF MODULE:   withpc (WITHPC)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?WITHPC
+  +--> ?C_INITSEG
+
+?PR?MAIN?WITHPC                0008H    000EH
+  +--> ?PR?INITIAL?WITHPC
+  +--> ?PR?_DELAY?WITHPC
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:34  PAGE 2
+
+
+  +--> ?PR?_SEND?WITHPC
+
+?PR?_SEND?WITHPC               0016H    0005H
+
+
+
+SYMBOL TABLE OF MODULE:  withpc (WITHPC)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        WITHPC
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00B0H.4       PUBLIC        T0
+  B:00D0H.6       PUBLIC        AC
+  B:00B0H.5       PUBLIC        T1
+  B:00A8H.7       PUBLIC        EA
+  C:0107H         PUBLIC        _send
+  D:00A8H         PUBLIC        IE
+  B:0080H.0       PUBLIC        P0_0
+  B:0090H.0       PUBLIC        P1_0
+  B:0080H.1       PUBLIC        P0_1
+  B:00A0H.0       PUBLIC        P2_0
+  B:0090H.1       PUBLIC        P1_1
+  B:0080H.2       PUBLIC        P0_2
+  B:00A0H.1       PUBLIC        P2_1
+  B:0090H.2       PUBLIC        P1_2
+  B:0080H.3       PUBLIC        P0_3
+  B:00A0H.2       PUBLIC        P2_2
+  B:0090H.3       PUBLIC        P1_3
+  B:0080H.4       PUBLIC        P0_4
+  B:00B0H.2       PUBLIC        P3_2
+  B:00A0H.3       PUBLIC        P2_3
+  B:0090H.4       PUBLIC        P1_4
+  B:0080H.5       PUBLIC        P0_5
+  B:00B0H.3       PUBLIC        P3_3
+  B:00A0H.4       PUBLIC        P2_4
+  B:0090H.5       PUBLIC        P1_5
+  B:0080H.6       PUBLIC        P0_6
+  B:00B0H.7       PUBLIC        RD
+  B:00A0H.5       PUBLIC        P2_5
+  B:0090H.6       PUBLIC        P1_6
+  B:0080H.7       PUBLIC        P0_7
+  B:00A0H.6       PUBLIC        P2_6
+  B:0090H.7       PUBLIC        P1_7
+  B:00A8H.4       PUBLIC        ES
+  B:00A0H.7       PUBLIC        P2_7
+  D:00B8H         PUBLIC        IP
+  B:0098H.0       PUBLIC        RI
+  B:00B0H.2       PUBLIC        INT0
+  B:00D0H.7       PUBLIC        CY
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:34  PAGE 3
+
+
+  B:00B8H.4       PUBLIC        PS
+  B:00D0H.2       PUBLIC        OV
+  C:009AH         PUBLIC        main
+  B:00B0H.6       PUBLIC        WR
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:0088H.1       PUBLIC        IE0
+  B:0088H.3       PUBLIC        IE1
+  D:00E0H         PUBLIC        ACC
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:0088H.7       PUBLIC        TF1
+  B:0098H.2       PUBLIC        RB8
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  D:008DH         PUBLIC        TH1
+  B:0098H.3       PUBLIC        TB8
+  B:00A8H.2       PUBLIC        EX1
+  B:0088H.2       PUBLIC        IT1
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  D:008BH         PUBLIC        TL1
+  B:0098H.5       PUBLIC        SM2
+  B:00B8H.1       PUBLIC        PT0
+  B:00B8H.3       PUBLIC        PT1
+  B:00D0H.3       PUBLIC        RS0
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  B:0088H.6       PUBLIC        TR1
+  B:00B8H.0       PUBLIC        PX0
+  B:00B8H.2       PUBLIC        PX1
+  B:0098H.4       PUBLIC        REN
+  B:0020H.0       PUBLIC        EvRcv
+  D:001BH         PUBLIC        rcvdata
+  C:0192H         PUBLIC        initial
+  B:00B0H.0       PUBLIC        RXD
+  B:00B0H.1       PUBLIC        TXD
+  C:01DCH         PUBLIC        _delay
+  B:00D0H.5       PUBLIC        F0
+  C:01BCH         PUBLIC        Rcv_INT
+  -------         PROC          MAIN
+  -------         DO            
+  D:0008H         SYMBOL        datacomm
+  D:000EH         SYMBOL        datarecv
+  D:0014H         SYMBOL        count
+  D:0015H         SYMBOL        datahand
+  -------         ENDDO         
+  C:009AH         LINE#         65
+  C:009AH         LINE#         66
+  C:009AH         LINE#         68
+  C:009DH         LINE#         69
+  C:00A0H         LINE#         70
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:34  PAGE 4
+
+
+  C:00A3H         LINE#         71
+  C:00A6H         LINE#         72
+  C:00A9H         LINE#         73
+  C:00ACH         LINE#         74
+  C:00AFH         LINE#         75
+  C:00B2H         LINE#         76
+  C:00B5H         LINE#         77
+  C:00B7H         LINE#         78
+  C:00B7H         LINE#         79
+  C:00B7H         LINE#         80
+  C:00BAH         LINE#         81
+  C:00BAH         LINE#         82
+  C:00BFH         LINE#         83
+  C:00C1H         LINE#         84
+  C:00C8H         LINE#         85
+  C:00CAH         LINE#         86
+  C:00CAH         LINE#         87
+  C:00CCH         LINE#         88
+  C:00CEH         LINE#         89
+  C:00CEH         LINE#         90
+  C:00DBH         LINE#         91
+  C:00DBH         LINE#         92
+  C:00DBH         LINE#         93
+  C:00DBH         LINE#         94
+  C:00DEH         LINE#         95
+  C:00E5H         LINE#         96
+  C:00E7H         LINE#         97
+  C:00E9H         LINE#         98
+  C:00E9H         LINE#         99
+  C:00EEH         LINE#         100
+  C:00EEH         LINE#         101
+  C:00F8H         LINE#         102
+  C:0105H         LINE#         103
+  -------         ENDPROC       MAIN
+  -------         PROC          INITIAL
+  C:0192H         LINE#         106
+  C:0192H         LINE#         107
+  C:0192H         LINE#         108
+  C:0195H         LINE#         109
+  C:0198H         LINE#         110
+  C:019BH         LINE#         112
+  C:019EH         LINE#         113
+  C:01A1H         LINE#         115
+  C:01A4H         LINE#         116
+  C:01A7H         LINE#         117
+  C:01AAH         LINE#         118
+  C:01ADH         LINE#         121
+  C:01AFH         LINE#         122
+  C:01B1H         LINE#         123
+  C:01B3H         LINE#         124
+  C:01B5H         LINE#         125
+  C:01B7H         LINE#         126
+  C:01B9H         LINE#         127
+  C:01BBH         LINE#         128
+  -------         ENDPROC       INITIAL
+  -------         PROC          _SEND
+  D:0016H         SYMBOL        temp
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:34  PAGE 5
+
+
+  D:0019H         SYMBOL        j
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0107H         LINE#         130
+  C:0111H         LINE#         131
+  C:0111H         LINE#         132
+  C:0114H         LINE#         133
+  C:0116H         LINE#         134
+  C:0118H         LINE#         135
+  C:012FH         LINE#         136
+  C:012FH         LINE#         137
+  C:013CH         LINE#         138
+  C:0140H         LINE#         139
+  C:0142H         LINE#         140
+  C:0145H         LINE#         141
+  C:0147H         LINE#         142
+  C:014EH         LINE#         143
+  C:0150H         LINE#         144
+  C:0152H         LINE#         145
+  -------         ENDPROC       _SEND
+  -------         PROC          RCV_INT
+  C:01BCH         LINE#         147
+  C:01C0H         LINE#         150
+  C:01C2H         LINE#         151
+  C:01C5H         LINE#         152
+  C:01C5H         LINE#         153
+  C:01C7H         LINE#         154
+  C:01CFH         LINE#         155
+  C:01CFH         LINE#         156
+  C:01D1H         LINE#         157
+  C:01D3H         LINE#         158
+  C:01D3H         LINE#         159
+  C:01D5H         LINE#         160
+  C:01D5H         LINE#         161
+  C:01D7H         LINE#         162
+  -------         ENDPROC       RCV_INT
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        i
+  -------         DO            
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:01DCH         LINE#         165
+  C:01DCH         LINE#         166
+  C:01DCH         LINE#         167
+  C:01DFH         LINE#         168
+  C:01E5H         LINE#         169
+  C:01F9H         LINE#         170
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        WITHPC
+
+  -------         MODULE        ?C?CLDOPTR
+  C:0153H         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?IMUL
+  C:0180H         PUBLIC        ?C?IMUL
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:34  PAGE 6
+
+
+  -------         ENDMOD        ?C?IMUL
+
+Program Size: data=29.1 xdata=0 code=504
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,404 @@
+BL51 BANKED LINKER/LOCATER V4.23                                                        11/20/2002  14:12:45  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V4.23, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE main.obj TO main CODE (0X0000-0X3FFF) XDATA (0X0000-0X3FFF)
+
+
+MEMORY MODEL: LARGE
+
+
+INPUT MODULES INCLUDED:
+  main.obj (MAIN)
+  C:\KEIL\C51\LIB\C51L.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?SIDIV)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?OFFX256)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?OFFXADD)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDOPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (PRINTF)
+  C:\KEIL\C51\LIB\C51L.LIB (GETS)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?STRCMP)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?STRCPY)
+  C:\KEIL\C51\LIB\C51L.LIB (MALLOC)
+  C:\KEIL\C51\LIB\C51L.LIB (INIT_MEM)
+  C:\KEIL\C51\LIB\C51L.LIB (?C_INIT)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CLDPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CLDOPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CSTPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CSTOPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?UIDIV)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDIDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDXDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDIXDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PSTXDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDPDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDCODE)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CCASE)
+  C:\KEIL\C51\LIB\C51L.LIB (PUTCHAR)
+  C:\KEIL\C51\LIB\C51L.LIB (GETCHAR)
+  C:\KEIL\C51\LIB\C51L.LIB (_GETKEY)
+
+
+LINK MAP OF MODULE:  main (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0005H     UNIT         _DATA_GROUP_
+                    000DH     0013H                  *** GAP ***
+            BIT     0020H.0   0001H.1   UNIT         _BIT_GROUP_
+            BIT     0021H.1   0000H.1   UNIT         ?BI?GETCHAR
+                    0021H.2   0000H.6                *** GAP ***
+            IDATA   0022H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     003FH     UNIT         _XDATA_GROUP_
+            XDATA   003FH     0008H     UNIT         ?XD?INIT_MEM
+            XDATA   0047H     0001H     UNIT         ?XD?GETCHAR
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/20/2002  14:12:45  PAGE 2
+
+
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     046DH     UNIT         ?C?LIB_CODE
+            CODE    0470H     0365H     UNIT         ?PR?PRINTF?PRINTF
+            CODE    07D5H     020AH     UNIT         ?PR?MAIN?MAIN
+            CODE    09DFH     017CH     UNIT         ?PR?_BINARY?MAIN
+            CODE    0B5BH     00EDH     UNIT         ?PR?_GETS?GETS
+            CODE    0C48H     00D1H     UNIT         ?PR?_MALLOC?MALLOC
+            CODE    0D19H     00C0H     UNIT         ?PR?_INSERT?MAIN
+            CODE    0DD9H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0E65H     004DH     UNIT         ?PR?_INIT_MEMPOOL?INIT_MEM
+            CODE    0EB2H     0045H     UNIT         ?CO?MAIN
+            CODE    0EF7H     0027H     UNIT         ?PR?PUTCHAR?PUTCHAR
+            CODE    0F1EH     0014H     UNIT         ?PR?GETCHAR?GETCHAR
+            CODE    0F32H     000CH     UNIT         ?C_INITSEG
+            CODE    0F3EH     000AH     UNIT         ?PR?_GETKEY?_GETKEY
+
+
+
+OVERLAY MAP OF MODULE:   main (MAIN)
+
+
+SEGMENT                               BIT_GROUP          DATA_GROUP          XDATA_GROUP
+  +--> CALLED SEGMENT              START    LENGTH     START    LENGTH     START    LENGTH
+------------------------------------------------------------------------------------------
+?C_C51STARTUP                      -----    -----      -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                      -----    -----      -----    -----      0000H    0017H
+  +--> ?PR?_INIT_MEMPOOL?INIT_MEM
+  +--> ?PR?_MALLOC?MALLOC
+  +--> ?PR?_GETS?GETS
+  +--> ?CO?MAIN
+  +--> ?PR?PRINTF?PRINTF
+  +--> ?PR?_BINARY?MAIN
+  +--> ?PR?_INSERT?MAIN
+
+?PR?_MALLOC?MALLOC                 -----    -----      -----    -----      0017H    0006H
+
+?PR?_GETS?GETS                     -----    -----      -----    -----      0017H    0007H
+  +--> ?PR?GETCHAR?GETCHAR
+  +--> ?PR?PUTCHAR?PUTCHAR
+
+?PR?GETCHAR?GETCHAR                -----    -----      -----    -----      -----    -----
+  +--> ?PR?_GETKEY?_GETKEY
+  +--> ?PR?PUTCHAR?PUTCHAR
+
+?PR?PRINTF?PRINTF                  0020H.0  0001H.1    0008H    0005H      0017H    0028H
+  +--> ?PR?PUTCHAR?PUTCHAR
+
+?PR?_BINARY?MAIN                   -----    -----      -----    -----      0017H    000EH
+
+?PR?_INSERT?MAIN                   -----    -----      -----    -----      0017H    000CH
+
+
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/20/2002  14:12:45  PAGE 3
+
+
+
+SYMBOL TABLE OF MODULE:  main (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00B0H.4       PUBLIC        T0
+  B:00D0H.6       PUBLIC        AC
+  B:00B0H.5       PUBLIC        T1
+  B:0090H.0       PUBLIC        T2
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+  B:00C8H.6       PUBLIC        EXF2
+  B:00B0H.7       PUBLIC        RD
+  B:00A8H.4       PUBLIC        ES
+  D:00B8H         PUBLIC        IP
+  B:0098H.0       PUBLIC        RI
+  B:00B0H.2       PUBLIC        INT0
+  B:00D0H.7       PUBLIC        CY
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+  B:00B8H.4       PUBLIC        PS
+  B:0090H.1       PUBLIC        T2EX
+  B:00D0H.2       PUBLIC        OV
+  C:07D5H         PUBLIC        main
+  B:00C8H.1       PUBLIC        C_T2
+  B:00B0H.6       PUBLIC        WR
+  B:00C8H.5       PUBLIC        RCLK
+  B:00C8H.4       PUBLIC        TCLK
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:0088H.1       PUBLIC        IE0
+  B:0088H.3       PUBLIC        IE1
+  B:00C8H.0       PUBLIC        CP_RL2
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:00A8H.5       PUBLIC        ET2
+  B:0088H.7       PUBLIC        TF1
+  B:00C8H.7       PUBLIC        TF2
+  B:0098H.2       PUBLIC        RB8
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  D:008DH         PUBLIC        TH1
+  B:0098H.3       PUBLIC        TB8
+  B:00A8H.2       PUBLIC        EX1
+  B:0088H.2       PUBLIC        IT1
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  B:0098H.5       PUBLIC        SM2
+  B:00B8H.1       PUBLIC        PT0
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/20/2002  14:12:45  PAGE 4
+
+
+  B:00B8H.3       PUBLIC        PT1
+  B:00D0H.3       PUBLIC        RS0
+  B:00B8H.5       PUBLIC        PT2
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  B:0088H.6       PUBLIC        TR1
+  B:00C8H.2       PUBLIC        TR2
+  B:00B8H.0       PUBLIC        PX0
+  B:00B8H.2       PUBLIC        PX1
+  B:00C8H.3       PUBLIC        EXEN2
+  B:0098H.4       PUBLIC        REN
+  D:00C8H         PUBLIC        T2CON
+  C:09DFH         PUBLIC        _binary
+  B:00B0H.0       PUBLIC        RXD
+  B:00B0H.1       PUBLIC        TXD
+  B:00D0H.5       PUBLIC        F0
+  C:0D19H         PUBLIC        _insert
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  -------         DO            
+  X:0000H         SYMBOL        temp
+  X:0003H         SYMBOL        ptr1
+  X:0015H         SYMBOL        i
+  -------         ENDDO         
+  C:07D5H         LINE#         16
+  C:07D5H         LINE#         26
+  C:07D8H         LINE#         27
+  C:07DBH         LINE#         28
+  C:07DEH         LINE#         29
+  C:07E0H         LINE#         30
+  C:07E2H         LINE#         37
+  C:07EDH         LINE#         38
+  C:07F4H         LINE#         39
+  C:07F4H         LINE#         40
+  C:0822H         LINE#         41
+  C:0844H         LINE#         42
+  C:0863H         LINE#         43
+  C:087AH         LINE#         44
+  C:0883H         LINE#         45
+  C:088CH         LINE#         46
+  C:08A5H         LINE#         47
+  C:08E3H         LINE#         48
+  C:08ECH         LINE#         49
+  C:0904H         LINE#         50
+  C:090BH         LINE#         51
+  C:0938H         LINE#         52
+  C:0949H         LINE#         53
+  C:097DH         LINE#         54
+  C:0986H         LINE#         55
+  C:099FH         LINE#         56
+  C:09DDH         LINE#         57
+  -------         ENDPROC       MAIN
+  -------         PROC          _BINARY
+  X:0017H         SYMBOL        ptr
+  X:001AH         SYMBOL        str
+  X:001DH         SYMBOL        n
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/20/2002  14:12:45  PAGE 5
+
+
+  X:001FH         SYMBOL        hig
+  X:0021H         SYMBOL        low
+  X:0023H         SYMBOL        mid
+  -------         ENDDO         
+  C:09DFH         LINE#         60
+  C:09EAH         LINE#         61
+  C:09EAH         LINE#         63
+  C:09F1H         LINE#         64
+  C:0A05H         LINE#         65
+  C:0A2EH         LINE#         67
+  C:0A74H         LINE#         69
+  C:0A91H         LINE#         70
+  C:0A91H         LINE#         71
+  C:0AA4H         LINE#         72
+  C:0AE4H         LINE#         73
+  C:0AF6H         LINE#         74
+  C:0B36H         LINE#         75
+  C:0B4DH         LINE#         76
+  C:0B52H         LINE#         77
+  C:0B52H         LINE#         78
+  C:0B5AH         LINE#         79
+  -------         ENDPROC       _BINARY
+  -------         PROC          _INSERT
+  X:0017H         SYMBOL        ptr
+  X:001AH         SYMBOL        str
+  X:001DH         SYMBOL        n
+  X:001FH         SYMBOL        i
+  -------         DO            
+  X:0021H         SYMBOL        j
+  -------         ENDDO         
+  C:0D19H         LINE#         80
+  C:0D24H         LINE#         81
+  C:0D24H         LINE#         83
+  C:0D4DH         LINE#         84
+  C:0DA7H         LINE#         85
+  -------         ENDPROC       _INSERT
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?SIDIV
+  C:0003H         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?OFFX256
+  C:0039H         PUBLIC        ?C?OFFX256
+  -------         ENDMOD        ?C?OFFX256
+
+  -------         MODULE        ?C?OFFXADD
+  C:004AH         PUBLIC        ?C?OFFXADD
+  -------         ENDMOD        ?C?OFFXADD
+
+  -------         MODULE        ?C?PLDPTR
+  C:0056H         PUBLIC        ?C?PLDPTR
+  -------         ENDMOD        ?C?PLDPTR
+
+  -------         MODULE        ?C?PLDOPTR
+  C:0076H         PUBLIC        ?C?PLDOPTR
+  -------         ENDMOD        ?C?PLDOPTR
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/20/2002  14:12:45  PAGE 6
+
+
+
+  -------         MODULE        PRINTF
+  X:0017H         PUBLIC        ?_PRINTF517?BYTE
+  X:0017H         PUBLIC        ?_PRINTF?BYTE
+  X:0017H         PUBLIC        ?_SPRINTF517?BYTE
+  X:0017H         PUBLIC        ?_SPRINTF?BYTE
+  C:04DBH         PUBLIC        _PRINTF
+  C:04DBH         PUBLIC        _PRINTF517
+  C:04D5H         PUBLIC        _SPRINTF
+  C:04D5H         PUBLIC        _SPRINTF517
+  -------         ENDMOD        PRINTF
+
+  -------         MODULE        GETS
+  C:0B5BH         PUBLIC        _gets
+  -------         ENDMOD        GETS
+
+  -------         MODULE        ?C?STRCMP
+  C:022EH         PUBLIC        ?C?STRCMP
+  -------         ENDMOD        ?C?STRCMP
+
+  -------         MODULE        ?C?STRCPY
+  C:0317H         PUBLIC        ?C?STRCPY
+  -------         ENDMOD        ?C?STRCPY
+
+  -------         MODULE        MALLOC
+  C:0C48H         PUBLIC        _malloc
+  -------         ENDMOD        MALLOC
+
+  -------         MODULE        INIT_MEM
+  X:003FH         PUBLIC        __mem_avail__
+  C:0E65H         PUBLIC        _init_mempool
+  -------         ENDMOD        INIT_MEM
+
+  -------         MODULE        ?C?CLDPTR
+  C:0334H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CLDOPTR
+  C:034DH         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?CSTPTR
+  C:037AH         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        ?C?CSTOPTR
+  C:038CH         PUBLIC        ?C?CSTOPTR
+  -------         ENDMOD        ?C?CSTOPTR
+
+  -------         MODULE        ?C?UIDIV
+  C:03AEH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?PLDIDATA
+  C:0403H         PUBLIC        ?C?PLDIDATA
+  -------         ENDMOD        ?C?PLDIDATA
+
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/20/2002  14:12:45  PAGE 7
+
+
+  -------         MODULE        ?C?PLDXDATA
+  C:040CH         PUBLIC        ?C?PLDXDATA
+  -------         ENDMOD        ?C?PLDXDATA
+
+  -------         MODULE        ?C?PLDIXDATA
+  C:0415H         PUBLIC        ?C?PLDIXDATA
+  -------         ENDMOD        ?C?PLDIXDATA
+
+  -------         MODULE        ?C?PSTXDATA
+  C:042CH         PUBLIC        ?C?PSTXDATA
+  -------         ENDMOD        ?C?PSTXDATA
+
+  -------         MODULE        ?C?PLDPDATA
+  C:0435H         PUBLIC        ?C?PLDPDATA
+  -------         ENDMOD        ?C?PLDPDATA
+
+  -------         MODULE        ?C?PLDCODE
+  C:043EH         PUBLIC        ?C?PLDCODE
+  -------         ENDMOD        ?C?PLDCODE
+
+  -------         MODULE        ?C?CCASE
+  C:044AH         PUBLIC        ?C?CCASE
+  -------         ENDMOD        ?C?CCASE
+
+  -------         MODULE        PUTCHAR
+  C:0EF7H         PUBLIC        _PUTCHAR
+  -------         ENDMOD        PUTCHAR
+
+  -------         MODULE        GETCHAR
+  B:0021H.1       PUBLIC        ?C?CHARLOADED
+  X:0047H         PUBLIC        ?_UNGETCHAR?BYTE
+  C:0F1EH         PUBLIC        GETCHAR
+  -------         ENDMOD        GETCHAR
+
+  -------         MODULE        _GETKEY
+  C:0F3EH         PUBLIC        _GETKEY
+  -------         ENDMOD        _GETKEY
+
+Program Size: data=15.2 xdata=72 code=3912
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

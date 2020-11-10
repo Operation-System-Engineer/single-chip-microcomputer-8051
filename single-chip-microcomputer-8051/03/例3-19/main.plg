@@ -1,0 +1,47 @@
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(31): error C141: syntax error near 'int'
+MAIN.C(31): warning C206: 'sub_max': missing function-prototype
+MAIN.C(32): error C141: syntax error near 'int'
+MAIN.C(32): error C202: 'n': undefined identifier
+MAIN.C(33): error C141: syntax error near 'int'
+MAIN.C(33): error C202: 'max': undefined identifier
+MAIN.C(34): error C202: 'n': undefined identifier
+MAIN.C(35): error C202: 'n': undefined identifier
+MAIN.C(36): error C202: 'max': undefined identifier
+MAIN.C(37): error C202: 'max': undefined identifier
+MAIN.C(41): error C141: syntax error near '}'
+MAIN.C(43): warning C236: '_sub_max': different length of parameter lists
+MAIN.C(47): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(34): error C202: 'i': undefined identifier
+MAIN.C(36): error C267: 'sub_max': requires ANSI-style prototype
+MAIN.C(41): error C141: syntax error near '}'
+MAIN.C(43): warning C236: '_sub_max': different length of parameter lists
+MAIN.C(47): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(36): error C267: 'sub_max': requires ANSI-style prototype
+MAIN.C(41): error C141: syntax error near '}'
+MAIN.C(43): warning C236: '_sub_max': different length of parameter lists
+MAIN.C(47): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(41): error C141: syntax error near '}'
+MAIN.C(47): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(41): warning C280: 'i': unreferenced local variable
+linking...
+Program Size: data=15.2 xdata=72 code=2425
+"main" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=15.2 xdata=72 code=2480
+"main" - 0 Error(s), 0 Warning(s).

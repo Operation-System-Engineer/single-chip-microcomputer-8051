@@ -1,0 +1,40 @@
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(15): error C141: syntax error near '/'
+.\MAIN.C(15): error C100: unprintable character 0xBA skipped
+.\MAIN.C(15): error C100: unprintable character 0xAF skipped
+.\MAIN.C(15): error C100: unprintable character 0xCA skipped
+.\MAIN.C(15): error C100: unprintable character 0xC9 skipped
+.\MAIN.C(15): error C100: unprintable character 0xF9 skipped
+.\MAIN.C(15): error C100: unprintable character 0xC3 skipped
+.\MAIN.C(15): error C100: unprintable character 0xF7 skipped
+.\MAIN.C(15): error C141: syntax error near '/'
+.\MAIN.C(16): error C202: 'p1': undefined identifier
+.\MAIN.C(33): error C202: 'a': undefined identifier
+.\MAIN.C(34): error C202: 'p1': undefined identifier
+.\MAIN.C(35): error C202: 'p2': undefined identifier
+.\MAIN.C(36): error C202: 'p1': undefined identifier
+.\MAIN.C(37): error C202: 'p1': undefined identifier
+.\MAIN.C(43): error C231: 'chang': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(36): error C267: 'chang': requires ANSI-style prototype
+.\MAIN.C(43): error C231: 'chang': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(36): warning C206: 'chang': missing function-prototype
+.\MAIN.C(36): error C267: 'chang': requires ANSI-style prototype
+.\MAIN.C(43): error C231: 'chang': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(36): warning C206: 'chang': missing function-prototype
+.\MAIN.C(36): error C267: 'chang': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(16): warning C280: 't': unreferenced local variable
+linking...
+"main" - 0 Error(s), 1 Warning(s).

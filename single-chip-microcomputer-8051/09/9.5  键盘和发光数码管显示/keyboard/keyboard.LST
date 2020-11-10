@@ -1,0 +1,292 @@
+C51 COMPILER V6.23a  KEYBOARD                                                              09/08/2003 17:00:29 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE KEYBOARD
+NO OBJECT MODULE REQUESTED
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE keyboard.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #pragma SRC
+   2          #include <stdio.h>
+   3          #include <reg51.h>
+   4          
+   5          
+   6          #define         TRUE                    1
+   7          #define         FALSE                   0
+   8          
+   9          #define         DELAY_VALUE             3
+  10          
+  11          
+  12          
+  13          
+  14          #define         PinDrvKey1      P1_0
+  15          #define         PinDrvKey2      P1_1
+  16          #define         PinDrvKey3      P1_2
+  17          #define         PinDrvKey4      P1_3            //键盘扫描的驱动线
+  18          
+  19          
+  20          #define         PinScanKey1     P1_4
+  21          #define         PinScanKey2     P1_5
+  22          #define         PinScanKey3     P1_6
+  23          #define         PinScanKey4     P1_7            //键盘扫描的信号获取线
+  24          
+  25          #define         PinLamp         P0_0            //指示灯驱动管脚
+  26          #define         PinSpeaker      P0_1            //蜂鸣器驱动管脚
+  27          
+  28          sbit            P0_0=P0^0;
+  29          sbit            P0_1=P0^1;
+  30          sbit            P0_2=P0^2;
+  31          sbit            P0_3=P0^3;
+  32          sbit            P0_4=P0^4;
+  33          sbit            P0_5=P0^5;
+  34          sbit            P0_6=P0^6;
+  35          sbit            P0_7=P0^7;
+  36          
+  37          sbit            P1_0=P1^0;
+  38          sbit            P1_1=P1^1;
+  39          sbit            P1_2=P1^2;
+  40          sbit            P1_3=P1^3;
+  41          sbit            P1_4=P1^4;
+  42          sbit            P1_5=P1^5;
+  43          sbit            P1_6=P1^6;
+  44          sbit            P1_7=P1^7;
+  45          
+  46          sbit            P2_0=P2^0;
+  47          sbit            P2_1=P2^1;
+  48          sbit            P2_2=P2^2;
+  49          sbit            P2_3=P2^3;
+  50          sbit            P2_4=P2^4;
+  51          sbit            P2_5=P2^5;
+  52          sbit            P2_6=P2^6;
+  53          sbit            P2_7=P2^7;
+  54          
+  55          
+C51 COMPILER V6.23a  KEYBOARD                                                              09/08/2003 17:00:29 PAGE 2   
+
+  56          void initial(void);              //初始化子程序
+  57          void delay(short i);
+  58          unsigned char keyscan(void);
+  59          
+  60          void main(void)
+  61          {
+  62   1              
+  63   1              unsigned char keyword;
+  64   1              
+  65   1              initial();                      //键盘驱动信号都设为低
+  66   1              
+  67   1              keyword=keyscan();
+  68   1              
+  69   1      }
+  70          
+  71          void initial(void)
+  72          {
+  73   1              P1_0=FALSE;
+  74   1              P1_1=FALSE;
+  75   1              P1_2=FALSE;
+  76   1              P1_3=FALSE;                     //键盘驱动信号都设为低
+  77   1              P0_0=TRUE;                      //发光二极管设为不亮
+  78   1              P0_1=TRUE;                      //蜂鸣器不叫
+  79   1      }
+  80          
+  81          unsigned char keyscan()
+  82          {
+  83   1      PinDrvKey1=TRUE;
+  84   1      if(PinScanKey1==TRUE)
+  85   1              PinLamp=FALSE;
+  86   1              PinSpeaker=FALSE;
+  87   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+  88   1              PinLamp=TRUE;
+  89   1              PinSpeaker=TRUE;
+  90   1      if(PinScanKey1==TRUE)
+  91   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+  92   2      if(PinScanKey1==TRUE)                   
+  93   2              return 1;}                                      //确认确实有按键信号，返回键值
+  94   1      if(PinScanKey2==TRUE)
+  95   1              PinLamp=FALSE;
+  96   1              PinSpeaker=FALSE;
+  97   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+  98   1              PinLamp=TRUE;
+  99   1              PinSpeaker=TRUE; 
+ 100   1      if(PinScanKey2==TRUE)
+ 101   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 102   2      if(PinScanKey2==TRUE)                   
+ 103   2              return 5;}                                      //确认确实有按键信号，返回键值
+ 104   1      if(PinScanKey3==TRUE)
+ 105   1              PinLamp=FALSE;
+ 106   1              PinSpeaker=FALSE;
+ 107   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 108   1              PinLamp=TRUE;
+ 109   1              PinSpeaker=TRUE; 
+ 110   1      if(PinScanKey3==TRUE)
+ 111   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 112   2      if(PinScanKey3==TRUE)                   
+ 113   2              return 9;}                                      //确认确实有按键信号，返回键值
+ 114   1      if(PinScanKey4==TRUE)
+ 115   1              PinLamp=FALSE;
+ 116   1              PinSpeaker=FALSE;
+ 117   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+C51 COMPILER V6.23a  KEYBOARD                                                              09/08/2003 17:00:29 PAGE 3   
+
+ 118   1              PinLamp=TRUE;
+ 119   1              PinSpeaker=TRUE; 
+ 120   1      if(PinScanKey2==TRUE)
+ 121   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 122   2      if(PinScanKey2==TRUE)
+ 123   2              return 12;}                                     //确认确实有按键信号，返回键值
+ 124   1      PinDrvKey1=FALSE;                               //以上语句扫描第一列
+ 125   1      PinDrvKey2=TRUE;
+ 126   1      if(PinScanKey1==TRUE)
+ 127   1              PinLamp=FALSE;
+ 128   1              PinSpeaker=FALSE;
+ 129   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 130   1              PinLamp=TRUE;
+ 131   1              PinSpeaker=TRUE; 
+ 132   1      if(PinScanKey1==TRUE)
+ 133   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 134   2      if(PinScanKey1==TRUE)
+ 135   2              return 2;}                                      //确认确实有按键信号，返回键值
+ 136   1      if(PinScanKey2==TRUE)
+ 137   1              PinLamp=FALSE;
+ 138   1              PinSpeaker=FALSE;
+ 139   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 140   1              PinLamp=TRUE;
+ 141   1              PinSpeaker=TRUE; 
+ 142   1      if(PinScanKey2==TRUE)
+ 143   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 144   2      if(PinScanKey2==TRUE)
+ 145   2              return 6;}                                      //确认确实有按键信号，返回键值
+ 146   1      if(PinScanKey3==TRUE)
+ 147   1              PinLamp=FALSE;
+ 148   1              PinSpeaker=FALSE;
+ 149   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 150   1              PinLamp=TRUE;
+ 151   1              PinSpeaker=TRUE; 
+ 152   1      if(PinScanKey3==TRUE)
+ 153   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 154   2      if(PinScanKey3==TRUE)
+ 155   2              return 0;}                                      //确认确实有按键信号，返回键值
+ 156   1      if(PinScanKey4==TRUE)
+ 157   1              PinLamp=FALSE;
+ 158   1              PinSpeaker=FALSE;
+ 159   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 160   1              PinLamp=TRUE;
+ 161   1              PinSpeaker=TRUE; 
+ 162   1      if(PinScanKey4==TRUE)
+ 163   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 164   2      if(PinScanKey4==TRUE)
+ 165   2              return 13;}                                     //确认确实有按键信号，返回键值
+ 166   1      PinDrvKey2=FALSE;                               //以上语句扫描第二列
+ 167   1      PinDrvKey3=TRUE;
+ 168   1      if(PinScanKey1==TRUE)
+ 169   1              PinLamp=FALSE;
+ 170   1              PinSpeaker=FALSE;
+ 171   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 172   1              PinLamp=TRUE;
+ 173   1              PinSpeaker=TRUE; 
+ 174   1      if(PinScanKey1==TRUE)
+ 175   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 176   2      if(PinScanKey1==TRUE)
+ 177   2              return 3;}                                      //确认确实有按键信号，返回键值
+ 178   1      if(PinScanKey2==TRUE)
+ 179   1              PinLamp=FALSE;
+C51 COMPILER V6.23a  KEYBOARD                                                              09/08/2003 17:00:29 PAGE 4   
+
+ 180   1              PinSpeaker=FALSE;
+ 181   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 182   1              PinLamp=TRUE;
+ 183   1              PinSpeaker=TRUE; 
+ 184   1      if(PinScanKey2==TRUE)
+ 185   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 186   2      if(PinScanKey2==TRUE)
+ 187   2              return 7;}                                      //确认确实有按键信号，返回键值
+ 188   1      if(PinScanKey3==TRUE)
+ 189   1              PinLamp=FALSE;
+ 190   1              PinSpeaker=FALSE;
+ 191   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 192   1              PinLamp=TRUE;
+ 193   1              PinSpeaker=TRUE; 
+ 194   1      if(PinScanKey3==TRUE)
+ 195   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 196   2      if(PinScanKey3==TRUE)
+ 197   2              return 10;}                                     //确认确实有按键信号，返回键值
+ 198   1      if(PinScanKey4==TRUE)
+ 199   1              PinLamp=FALSE;
+ 200   1              PinSpeaker=FALSE;
+ 201   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 202   1              PinLamp=TRUE;
+ 203   1              PinSpeaker=TRUE; 
+ 204   1      if(PinScanKey4==TRUE)
+ 205   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 206   2      if(PinScanKey4==TRUE)
+ 207   2              return 14;}                                     //确认确实有按键信号，返回键值
+ 208   1      PinDrvKey3=FALSE;                               //以上语句扫描第三列
+ 209   1      PinDrvKey4=TRUE;
+ 210   1      if(PinScanKey4==TRUE)
+ 211   1              PinLamp=FALSE;
+ 212   1              PinSpeaker=FALSE;
+ 213   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 214   1              PinLamp=TRUE;
+ 215   1              PinSpeaker=TRUE; 
+ 216   1      if(PinScanKey1==TRUE)
+ 217   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 218   2      if(PinScanKey1==TRUE)
+ 219   2              return 4;}                                      //确认确实有按键信号，返回键值
+ 220   1      if(PinScanKey2==TRUE)
+ 221   1              PinLamp=FALSE;
+ 222   1              PinSpeaker=FALSE;
+ 223   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 224   1              PinLamp=TRUE;
+ 225   1              PinSpeaker=TRUE; 
+ 226   1      if(PinScanKey2==TRUE)
+ 227   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 228   2      if(PinScanKey2==TRUE)
+ 229   2              return 8;}                                      //确认确实有按键信号，返回键值
+ 230   1      if(PinScanKey3==TRUE)
+ 231   1              PinLamp=FALSE;
+ 232   1              PinSpeaker=FALSE;
+ 233   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 234   1              PinLamp=TRUE;
+ 235   1              PinSpeaker=TRUE; 
+ 236   1      if(PinScanKey3==TRUE)
+ 237   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 238   2      if(PinScanKey3==TRUE)
+ 239   2              return 11;}                                     //确认确实有按键信号，返回键值
+ 240   1      if(PinScanKey4==TRUE)
+ 241   1              PinLamp=FALSE;
+C51 COMPILER V6.23a  KEYBOARD                                                              09/08/2003 17:00:29 PAGE 5   
+
+ 242   1              PinSpeaker=FALSE;
+ 243   1              delay(DELAY_VALUE);             //如果判断有信号，则延时一次
+ 244   1              PinLamp=TRUE;
+ 245   1              PinSpeaker=TRUE; 
+ 246   1      if(PinScanKey4==TRUE)
+ 247   1      { delay(DELAY_VALUE);                   //假如判断还有信号，则再延时
+ 248   2      if(PinScanKey4==TRUE)
+ 249   2              return 15;}                                     //假如判断还有信号，则再延时
+ 250   1      PinDrvKey3=FALSE;                               //以上语句扫描第四列
+ 251   1      return 16;
+ 252   1      }
+ 253          
+ 254          
+ 255          void delay(short i)
+ 256          {
+ 257   1              int j=0;
+ 258   1              int k=0;
+ 259   1              k=i*DELAY_VALUE;
+ 260   1              while (j<k)j++;
+ 261   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    465    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

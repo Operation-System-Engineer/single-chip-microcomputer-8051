@@ -1,0 +1,20 @@
+Build target 'Target 1'
+compiling ex19.c...
+.\EX19.C(37): error C202: 'n': undefined identifier
+.\EX19.C(39): error C202: 'n': undefined identifier
+.\EX19.C(41): error C202: 'n': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling ex19.c...
+linking...
+
+BL51 BANKED LINKER/LOCATER V4.13 - SN: Eval Version
+COPYRIGHT KEIL ELEKTRONIK GmbH 1987 - 2001
+"ex19.obj" 
+TO "ex19" 
+
+
+*** FATAL ERROR L210: I/O ERROR ON INPUT FILE:
+    EXCEPTION 0021H: PATH OR FILE NOT FOUND
+    FILE: C:\KEIL\C51\LIB\C51FPS.LIB
+Target not created

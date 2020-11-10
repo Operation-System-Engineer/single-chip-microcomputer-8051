@@ -1,0 +1,55 @@
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(34): warning C209: '_gets': too few actual parameters
+.\MAIN.C(35): warning C209: '_gets': too few actual parameters
+.\MAIN.C(36): warning C206: 'strlen': missing function-prototype
+.\MAIN.C(36): error C267: 'strlen': requires ANSI-style prototype
+.\MAIN.C(37): warning C206: 'strcmp': missing function-prototype
+.\MAIN.C(37): error C267: 'strcmp': requires ANSI-style prototype
+.\MAIN.C(39): warning C206: 'strcat': missing function-prototype
+.\MAIN.C(40): error C202: 's': undefined identifier
+.\MAIN.C(40): error C141: syntax error near '1'
+.\MAIN.C(42): error C241: 'main': auto segment too large
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(34): warning C209: '_gets': too few actual parameters
+.\MAIN.C(35): warning C209: '_gets': too few actual parameters
+.\MAIN.C(36): warning C206: 'strlen': missing function-prototype
+.\MAIN.C(36): error C267: 'strlen': requires ANSI-style prototype
+.\MAIN.C(37): warning C206: 'strcmp': missing function-prototype
+.\MAIN.C(37): error C267: 'strcmp': requires ANSI-style prototype
+.\MAIN.C(39): warning C206: 'strcat': missing function-prototype
+.\MAIN.C(40): error C202: 's': undefined identifier
+.\MAIN.C(40): error C141: syntax error near '1'
+.\MAIN.C(42): error C241: 'main': auto segment too large
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(36): warning C206: 'strlen': missing function-prototype
+.\MAIN.C(36): error C267: 'strlen': requires ANSI-style prototype
+.\MAIN.C(37): warning C206: 'strcmp': missing function-prototype
+.\MAIN.C(37): error C267: 'strcmp': requires ANSI-style prototype
+.\MAIN.C(39): warning C206: 'strcat': missing function-prototype
+.\MAIN.C(40): error C202: 's': undefined identifier
+.\MAIN.C(40): error C141: syntax error near '1'
+.\MAIN.C(42): error C241: 'main': auto segment too large
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(40): error C202: 's': undefined identifier
+.\MAIN.C(40): error C141: syntax error near '1'
+.\MAIN.C(42): error C241: 'main': auto segment too large
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(42): error C241: 'main': auto segment too large
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(42): error C241: 'main': auto segment too large
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).

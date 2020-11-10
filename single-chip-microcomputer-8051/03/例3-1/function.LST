@@ -1,0 +1,378 @@
+C51 COMPILER V6.02  FUNCTION                                                               09/15/2002 23:41:50 PAGE 1   
+
+
+C51 COMPILER V6.02, COMPILATION OF MODULE FUNCTION
+OBJECT MODULE PLACED IN .\function.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE .\function.c LARGE DEBUG OBJECTEXTEND CODE SYMBOLS PREPRINT
+
+stmt level    source
+
+   1          #include <stdio.h>
+   2          #include "def.h"
+   3          /* getline ：取一行放到s 中，并返回该行的长度*/
+   4          
+   5          int getline(char s[ ], int lim)
+   6          {
+   7   1      	int c, i;
+   8   1      	i = 0;
+   9   1      	while ( -- lim > 0&& ( c = getchar() ) != EOF&&c!='\n')
+  10   1      		s[i++] = c;
+  11   1      	if (c == '\n' )
+  12   1      		s[i++] = c;
+  13   1      		s[i] = '\0';
+  14   1      	return i;
+  15   1      }
+  16          /* strindex ：返回t 在s 中的位置，若未找到则返回-1 */
+  17          int strindex(char s[], char t[] )
+  18          {
+  19   1      	int i, j, k;
+  20   1      	for ( i = 0; s[i] != '\0'; i++ ) {
+  21   2      		for ( j =i, k = 0; t[k] != '\0' && s[j] ==t[k]; j++, k++ );
+  22   2      		if ( k > 0 && t[k] == '\0' )
+  23   2      		return i;
+  24   2      	}
+  25   1      	return -1;
+  26   1      }
+C51 COMPILER V6.02  FUNCTION                                                               09/15/2002 23:41:50 PAGE 2   
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+
+             ; FUNCTION _getline (BEGIN)
+0000 900000      R     MOV     DPTR,#s
+0003 EB                MOV     A,R3
+0004 F0                MOVX    @DPTR,A
+0005 A3                INC     DPTR
+0006 EA                MOV     A,R2
+0007 F0                MOVX    @DPTR,A
+0008 A3                INC     DPTR
+0009 E9                MOV     A,R1
+000A F0                MOVX    @DPTR,A
+000B A3                INC     DPTR
+000C EC                MOV     A,R4
+000D F0                MOVX    @DPTR,A
+000E A3                INC     DPTR
+000F ED                MOV     A,R5
+0010 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 5
+                                           ; SOURCE LINE # 6
+                                           ; SOURCE LINE # 8
+0011 E4                CLR     A
+0012 900000      R     MOV     DPTR,#i
+0015 F0                MOVX    @DPTR,A
+0016 A3                INC     DPTR
+0017 F0                MOVX    @DPTR,A
+0018         ?C0001:
+                                           ; SOURCE LINE # 9
+0018 900000      R     MOV     DPTR,#lim
+001B 74FF              MOV     A,#0FFH
+001D F5F0              MOV     B,A
+001F 120000      E     LCALL   ?C?IILDX
+0022 FE                MOV     R6,A
+0023 D3                SETB    C
+0024 E5F0              MOV     A,B
+0026 9400              SUBB    A,#00H
+0028 EE                MOV     A,R6
+0029 6480              XRL     A,#080H
+002B 9480              SUBB    A,#080H
+002D 4047              JC      ?C0002
+002F 120000      E     LCALL   getchar
+0032 EF                MOV     A,R7
+0033 33                RLC     A
+0034 95E0              SUBB    A,ACC
+0036 FE                MOV     R6,A
+0037 900000      R     MOV     DPTR,#c
+003A F0                MOVX    @DPTR,A
+003B A3                INC     DPTR
+003C EF                MOV     A,R7
+003D F0                MOVX    @DPTR,A
+003E F4                CPL     A
+003F 7002              JNZ     ?C0013
+0041 EE                MOV     A,R6
+0042 F4                CPL     A
+0043         ?C0013:
+0043 6031              JZ      ?C0002
+0045 900000      R     MOV     DPTR,#c
+0048 E0                MOVX    A,@DPTR
+0049 7004              JNZ     ?C0014
+004B A3                INC     DPTR
+004C E0                MOVX    A,@DPTR
+C51 COMPILER V6.02  FUNCTION                                                               09/15/2002 23:41:50 PAGE 3   
+
+004D 640A              XRL     A,#0AH
+004F         ?C0014:
+004F 6025              JZ      ?C0002
+                                           ; SOURCE LINE # 10
+0051 900000      R     MOV     DPTR,#c+01H
+0054 E0                MOVX    A,@DPTR
+0055 FF                MOV     R7,A
+0056 900000      R     MOV     DPTR,#s
+0059 E0                MOVX    A,@DPTR
+005A FB                MOV     R3,A
+005B A3                INC     DPTR
+005C E0                MOVX    A,@DPTR
+005D FA                MOV     R2,A
+005E A3                INC     DPTR
+005F E0                MOVX    A,@DPTR
+0060 F9                MOV     R1,A
+0061 900000      R     MOV     DPTR,#i
+0064 E4                CLR     A
+0065 75F001            MOV     B,#01H
+0068 120000      E     LCALL   ?C?ILDIX
+006B 85F082            MOV     DPL,B
+006E F583              MOV     DPH,A
+0070 EF                MOV     A,R7
+0071 120000      E     LCALL   ?C?CSTOPTR
+0074 80A2              SJMP    ?C0001
+0076         ?C0002:
+                                           ; SOURCE LINE # 11
+0076 900000      R     MOV     DPTR,#c
+0079 E0                MOVX    A,@DPTR
+007A 7004              JNZ     ?C0015
+007C A3                INC     DPTR
+007D E0                MOVX    A,@DPTR
+007E 640A              XRL     A,#0AH
+0080         ?C0015:
+0080 7023              JNZ     ?C0003
+                                           ; SOURCE LINE # 12
+0082 900000      R     MOV     DPTR,#c+01H
+0085 E0                MOVX    A,@DPTR
+0086 FF                MOV     R7,A
+0087 900000      R     MOV     DPTR,#s
+008A E0                MOVX    A,@DPTR
+008B FB                MOV     R3,A
+008C A3                INC     DPTR
+008D E0                MOVX    A,@DPTR
+008E FA                MOV     R2,A
+008F A3                INC     DPTR
+0090 E0                MOVX    A,@DPTR
+0091 F9                MOV     R1,A
+0092 900000      R     MOV     DPTR,#i
+0095 E4                CLR     A
+0096 75F001            MOV     B,#01H
+0099 120000      E     LCALL   ?C?ILDIX
+009C 85F082            MOV     DPL,B
+009F F583              MOV     DPH,A
+00A1 EF                MOV     A,R7
+00A2 120000      E     LCALL   ?C?CSTOPTR
+00A5         ?C0003:
+                                           ; SOURCE LINE # 13
+00A5 900000      R     MOV     DPTR,#s
+00A8 E0                MOVX    A,@DPTR
+00A9 FB                MOV     R3,A
+00AA A3                INC     DPTR
+C51 COMPILER V6.02  FUNCTION                                                               09/15/2002 23:41:50 PAGE 4   
+
+00AB E0                MOVX    A,@DPTR
+00AC FA                MOV     R2,A
+00AD A3                INC     DPTR
+00AE E0                MOVX    A,@DPTR
+00AF F9                MOV     R1,A
+00B0 900000      R     MOV     DPTR,#i
+00B3 E0                MOVX    A,@DPTR
+00B4 FE                MOV     R6,A
+00B5 A3                INC     DPTR
+00B6 E0                MOVX    A,@DPTR
+00B7 FF                MOV     R7,A
+00B8 F582              MOV     DPL,A
+00BA 8E83              MOV     DPH,R6
+00BC E4                CLR     A
+00BD 120000      E     LCALL   ?C?CSTOPTR
+                                           ; SOURCE LINE # 14
+                                           ; SOURCE LINE # 15
+00C0         ?C0004:
+00C0 22                RET     
+             ; FUNCTION _getline (END)
+
+             ; FUNCTION _strindex (BEGIN)
+0000 900000      R     MOV     DPTR,#s
+0003 EB                MOV     A,R3
+0004 F0                MOVX    @DPTR,A
+0005 A3                INC     DPTR
+0006 EA                MOV     A,R2
+0007 F0                MOVX    @DPTR,A
+0008 A3                INC     DPTR
+0009 E9                MOV     A,R1
+000A F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 17
+                                           ; SOURCE LINE # 18
+                                           ; SOURCE LINE # 20
+000B E4                CLR     A
+000C 900000      R     MOV     DPTR,#i
+000F F0                MOVX    @DPTR,A
+0010 A3                INC     DPTR
+0011 F0                MOVX    @DPTR,A
+0012         ?C0005:
+0012 900000      R     MOV     DPTR,#s
+0015 E0                MOVX    A,@DPTR
+0016 FB                MOV     R3,A
+0017 A3                INC     DPTR
+0018 E0                MOVX    A,@DPTR
+0019 FA                MOV     R2,A
+001A A3                INC     DPTR
+001B E0                MOVX    A,@DPTR
+001C F9                MOV     R1,A
+001D 900000      R     MOV     DPTR,#i
+0020 E0                MOVX    A,@DPTR
+0021 FE                MOV     R6,A
+0022 A3                INC     DPTR
+0023 E0                MOVX    A,@DPTR
+0024 F582              MOV     DPL,A
+0026 8E83              MOV     DPH,R6
+0028 120000      E     LCALL   ?C?CLDOPTR
+002B 7003              JNZ     $ + 5H
+002D 020000      R     LJMP    ?C0006
+                                           ; SOURCE LINE # 21
+0030 900000      R     MOV     DPTR,#i
+0033 E0                MOVX    A,@DPTR
+C51 COMPILER V6.02  FUNCTION                                                               09/15/2002 23:41:50 PAGE 5   
+
+0034 A3                INC     DPTR
+0035 E0                MOVX    A,@DPTR
+0036 FF                MOV     R7,A
+;---- Variable 'j' assigned to Register 'R6/R7' ----
+0037 E4                CLR     A
+0038 A3                INC     DPTR
+0039 F0                MOVX    @DPTR,A
+003A A3                INC     DPTR
+003B F0                MOVX    @DPTR,A
+003C         ?C0008:
+003C 900000      R     MOV     DPTR,#t
+003F E0                MOVX    A,@DPTR
+0040 FB                MOV     R3,A
+0041 A3                INC     DPTR
+0042 E0                MOVX    A,@DPTR
+0043 FA                MOV     R2,A
+0044 A3                INC     DPTR
+0045 E0                MOVX    A,@DPTR
+0046 F9                MOV     R1,A
+0047 900000      R     MOV     DPTR,#k
+004A E0                MOVX    A,@DPTR
+004B FC                MOV     R4,A
+004C A3                INC     DPTR
+004D E0                MOVX    A,@DPTR
+004E F582              MOV     DPL,A
+0050 8C83              MOV     DPH,R4
+0052 120000      E     LCALL   ?C?CLDOPTR
+0055 FD                MOV     R5,A
+0056 602A              JZ      ?C0009
+0058 900000      R     MOV     DPTR,#s
+005B E0                MOVX    A,@DPTR
+005C FB                MOV     R3,A
+005D A3                INC     DPTR
+005E E0                MOVX    A,@DPTR
+005F FA                MOV     R2,A
+0060 A3                INC     DPTR
+0061 E0                MOVX    A,@DPTR
+0062 F9                MOV     R1,A
+0063 8F82              MOV     DPL,R7
+0065 8E83              MOV     DPH,R6
+0067 120000      E     LCALL   ?C?CLDOPTR
+006A B50515            CJNE    A,AR5,?C0009
+006D 0F                INC     R7
+006E BF0001            CJNE    R7,#00H,?C0016
+0071 0E                INC     R6
+0072         ?C0016:
+0072 900000      R     MOV     DPTR,#k+01H
+0075 E0                MOVX    A,@DPTR
+0076 04                INC     A
+0077 F0                MOVX    @DPTR,A
+0078 70C2              JNZ     ?C0008
+007A 900000      R     MOV     DPTR,#k
+007D E0                MOVX    A,@DPTR
+007E 04                INC     A
+007F F0                MOVX    @DPTR,A
+0080         ?C0017:
+0080 80BA              SJMP    ?C0008
+0082         ?C0009:
+                                           ; SOURCE LINE # 22
+0082 900000      R     MOV     DPTR,#k
+0085 E0                MOVX    A,@DPTR
+0086 FE                MOV     R6,A
+C51 COMPILER V6.02  FUNCTION                                                               09/15/2002 23:41:50 PAGE 6   
+
+0087 A3                INC     DPTR
+0088 E0                MOVX    A,@DPTR
+0089 FF                MOV     R7,A
+008A D3                SETB    C
+008B 9400              SUBB    A,#00H
+008D EE                MOV     A,R6
+008E 6480              XRL     A,#080H
+0090 9480              SUBB    A,#080H
+0092 401D              JC      ?C0007
+0094 900000      R     MOV     DPTR,#t
+0097 E0                MOVX    A,@DPTR
+0098 FB                MOV     R3,A
+0099 A3                INC     DPTR
+009A E0                MOVX    A,@DPTR
+009B FA                MOV     R2,A
+009C A3                INC     DPTR
+009D E0                MOVX    A,@DPTR
+009E F9                MOV     R1,A
+009F 8F82              MOV     DPL,R7
+00A1 8E83              MOV     DPH,R6
+00A3 120000      E     LCALL   ?C?CLDOPTR
+00A6 7009              JNZ     ?C0007
+                                           ; SOURCE LINE # 23
+00A8 900000      R     MOV     DPTR,#i
+00AB E0                MOVX    A,@DPTR
+00AC FE                MOV     R6,A
+00AD A3                INC     DPTR
+00AE E0                MOVX    A,@DPTR
+00AF FF                MOV     R7,A
+00B0 22                RET     
+                                           ; SOURCE LINE # 24
+00B1         ?C0007:
+00B1 900000      R     MOV     DPTR,#i+01H
+00B4 E0                MOVX    A,@DPTR
+00B5 04                INC     A
+00B6 F0                MOVX    @DPTR,A
+00B7 7006              JNZ     ?C0018
+00B9 900000      R     MOV     DPTR,#i
+00BC E0                MOVX    A,@DPTR
+00BD 04                INC     A
+00BE F0                MOVX    @DPTR,A
+00BF         ?C0018:
+00BF 020000      R     LJMP    ?C0005
+00C2         ?C0006:
+                                           ; SOURCE LINE # 25
+00C2 7EFF              MOV     R6,#0FFH
+00C4 7FFF              MOV     R7,#0FFH
+                                           ; SOURCE LINE # 26
+00C6         ?C0012:
+00C6 22                RET     
+             ; FUNCTION _strindex (END)
+
+C51 COMPILER V6.02  FUNCTION                                                               09/15/2002 23:41:50 PAGE 7   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+_getline . . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  s. . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  lim. . . . . . . . . . . . . . . . .  AUTO     XDATA  INT      0003H  2
+  c. . . . . . . . . . . . . . . . . .  AUTO     XDATA  INT      0005H  2
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  INT      0007H  2
+_strindex. . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  s. . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  t. . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  INT      0006H  2
+  j. . . . . . . . . . . . . . . . . .  * REG *  DATA   INT      0006H  2
+  k. . . . . . . . . . . . . . . . . .  AUTO     XDATA  INT      0008H  2
+getchar. . . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    392    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      19
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

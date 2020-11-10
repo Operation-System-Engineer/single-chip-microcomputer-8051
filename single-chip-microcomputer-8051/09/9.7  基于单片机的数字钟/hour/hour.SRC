@@ -1,0 +1,1463 @@
+; hour.SRC generated from: hour.c
+
+$NOMOD51
+
+NAME	HOUR
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+T0	BIT	0B0H.4
+AC	BIT	0D0H.6
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+IE	DATA	0A8H
+P0_0	BIT	080H.0
+P1_0	BIT	090H.0
+P0_1	BIT	080H.1
+P2_0	BIT	0A0H.0
+P1_1	BIT	090H.1
+P0_2	BIT	080H.2
+P2_1	BIT	0A0H.1
+P1_2	BIT	090H.2
+P0_3	BIT	080H.3
+P2_2	BIT	0A0H.2
+P1_3	BIT	090H.3
+P0_4	BIT	080H.4
+P2_3	BIT	0A0H.3
+P1_4	BIT	090H.4
+P0_5	BIT	080H.5
+P2_4	BIT	0A0H.4
+P1_5	BIT	090H.5
+P0_6	BIT	080H.6
+RD	BIT	0B0H.7
+P2_5	BIT	0A0H.5
+P1_6	BIT	090H.6
+P0_7	BIT	080H.7
+P2_6	BIT	0A0H.6
+P1_7	BIT	090H.7
+ES	BIT	0A8H.4
+P2_7	BIT	0A0H.7
+IP	DATA	0B8H
+RI	BIT	098H.0
+INT0	BIT	0B0H.2
+CY	BIT	0D0H.7
+TI	BIT	098H.1
+INT1	BIT	0B0H.3
+PS	BIT	0B8H.4
+SP	DATA	081H
+OV	BIT	0D0H.2
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+TMOD	DATA	089H
+TCON	DATA	088H
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+ACC	DATA	0E0H
+ET0	BIT	0A8H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+TB8	BIT	098H.3
+EX1	BIT	0A8H.2
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+PT1	BIT	0B8H.3
+RS0	BIT	0D0H.3
+TR0	BIT	088H.4
+RS1	BIT	0D0H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?main?HOUR        SEGMENT CODE 
+?DT?main?HOUR        SEGMENT DATA OVERLAYABLE 
+?PR?initial?HOUR     SEGMENT CODE 
+?PR?_delay?HOUR      SEGMENT CODE 
+?DT?_delay?HOUR      SEGMENT DATA OVERLAYABLE 
+?PR?_display?HOUR    SEGMENT CODE 
+?PR?keyscan?HOUR     SEGMENT CODE 
+?PR?updatee?HOUR     SEGMENT CODE 
+?C_INITSEG           SEGMENT CODE 
+?DT?HOUR             SEGMENT DATA 
+	EXTRN	CODE (?C_STARTUP)
+	PUBLIC	sets1
+	PUBLIC	sets0
+	PUBLIC	setm1
+	PUBLIC	setm0
+	PUBLIC	seth1
+	PUBLIC	seth0
+	PUBLIC	s1
+	PUBLIC	s0
+	PUBLIC	m1
+	PUBLIC	m0
+	PUBLIC	h1
+	PUBLIC	h0
+	PUBLIC	updatee
+	PUBLIC	keyscan
+	PUBLIC	_display
+	PUBLIC	_delay
+	PUBLIC	initial
+	PUBLIC	main
+
+	RSEG  ?DT?main?HOUR
+?main?BYTE:
+     status?040:   DS   1
+    keyword?041:   DS   1
+
+	RSEG  ?DT?_delay?HOUR
+?_delay?BYTE:
+         ii?243:   DS   2
+
+	RSEG  ?DT?HOUR
+             h0:   DS   1
+             h1:   DS   1
+             m0:   DS   1
+             m1:   DS   1
+             s0:   DS   1
+             s1:   DS   1
+          seth0:   DS   1
+          seth1:   DS   1
+          setm0:   DS   1
+          setm1:   DS   1
+          sets0:   DS   1
+          sets1:   DS   1
+
+	RSEG  ?C_INITSEG
+	DB	001H
+	DB	h1
+	DB	000H
+
+	DB	001H
+	DB	h0
+	DB	000H
+
+	DB	001H
+	DB	m1
+	DB	000H
+
+	DB	001H
+	DB	m0
+	DB	000H
+
+	DB	001H
+	DB	s1
+	DB	000H
+
+	DB	001H
+	DB	s0
+	DB	000H
+
+	DB	001H
+	DB	seth1
+	DB	000H
+
+	DB	001H
+	DB	seth0
+	DB	000H
+
+	DB	001H
+	DB	setm1
+	DB	000H
+
+	DB	001H
+	DB	setm0
+	DB	000H
+
+	DB	001H
+	DB	sets1
+	DB	000H
+
+	DB	001H
+	DB	sets0
+	DB	000H
+
+; #pragma SRC
+; #include <stdio.h>
+; #include <reg51.h>
+; 
+; 
+; #define		TRUE			1
+; #define		FALSE			0
+; 
+; #define		DELAY_VALUE		3
+; #define		DELAY_VALUE_EXTRA	10100
+; 
+; 
+; 
+; #define    	PinDrvKey1	P1_0
+; #define		PinDrvKey2	P1_1
+; #define		PinDrvKey3	P1_2
+; #define    	PinDrvKey4	P1_3		
+; //键盘扫描的驱动线
+; 
+; 
+; #define    	PinScanKey1	P1_4
+; #define    	PinScanKey2	P1_5
+; #define    	PinScanKey3	P1_6
+; #define    	PinScanKey4	P1_7		
+; //键盘扫描的信号获取线
+; 
+; #define		PinSegA		P2_0	
+; #define		PinSegB		P2_1
+; #define		PinSegC		P2_2
+; #define		PinSegD		P2_3		
+; //七段码的数据线
+; 
+; #define		PinSelectA	P2_4
+; #define		PinSelectB	P2_5
+; #define		PinSelectC	P2_6		
+; //选择器的数据位
+; 
+; #define		PinSelectCS	P2_4		
+; //选择器的片选位
+; 
+; #define		LedSelect0	0x80
+; #define		LedSelect1	0x90
+; #define		LedSelect2	0xa0
+; #define		LedSelect3	0xb0
+; #define		LedSelect4	0xc0
+; #define		LedSelect5	0xd0
+; 
+; #define		PinLamp		P0_0		
+; //指示灯驱动管脚
+; #define		PinSpeaker	P0_1		
+; //蜂鸣器驱动管脚
+; 
+; sbit		P0_0=P0^0;
+; sbit		P0_1=P0^1;
+; sbit		P0_2=P0^2;
+; sbit		P0_3=P0^3;
+; sbit		P0_4=P0^4;
+; sbit		P0_5=P0^5;
+; sbit		P0_6=P0^6;
+; sbit		P0_7=P0^7;
+; 
+; sbit		P1_0=P1^0;
+; sbit		P1_1=P1^1;
+; sbit		P1_2=P1^2;
+; sbit		P1_3=P1^3;
+; sbit		P1_4=P1^4;
+; sbit		P1_5=P1^5;
+; sbit		P1_6=P1^6;
+; sbit		P1_7=P1^7;
+; 
+; sbit		P2_0=P2^0;
+; sbit		P2_1=P2^1;
+; sbit		P2_2=P2^2;
+; sbit		P2_3=P2^3;
+; sbit		P2_4=P2^4;
+; sbit		P2_5=P2^5;
+; sbit		P2_6=P2^6;
+; sbit		P2_7=P2^7;
+; 
+; 
+; void initial(void);              
+; //初始化子程序
+; void delay(short i);		 
+; //延时子程序
+; void display(unsigned char i,unsigned char num);
+; //显示子程序，其中变量i,num含义为在第i个数码管显示数字num.
+; unsigned char keyscan(void);
+; //键盘扫描子程序
+; void updatee(void);
+; 
+; unsigned char h1=0;
+; unsigned char h0=0;
+; unsigned char m1=0;
+; unsigned char m0=0;
+; unsigned char s1=0;
+; unsigned char s0=0;
+; unsigned char seth1=0;
+; unsigned char seth0=0;
+; unsigned char setm1=0;
+; unsigned char setm0=0;
+; unsigned char sets1=0;
+; unsigned char sets0=0;  //设定闹钟的闹定时间,设定为闹钟时间，闹铃时间定为1分钟
+; 
+; void main(void)
+
+	RSEG  ?PR?main?HOUR
+main:
+	USING	0
+			; SOURCE LINE # 104
+; {
+			; SOURCE LINE # 105
+; 	unsigned char status;
+; 	unsigned char keyword;
+; 	initial();
+			; SOURCE LINE # 108
+	LCALL	initial
+; 	//键盘驱动信号，发光二极管，以及蜂鸣器都设在无效状态
+; 	for(;;)
+			; SOURCE LINE # 110
+?C0001:
+; 	{
+			; SOURCE LINE # 111
+; 		switch(status)
+			; SOURCE LINE # 112
+	MOV  	A,status?040
+	DEC  	A
+	JZ   	?C0011
+	DEC  	A
+	JNZ  	$ + 5H
+	LJMP 	?C0020
+	DEC  	A
+	JNZ  	$ + 5H
+	LJMP 	?C0027
+	ADD  	A,#03H
+	JNZ  	?C0001
+; 		{
+			; SOURCE LINE # 113
+; 		case 0:
+			; SOURCE LINE # 114
+?C0004:
+; 			keyword=keyscan();
+			; SOURCE LINE # 115
+	LCALL	keyscan
+	MOV  	keyword?041,R7
+; 			if(keyword==16)
+			; SOURCE LINE # 116
+	MOV  	A,keyword?041
+	XRL  	A,#010H
+	JNZ  	?C0005
+; 			{
+			; SOURCE LINE # 117
+; 				if(h1==seth1&&h0==seth0&&m1==setm1&&m0==setm0)
+			; SOURCE LINE # 118
+	MOV  	A,h1
+	CJNE 	A,seth1,?C0006
+	MOV  	A,h0
+	CJNE 	A,seth0,?C0006
+	MOV  	A,m1
+	CJNE 	A,setm1,?C0006
+	MOV  	A,m0
+	CJNE 	A,setm0,?C0006
+; 				{
+			; SOURCE LINE # 119
+; 					PinSpeaker=FALSE;
+			; SOURCE LINE # 120
+; 					delay(DELAY_VALUE);
+			; SOURCE LINE # 121
+	LCALL	L?0081
+; 					PinSpeaker=TRUE;     //到达闹钟定时时间，蜂鸣器响
+			; SOURCE LINE # 122
+	SETB 	P0_1
+; 				}
+			; SOURCE LINE # 123
+	LJMP 	?C0077
+?C0006:
+; 				else
+; 					delay(DELAY_VALUE_EXTRA);
+			; SOURCE LINE # 125
+	MOV  	R7,#074H
+	MOV  	R6,#027H
+	LCALL	_delay
+?C0007:
+; 				updatee();
+			; SOURCE LINE # 126
+; 			}
+			; SOURCE LINE # 127
+	LJMP 	?C0077
+?C0005:
+; 			else
+; 				if(keyword==11)status=1; //0状态为计时状态，1状态为停止状态
+			; SOURCE LINE # 129
+	MOV  	A,keyword?041
+	CJNE 	A,#0BH,?C0009
+	LJMP 	?C0078
+?C0009:
+; 				else 
+; 				{
+			; SOURCE LINE # 131
+; 					PinSpeaker=FALSE;
+			; SOURCE LINE # 132
+; 					delay(DELAY_VALUE);
+			; SOURCE LINE # 133
+; 					PinSpeaker=TRUE;     //输入有错，蜂鸣器响
+			; SOURCE LINE # 134
+; 				}
+			; SOURCE LINE # 135
+; 				break;
+			; SOURCE LINE # 136
+	SJMP 	?C0079
+; 		case 1:
+			; SOURCE LINE # 137
+?C0011:
+; 			keyword=keyscan();
+			; SOURCE LINE # 138
+	LCALL	keyscan
+	MOV  	keyword?041,R7
+; 			if(keyword==10)status=0;
+			; SOURCE LINE # 139
+	MOV  	A,keyword?041
+	CJNE 	A,#0AH,?C0012
+	LJMP 	?C0080
+?C0012:
+; 			else if(keyword==12)status=2;//2状态为设置初值状态；
+			; SOURCE LINE # 140
+	MOV  	A,keyword?041
+	CJNE 	A,#0CH,?C0014
+	MOV  	status?040,#02H
+	SJMP 	?C0001
+?C0014:
+; 			else if(keyword==13){h0=0;
+			; SOURCE LINE # 141
+	MOV  	A,keyword?041
+	CJNE 	A,#0DH,?C0016
+	CLR  	A
+	MOV  	h0,A
+; 			h1=0;
+			; SOURCE LINE # 142
+	MOV  	h1,A
+; 			s0=0;
+			; SOURCE LINE # 143
+	MOV  	s0,A
+; 			s1=0;
+			; SOURCE LINE # 144
+	MOV  	s1,A
+; 			m0=0;
+			; SOURCE LINE # 145
+	MOV  	m0,A
+; 			m1=0;}//清零
+			; SOURCE LINE # 146
+	MOV  	m1,A
+	LJMP 	?C0001
+?C0016:
+; 			else if(keyword==14)status=3;//3状态为设置闹钟时间状态；
+			; SOURCE LINE # 147
+	MOV  	A,keyword?041
+	CJNE 	A,#0EH,?C0018
+	MOV  	status?040,#03H
+	LJMP 	?C0001
+?C0018:
+; 			else
+; 			{
+			; SOURCE LINE # 149
+; 				PinSpeaker=FALSE;
+			; SOURCE LINE # 150
+?C0079:
+; 				delay(DELAY_VALUE);
+			; SOURCE LINE # 151
+	LCALL	L?0081
+; 				PinSpeaker=TRUE;     //输入有错，蜂鸣器响   			
+			; SOURCE LINE # 152
+	SETB 	P0_1
+; 			}
+			; SOURCE LINE # 153
+; 			break;
+			; SOURCE LINE # 154
+	LJMP 	?C0001
+; 		case 2:
+			; SOURCE LINE # 155
+?C0020:
+; 			keyword=keyscan();
+			; SOURCE LINE # 156
+	LCALL	keyscan
+	MOV  	keyword?041,R7
+; 			if(keyword==10&&s1<=5&&m1<=5&&(h1*10+h0)<24)
+			; SOURCE LINE # 157
+	MOV  	A,keyword?041
+	XRL  	A,#0AH
+	JNZ  	?C0021
+	MOV  	A,s1
+	SETB 	C
+	SUBB 	A,#05H
+	JNC  	?C0021
+	MOV  	A,m1
+	SUBB 	A,#05H
+	JNC  	?C0021
+	MOV  	A,h1
+	MOV  	B,#0AH
+	MUL  	AB
+	MOV  	R4,#00H
+	ADD  	A,h0
+	MOV  	R7,A
+	MOV  	A,R4
+	ADDC 	A,B
+	MOV  	R6,A
+	CLR  	C
+	MOV  	A,R7
+	SUBB 	A,#018H
+	MOV  	A,R6
+	XRL  	A,#080H
+	SUBB 	A,#080H
+	JNC  	?C0021
+; 				status=0;
+			; SOURCE LINE # 158
+	CLR  	A
+	MOV  	status?040,A
+	SJMP 	?C0027
+?C0021:
+; 			else if(keyword==11&&s1<=5&&m1<=5&&(h1*10+h0)<24)
+			; SOURCE LINE # 159
+	MOV  	A,keyword?041
+	XRL  	A,#0BH
+	JNZ  	?C0023
+	MOV  	A,s1
+	SETB 	C
+	SUBB 	A,#05H
+	JNC  	?C0023
+	MOV  	A,m1
+	SUBB 	A,#05H
+	JNC  	?C0023
+	MOV  	A,h1
+	MOV  	B,#0AH
+	MUL  	AB
+	MOV  	R4,#00H
+	ADD  	A,h0
+	MOV  	R7,A
+	MOV  	A,R4
+	ADDC 	A,B
+	MOV  	R6,A
+	CLR  	C
+	MOV  	A,R7
+	SUBB 	A,#018H
+	MOV  	A,R6
+	XRL  	A,#080H
+	SUBB 	A,#080H
+	JNC  	?C0023
+; 				status=1;
+			; SOURCE LINE # 160
+	MOV  	status?040,#01H
+	SJMP 	?C0027
+?C0023:
+; 			else if(keyword<10&&keyword>=0) //输入的是数字键
+			; SOURCE LINE # 161
+	MOV  	A,keyword?041
+	CLR  	C
+	SUBB 	A,#0AH
+	JNC  	?C0025
+	MOV  	A,keyword?041
+	CLR  	C
+	SUBB 	A,#00H
+	JC   	?C0025
+; 			{
+			; SOURCE LINE # 162
+; 				h1=h0;
+			; SOURCE LINE # 163
+	MOV  	h1,h0
+; 				h0=m1;
+			; SOURCE LINE # 164
+	MOV  	h0,m1
+; 				m1=m0;
+			; SOURCE LINE # 165
+	MOV  	m1,m0
+; 				m0=s1;
+			; SOURCE LINE # 166
+	MOV  	m0,s1
+; 				s1=s0;
+			; SOURCE LINE # 167
+	MOV  	s1,s0
+; 				s0=keyword;
+			; SOURCE LINE # 168
+	MOV  	s0,keyword?041
+; 				updatee();		   //输入的数字键从低位起往左移
+			; SOURCE LINE # 169
+	LCALL	updatee
+; 			}
+			; SOURCE LINE # 170
+	SJMP 	?C0027
+?C0025:
+; 			else
+; 			{
+			; SOURCE LINE # 172
+; 				PinSpeaker=FALSE;
+			; SOURCE LINE # 173
+; 				delay(DELAY_VALUE);
+			; SOURCE LINE # 174
+	LCALL	L?0082
+; 				PinSpeaker=TRUE;     //输入有错，蜂鸣器响   			
+			; SOURCE LINE # 175
+	SETB 	P0_1
+; 			}
+			; SOURCE LINE # 176
+; 		case 3:
+			; SOURCE LINE # 177
+?C0027:
+; 			keyword=keyscan();
+			; SOURCE LINE # 178
+	LCALL	keyscan
+	MOV  	keyword?041,R7
+; 			if(keyword==10&&sets1<=5&&setm1<=5&&(seth1*10+seth0)<24)
+			; SOURCE LINE # 179
+	MOV  	A,keyword?041
+	XRL  	A,#0AH
+	JNZ  	?C0028
+	MOV  	A,sets1
+	SETB 	C
+	SUBB 	A,#05H
+	JNC  	?C0028
+	MOV  	A,setm1
+	SUBB 	A,#05H
+	JNC  	?C0028
+	MOV  	A,seth1
+	MOV  	B,#0AH
+	MUL  	AB
+	MOV  	R4,#00H
+	ADD  	A,seth0
+	MOV  	R7,A
+	MOV  	A,R4
+	ADDC 	A,B
+	MOV  	R6,A
+	CLR  	C
+	MOV  	A,R7
+	SUBB 	A,#018H
+	MOV  	A,R6
+	XRL  	A,#080H
+	SUBB 	A,#080H
+	JNC  	?C0028
+; 				status=0;
+			; SOURCE LINE # 180
+?C0080:
+	CLR  	A
+	MOV  	status?040,A
+	LJMP 	?C0001
+?C0028:
+; 			else if(keyword==11&&sets1<=5&&setm1<=5&&(seth1*10+seth0)<24)
+			; SOURCE LINE # 181
+	MOV  	A,keyword?041
+	XRL  	A,#0BH
+	JNZ  	?C0030
+	MOV  	A,sets1
+	SETB 	C
+	SUBB 	A,#05H
+	JNC  	?C0030
+	MOV  	A,setm1
+	SUBB 	A,#05H
+	JNC  	?C0030
+	MOV  	A,seth1
+	MOV  	B,#0AH
+	MUL  	AB
+	MOV  	R4,#00H
+	ADD  	A,seth0
+	MOV  	R7,A
+	MOV  	A,R4
+	ADDC 	A,B
+	MOV  	R6,A
+	CLR  	C
+	MOV  	A,R7
+	SUBB 	A,#018H
+	MOV  	A,R6
+	XRL  	A,#080H
+	SUBB 	A,#080H
+	JNC  	?C0030
+; 				status=1;
+			; SOURCE LINE # 182
+?C0078:
+	MOV  	status?040,#01H
+	LJMP 	?C0001
+?C0030:
+; 			else if(keyword<10&&keyword>=0) //输入的是数字键
+			; SOURCE LINE # 183
+	MOV  	A,keyword?041
+	CLR  	C
+	SUBB 	A,#0AH
+	JNC  	?C0032
+	MOV  	A,keyword?041
+	CLR  	C
+	SUBB 	A,#00H
+	JC   	?C0032
+; 			{
+			; SOURCE LINE # 184
+; 				seth1=seth0;
+			; SOURCE LINE # 185
+	MOV  	seth1,seth0
+; 				seth0=setm1;
+			; SOURCE LINE # 186
+	MOV  	seth0,setm1
+; 				setm1=setm0;
+			; SOURCE LINE # 187
+	MOV  	setm1,setm0
+; 				setm0=sets1;
+			; SOURCE LINE # 188
+	MOV  	setm0,sets1
+; 				sets1=sets0;
+			; SOURCE LINE # 189
+	MOV  	sets1,sets0
+; 				sets0=keyword;
+			; SOURCE LINE # 190
+	MOV  	sets0,keyword?041
+; 				updatee();		   //输入的数字键从低位起往左移
+			; SOURCE LINE # 191
+?C0077:
+	LCALL	updatee
+; 			}
+			; SOURCE LINE # 192
+	LJMP 	?C0001
+?C0032:
+; 			else
+; 			{
+			; SOURCE LINE # 194
+; 				PinSpeaker=FALSE;
+			; SOURCE LINE # 195
+; 				delay(DELAY_VALUE);
+			; SOURCE LINE # 196
+	LCALL	L?0082
+; 				PinSpeaker=TRUE;     //输入有错，蜂鸣器响   			
+			; SOURCE LINE # 197
+	SETB 	P0_1
+; 			}
+			; SOURCE LINE # 198
+; 			
+; 		}	
+			; SOURCE LINE # 200
+; 	}
+			; SOURCE LINE # 201
+	LJMP 	?C0001
+; END OF main
+
+; 	
+; }
+; 
+; void initial(void)
+
+	RSEG  ?PR?initial?HOUR
+initial:
+			; SOURCE LINE # 205
+; {
+			; SOURCE LINE # 206
+; 	P1_0=FALSE;
+			; SOURCE LINE # 207
+	CLR  	P1_0
+; 	P1_1=FALSE;
+			; SOURCE LINE # 208
+	CLR  	P1_1
+; 	P1_2=FALSE;
+			; SOURCE LINE # 209
+	CLR  	P1_2
+; 	P1_3=FALSE;			//键盘驱动信号都设为低,避免干扰。  
+			; SOURCE LINE # 210
+	CLR  	P1_3
+; 	P0_0=TRUE;			//发光二极管设为不亮
+			; SOURCE LINE # 211
+	SETB 	P0_0
+; 	P0_1=TRUE;			//蜂鸣器不响
+			; SOURCE LINE # 212
+	SETB 	P0_1
+; }
+			; SOURCE LINE # 213
+	RET  	
+; END OF initial
+
+; 
+; void delay(short i)	//延迟子程序，为精确计时，需要用汇编语言来做。R6R7刚好存的是i的值
+
+	RSEG  ?PR?_delay?HOUR
+L?0081:
+	USING	0
+L?0082:
+	CLR  	P0_1
+L?0083:
+	MOV  	R7,#03H
+	MOV  	R6,#00H
+_delay:
+			; SOURCE LINE # 215
+;---- Variable 'i?242' assigned to Register 'R6/R7' ----
+; {
+			; SOURCE LINE # 216
+; short ii;
+; ii=i;
+			; SOURCE LINE # 218
+	MOV  	ii?243,R6
+	MOV  	ii?243+01H,R7
+; #pragma asm
+; X_delay:
+	  X_delay:
+; 	USING	0
+	  USING	0
+; 	CLR  	A
+	  CLR  	A
+; 	MOV  	R4,A
+	  MOV  	R4,A
+; 	MOV  	R5,A
+	  MOV  	R5,A
+; XC0025:
+	  XC0025:
+; 	CLR  	C
+	  CLR  	C
+; 	MOV  	A,R5
+	  MOV  	A,R5
+; 	SUBB 	A,R7
+	  SUBB 	A,R7
+; 	MOV  	A,R6
+	  MOV  	A,R6
+; 	XRL  	A,#080H
+	  XRL  	A,#080H
+; 	MOV  	R0,A
+	  MOV  	R0,A
+; 	MOV  	A,R4
+	  MOV  	A,R4
+; 	XRL  	A,#080H
+	  XRL  	A,#080H
+; 	SUBB 	A,R0
+	  SUBB 	A,R0
+; 	JNC  	XC0028
+	  JNC  	XC0028
+; 	INC  	R5
+	  INC  	R5
+; 	CJNE 	R5,#00H,XC0069
+	  CJNE 	R5,#00H,XC0069
+; 	INC  	R4
+	  INC  	R4
+; XC0069:
+	  XC0069:
+; 	SJMP 	XC0025
+	  SJMP 	XC0025
+; XC0028:
+	  XC0028:
+; #pragma endasm
+; }
+			; SOURCE LINE # 243
+	RET  	
+; END OF _delay
+
+; 
+; void display(unsigned char i,unsigned char num)
+
+	RSEG  ?PR?_display?HOUR
+_display:
+			; SOURCE LINE # 245
+;---- Variable 'num?345' assigned to Register 'R5' ----
+;---- Variable 'i?344' assigned to Register 'R7' ----
+; {
+			; SOURCE LINE # 246
+; 	if(num >= 0 && num <=9)
+			; SOURCE LINE # 247
+	MOV  	A,R5
+	CLR  	C
+	SUBB 	A,#00H
+	JC   	?C0046
+	MOV  	A,R5
+	SETB 	C
+	SUBB 	A,#09H
+	JNC  	?C0046
+; 	{switch(i)
+			; SOURCE LINE # 248
+	MOV  	A,R7
+	DEC  	A
+	JZ   	?C0040
+	DEC  	A
+	JZ   	?C0041
+	DEC  	A
+	JZ   	?C0042
+	DEC  	A
+	JZ   	?C0043
+	DEC  	A
+	JZ   	?C0044
+	ADD  	A,#05H
+	JNZ  	?C0046
+; 	{ case 0:P2= LedSelect0 | num;  
+			; SOURCE LINE # 249
+?C0039:
+	MOV  	A,R5
+	ORL  	A,#080H
+	MOV  	P2,A
+; 	//LedSelect0的高四位为选择第0个数码管的逻辑，低四位则为数码管显示的数字。
+; 	break;
+			; SOURCE LINE # 251
+	RET  	
+; 	  case 1:P2= LedSelect1 | num;
+			; SOURCE LINE # 252
+?C0040:
+	MOV  	A,R5
+	ORL  	A,#090H
+	MOV  	P2,A
+; 		  //LedSelect1的高四位为选择第1个数码管的逻辑，低四位则为数码管显示的数字。
+; 		  break;
+			; SOURCE LINE # 254
+	RET  	
+; 	  case 2:P2= LedSelect2 | num;
+			; SOURCE LINE # 255
+?C0041:
+	MOV  	A,R5
+	ORL  	A,#0A0H
+	MOV  	P2,A
+; 		  //LedSelect2的高四位为选择第2个数码管的逻辑，低四位则为数码管显示的数字。
+; 		  break;
+			; SOURCE LINE # 257
+	RET  	
+; 	  case 3:P2= LedSelect3 | num;
+			; SOURCE LINE # 258
+?C0042:
+	MOV  	A,R5
+	ORL  	A,#0B0H
+	MOV  	P2,A
+; 		  //LedSelect3的高四位为选择第3个数码管的逻辑，低四位则为数码管显示的数字。
+; 		  break;
+			; SOURCE LINE # 260
+	RET  	
+; 	  case 4:P2= LedSelect4 | num;
+			; SOURCE LINE # 261
+?C0043:
+	MOV  	A,R5
+	ORL  	A,#0C0H
+	MOV  	P2,A
+; 		  //LedSelect4的高四位为选择第4个数码管的逻辑，低四位则为数码管显示的数字。
+; 		  break;
+			; SOURCE LINE # 263
+	RET  	
+; 	  case 5:P2= LedSelect5 | num;
+			; SOURCE LINE # 264
+?C0044:
+	MOV  	A,R5
+	ORL  	A,#0D0H
+	MOV  	P2,A
+; 		  //LedSelect5的高四位为选择第5个数码管的逻辑，低四位则为数码管显示的数字。
+; 		  break;
+			; SOURCE LINE # 266
+; 	  default:break;
+			; SOURCE LINE # 267
+; 	}
+			; SOURCE LINE # 268
+; 	}
+			; SOURCE LINE # 269
+; }
+			; SOURCE LINE # 270
+?C0046:
+	RET  	
+; END OF _display
+
+; 
+; unsigned char keyscan()
+
+	RSEG  ?PR?keyscan?HOUR
+keyscan:
+	USING	0
+			; SOURCE LINE # 272
+; {
+			; SOURCE LINE # 273
+; 	PinDrvKey1=TRUE;
+			; SOURCE LINE # 274
+	SETB 	P1_0
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 275
+	JNB  	P1_4,?C0047
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 276
+	CLR  	P0_0
+?C0047:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 277
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 278
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 279
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 280
+	SETB 	P0_1
+; 	return 1;
+			; SOURCE LINE # 281
+	MOV  	R7,#01H
+	RET  	
+; 	if(PinScanKey2==TRUE)
+			; SOURCE LINE # 282
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 283
+?C0049:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 284
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 285
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 286
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 287
+	SETB 	P0_1
+; 	return 5;
+			; SOURCE LINE # 288
+	MOV  	R7,#05H
+	RET  	
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 289
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 290
+?C0050:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 291
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 292
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 293
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 294
+	SETB 	P0_1
+; 	return 9;
+			; SOURCE LINE # 295
+	MOV  	R7,#09H
+	RET  	
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 296
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 297
+?C0051:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 298
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 299
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 300
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 301
+	SETB 	P0_1
+; 	return 12;
+			; SOURCE LINE # 302
+	MOV  	R7,#0CH
+	RET  	
+; 	PinDrvKey1=FALSE;	//扫描第一列
+			; SOURCE LINE # 303
+; 	PinDrvKey2=TRUE;
+			; SOURCE LINE # 304
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 305
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 306
+?C0052:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 307
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 308
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 309
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 310
+	SETB 	P0_1
+; 	return 2;
+			; SOURCE LINE # 311
+	DEC  	R7
+	RET  	
+; 	if(PinScanKey2==TRUE)
+			; SOURCE LINE # 312
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 313
+?C0053:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 314
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 315
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 316
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 317
+	SETB 	P0_1
+; 	return 6;
+			; SOURCE LINE # 318
+	MOV  	R7,#06H
+	RET  	
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 319
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 320
+?C0054:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 321
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 322
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 323
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 324
+	SETB 	P0_1
+; 	return 0;
+			; SOURCE LINE # 325
+	MOV  	R7,#00H
+	RET  	
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 326
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 327
+?C0055:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 328
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 329
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 330
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 331
+	SETB 	P0_1
+; 	return 13;
+			; SOURCE LINE # 332
+	MOV  	R7,#0DH
+	RET  	
+; 	PinDrvKey2=FALSE;	//扫描第二列
+			; SOURCE LINE # 333
+; 	PinDrvKey3=TRUE;
+			; SOURCE LINE # 334
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 335
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 336
+?C0056:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 337
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 338
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 339
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 340
+	SETB 	P0_1
+; 	return 3;
+			; SOURCE LINE # 341
+	RET  	
+; 	if(PinScanKey2==TRUE)
+			; SOURCE LINE # 342
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 343
+?C0057:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 344
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 345
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 346
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 347
+	SETB 	P0_1
+; 	return 7;
+			; SOURCE LINE # 348
+	MOV  	R7,#07H
+	RET  	
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 349
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 350
+?C0058:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 351
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 352
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 353
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 354
+	SETB 	P0_1
+; 	return 10;
+			; SOURCE LINE # 355
+	MOV  	R7,#0AH
+	RET  	
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 356
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 357
+?C0059:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 358
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 359
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 360
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 361
+	SETB 	P0_1
+; 	return 14;
+			; SOURCE LINE # 362
+	MOV  	R7,#0EH
+	RET  	
+; 	PinDrvKey3=FALSE;	//扫描第三列
+			; SOURCE LINE # 363
+; 	PinDrvKey4=TRUE;
+			; SOURCE LINE # 364
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 365
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 366
+?C0060:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 367
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 368
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 369
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 370
+	SETB 	P0_1
+; 	return 4;
+			; SOURCE LINE # 371
+	INC  	R7
+	RET  	
+; 	if(PinScanKey2==TRUE)
+			; SOURCE LINE # 372
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 373
+?C0061:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 374
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 375
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 376
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 377
+	SETB 	P0_1
+; 	return 8;
+			; SOURCE LINE # 378
+	MOV  	R7,#08H
+	RET  	
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 379
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 380
+?C0062:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 381
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 382
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 383
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 384
+	SETB 	P0_1
+; 	return 11;
+			; SOURCE LINE # 385
+	MOV  	R7,#0BH
+	RET  	
+; 	if(PinScanKey1==TRUE)
+			; SOURCE LINE # 386
+; 		PinLamp=FALSE;
+			; SOURCE LINE # 387
+?C0063:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 388
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 389
+	LCALL	L?0082
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 390
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 391
+	SETB 	P0_1
+; 	return 15;
+			; SOURCE LINE # 392
+	MOV  	R7,#0FH
+; 	PinDrvKey3=FALSE;	//扫描第四列
+			; SOURCE LINE # 393
+; 	return 16;
+			; SOURCE LINE # 394
+; }
+			; SOURCE LINE # 395
+?C0048:
+	RET  	
+; END OF keyscan
+
+; 
+; void updatee()
+
+	RSEG  ?PR?updatee?HOUR
+updatee:
+	USING	0
+			; SOURCE LINE # 397
+; {
+			; SOURCE LINE # 398
+; 	if(s0==9)	//如果10ms位需要进位，则进入语句
+			; SOURCE LINE # 399
+	MOV  	A,s0
+	XRL  	A,#09H
+	JNZ  	?C0064
+; 	{
+			; SOURCE LINE # 400
+; 		s0=0;
+			; SOURCE LINE # 401
+	MOV  	s0,A
+; 		if(s1==5)	//如果100ms位需要进位，则进入语句
+			; SOURCE LINE # 402
+	MOV  	A,s1
+	XRL  	A,#05H
+	JNZ  	?C0065
+; 		{
+			; SOURCE LINE # 403
+; 			s1=0;
+			; SOURCE LINE # 404
+	MOV  	s1,A
+; 			if(m0==9)	//如果1sec位需要进位，则进入语句
+			; SOURCE LINE # 405
+	MOV  	A,m0
+	XRL  	A,#09H
+	JNZ  	?C0066
+; 			{
+			; SOURCE LINE # 406
+; 				m0=0;
+			; SOURCE LINE # 407
+	MOV  	m0,A
+; 				if(m1==5)	//如果10sec位需要进位，则进入语句
+			; SOURCE LINE # 408
+	MOV  	A,m1
+	XRL  	A,#05H
+	JNZ  	?C0067
+; 				{
+			; SOURCE LINE # 409
+; 					m1=0;
+			; SOURCE LINE # 410
+	MOV  	m1,A
+; 					if(h0==9&&h1<=1)
+			; SOURCE LINE # 411
+	MOV  	A,h0
+	CJNE 	A,#09H,?C0068
+	MOV  	A,h1
+	SETB 	C
+	SUBB 	A,#01H
+	JNC  	?C0068
+; 					{h0=0;
+			; SOURCE LINE # 412
+	CLR  	A
+	MOV  	h0,A
+; 					h1+=1;}
+			; SOURCE LINE # 413
+	INC  	h1
+	SJMP 	?C0075
+?C0068:
+; 					else if(h0==3&&h1==2)
+			; SOURCE LINE # 414
+	MOV  	A,h0
+	CJNE 	A,#03H,?C0070
+	MOV  	A,h1
+	CJNE 	A,#02H,?C0070
+; 					{h0=0;
+			; SOURCE LINE # 415
+	CLR  	A
+	MOV  	h0,A
+; 					h1=0;}
+			; SOURCE LINE # 416
+	MOV  	h1,A
+	SJMP 	?C0075
+?C0070:
+; 					else h0+=1;
+			; SOURCE LINE # 417
+	INC  	h0
+; 				}
+			; SOURCE LINE # 418
+	SJMP 	?C0075
+?C0067:
+; 				else m1+=1;
+			; SOURCE LINE # 419
+	INC  	m1
+; 			}
+			; SOURCE LINE # 420
+	SJMP 	?C0075
+?C0066:
+; 			else m0+=1;
+			; SOURCE LINE # 421
+	INC  	m0
+; 		}
+			; SOURCE LINE # 422
+	SJMP 	?C0075
+?C0065:
+; 		else s1+=1;
+			; SOURCE LINE # 423
+	INC  	s1
+; 	}
+			; SOURCE LINE # 424
+	SJMP 	?C0075
+?C0064:
+; 	else s0+=1;
+			; SOURCE LINE # 425
+	INC  	s0
+?C0075:
+; 	display(0,s0);
+			; SOURCE LINE # 426
+	MOV  	R5,s0
+	CLR  	A
+	MOV  	R7,A
+	LCALL	_display
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 427
+	LCALL	L?0083
+; 	display(1,s1);
+			; SOURCE LINE # 428
+	MOV  	R5,s1
+	MOV  	R7,#01H
+	LCALL	_display
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 429
+	MOV  	R7,#03H
+	LCALL	_delay
+; 	display(2,m0);
+			; SOURCE LINE # 430
+	MOV  	R5,m0
+	DEC  	R7
+	LCALL	_display
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 431
+	INC  	R7
+	LCALL	_delay
+; 	display(3,m1);
+			; SOURCE LINE # 432
+	MOV  	R5,m1
+	LCALL	_display
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 433
+	LCALL	_delay
+; 	display(4,h0);
+			; SOURCE LINE # 434
+	MOV  	R5,h0
+	INC  	R7
+	LCALL	_display
+; 	delay(DELAY_VALUE);
+			; SOURCE LINE # 435
+	DEC  	R7
+	LCALL	_delay
+; 	display(5,h1);
+			; SOURCE LINE # 436
+	MOV  	R5,h1
+	MOV  	R7,#05H
+	LCALL	_display
+; 	delay(DELAY_VALUE); //以上语句则在数码管上显示各个数字
+			; SOURCE LINE # 437
+	MOV  	R7,#03H
+	LJMP 	_delay
+; END OF updatee
+
+	END

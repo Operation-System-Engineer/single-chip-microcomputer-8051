@@ -1,0 +1,4 @@
+"main.obj" 
+TO "main" 
+CODE( 0X0000-0X3FFF )
+XDATA( 0X0000-0XFFFF )

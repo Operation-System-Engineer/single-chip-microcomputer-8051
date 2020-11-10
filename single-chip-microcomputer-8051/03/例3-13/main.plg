@@ -1,0 +1,31 @@
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(16): error C141: syntax error near '/'
+.\MAIN.C(16): error C100: unprintable character 0xB6 skipped
+.\MAIN.C(16): error C100: unprintable character 0xA8 skipped
+.\MAIN.C(16): error C100: unprintable character 0xD2 skipped
+.\MAIN.C(16): error C100: unprintable character 0xE5 skipped
+.\MAIN.C(16): error C100: unprintable character 0xCA skipped
+.\MAIN.C(16): error C100: unprintable character 0xB1 skipped
+.\MAIN.C(16): error C100: unprintable character 0xB6 skipped
+.\MAIN.C(16): error C100: unprintable character 0xD4 skipped
+.\MAIN.C(16): error C100: unprintable character 0xD6 skipped
+.\MAIN.C(16): error C100: unprintable character 0xB8 skipped
+.\MAIN.C(16): error C100: unprintable character 0xD5 skipped
+.\MAIN.C(16): error C100: unprintable character 0xEB skipped
+.\MAIN.C(16): error C100: unprintable character 0xB1 skipped
+.\MAIN.C(16): error C100: unprintable character 0xE4 skipped
+.\MAIN.C(16): error C100: unprintable character 0xC1 skipped
+.\MAIN.C(16): error C100: unprintable character 0xBF skipped
+.\MAIN.C(16): error C100: unprintable character 0xB3 skipped
+.\MAIN.C(16): error C100: unprintable character 0xF5 skipped
+.\MAIN.C(16): error C100: unprintable character 0xCA skipped
+.\MAIN.C(16): error C100: unprintable character 0xBC skipped
+.\MAIN.C(16): error C100: unprintable character 0xBB skipped
+.\MAIN.C(16): error C100: unprintable character 0xAF skipped
+.\MAIN.C(16): error C141: syntax error near '/'
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).

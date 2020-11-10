@@ -1,0 +1,408 @@
+C51 COMPILER V6.23a  MAIN                                                                  11/24/2002 21:27:04 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c LARGE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          
+   2          #ifdef MONITOR51                         /* Debugging with Monitor-51 needs   */
+              char code reserve [3] _at_ 0x23;         /* space for serial interrupt if     */
+              #endif                                   /* Stop Exection with Serial Intr.   */
+   5                                                   /* is enabled                        */
+   6          /*------------------------------------------------
+   7          The main C function.  Program execution starts
+   8          here after stack initialization.
+   9          ------------------------------------------------*/
+  10          #include <stdio.h>
+  11          #include <reg51.h>
+  12          #include <math.h>
+  13          
+  14          #define         DEBUG
+  15          #define         VALID                   0
+  16          #define         INVALID                 1
+  17          #define         TRUE                    1
+  18          #define         FALSE                   0
+  19          #define         ConstClockWise          1
+  20          #define         ConstAntiClock          0
+  21          
+  22          #define         DELAY_VALVE             3
+  23          
+  24          #define         MAXSTEPS                400                     //maxsteps = 360/0.9=400
+  25          #define         HALFMAXSTEPS            200                     //180 degree
+  26          #define         ONEQUARTERSTEPS         100
+  27          #define         THREEQUARTERSTEPS       300
+  28          #define         OCTANT                  50
+  29          
+  30          #define         MAXINPULSE              20
+  31          
+  32          
+  33          //#define       PinZFeedBack    P0_0            //input,photoelectricity signal feed back ,to know where is the 0 angle p
+             -osition
+  34          #define         PinClockWiseRot P0_1            //input,ClockWise Rotate Signal
+  35          #define         PinAntiClockRot P0_2            //input,Anti-clock-wise rotate signal
+  36          //#define       PinInFree       P0_3            //input,Rotate to Zero Angle Signal
+  37          #define         PinDrvOPTO      P1_0            //output,opto.
+  38          #define         PinDrvFree      P1_1            //output,if ,then machine is free
+  39          #define         PinDrvAntiClock P1_2            //output,if VALID,then Drive the machine rotate ANTI-clock wise
+  40          #define         PinDriver       P1_3            //output,give Pulse to control the machine's speed
+  41          
+  42          #define         PinXClockWise   P2_0            //input,X-array machine rotate clockwisely
+  43          #define         PinYClockWise   P2_1            //input,Y-array machine rotate clockwisely
+  44          
+  45          
+  46          #define         PinLamp1        P1_4
+  47          #define         PinLamp2        P1_5
+  48          #define         PinLamp3        P1_6
+  49          #define         PinLamp4        P1_7
+  50          
+  51          #define         PinLamp5        P2_2
+  52          #define         PinLamp6        P2_3
+  53          
+  54          #define         PinLampBlink    PinLamp1
+C51 COMPILER V6.23a  MAIN                                                                  11/24/2002 21:27:04 PAGE 2   
+
+  55          #define         PinRotIndicator PinLamp2
+  56          #define         LampFatalError  PinLamp4
+  57          #define         PinLampDebug    PinLamp3
+  58          #define         LampOVErr       PinLamp5
+  59          #define         LampComm        PinLamp6
+  60          
+  61          
+  62          sbit            P0_0=P0^0;
+  63          sbit            P0_1=P0^1;
+  64          sbit            P0_2=P0^2;
+  65          sbit            P0_3=P0^3;
+  66          sbit            P0_4=P0^4;
+  67          sbit            P0_5=P0^5;
+  68          sbit            P0_6=P0^6;
+  69          sbit            P0_7=P0^7;
+  70          
+  71          sbit            P1_0=P1^0;
+  72          sbit            P1_1=P1^1;
+  73          sbit            P1_2=P1^2;
+  74          sbit            P1_3=P1^3;
+  75          sbit            P1_4=P1^4;
+  76          sbit            P1_5=P1^5;
+  77          sbit            P1_6=P1^6;
+  78          sbit            P1_7=P1^7;
+  79          
+  80          sbit            P2_0=P2^0;
+  81          sbit            P2_1=P2^1;
+  82          sbit            P2_2=P2^2;
+  83          sbit            P2_3=P2^3;
+  84          sbit            P2_4=P2^4;
+  85          sbit            P2_5=P2^5;
+  86          sbit            P2_6=P2^6;
+  87          sbit            P2_7=P2^7;
+  88          
+  89          sbit            P3_2=P3^2;
+  90          sbit            P3_3=P3^3;
+  91          
+  92          
+  93          bit EvTimer=FALSE;
+  94          bit EvRcv=FALSE;
+  95          
+  96          char rcvdata=0;
+  97          char workmode=2;
+  98          int delaycount=20;
+  99          
+ 100          long int XPulse=0,YPulse=0;
+ 101          long int XPulseTemp=0,YPulseTemp=0;
+ 102          
+ 103          //用最小步数表示角度
+ 104          
+ 105          //int debugreg[4];
+ 106          int debugYinput=0;
+ 107          int debugXinput=0;
+ 108          int counter10ms=0;
+ 109          int debugtime=0;
+ 110          
+ 111          
+ 112          void initial(void);              //初始化子程序
+ 113          void delay(int i);
+ 114          int FuncRotate(bit BClockWise,int step,int *PRegAngle);
+ 115          int FuncGoAngleZ(int *PRegAngle);
+ 116          void send(char *temp,int j);
+C51 COMPILER V6.23a  MAIN                                                                  11/24/2002 21:27:04 PAGE 3   
+
+ 117          
+ 118          
+ 119          void main(void)
+ 120          {
+ 121   1              int RegAngle=0,RegNewAngle=0,temp=0;
+ 122   1              long int Xtmp=0,Ytmp=0;
+ 123   1              
+ 124   1              initial();                                 //初始化子程序
+ 125   1              PinDriver=VALID;
+ 126   1              PinLamp1=FALSE;
+ 127   1              PinLamp2=FALSE;
+ 128   1              PinLamp3=FALSE;
+ 129   1              PinLamp4=FALSE;
+ 130   1              PinLamp5=FALSE;
+ 131   1              PinLamp6=FALSE;
+ 132   1              
+ 133   1              PinDrvOPTO=FALSE;
+ 134   1              PinDrvFree=FALSE;
+ 135   1              delay(1);
+ 136   1              
+ 137   1              while(1)
+ 138   1              {
+ 139   2                      while(PinInFree==VALID) 
+*** ERROR C202 IN LINE 139 OF MAIN.C: 'PinInFree': undefined identifier
+ 140   2                      {
+ 141   3                              TR0=0;
+ 142   3                              PinDrvFree=TRUE;
+ 143   3                              while(PinClockWiseRot==VALID) 
+ 144   3                              {
+ 145   4                                      PinDrvFree=FALSE;
+ 146   4                                      FuncRotate(ConstClockWise,1,&RegAngle);
+ 147   4                                      delay(500);
+ 148   4                              }
+ 149   3                              while(PinAntiClockRot==VALID)
+ 150   3                              {
+ 151   4                                      PinDrvFree=FALSE;
+ 152   4                                      FuncRotate(ConstAntiClock,1,&RegAngle);
+ 153   4                                      delay(500);
+ 154   4                              }
+ 155   3                              TR0=1;
+ 156   3                              EvTimer=FALSE;
+ 157   3                      }
+ 158   2                      PinDrvFree=FALSE;
+ 159   2                      if(EvRcv)
+ 160   2                      {
+ 161   3                              delaycount=rcvdata&0x1F;
+ 162   3                              workmode=(rcvdata&0xE0)/32;
+ 163   3                              EvRcv=FALSE;
+ 164   3                      }
+ 165   2                      
+ 166   2                      
+ 167   2                      if (EvTimer)
+ 168   2                      {
+ 169   3                              ++debugtime;
+ 170   3                              if(debugtime==5) 
+ 171   3                              {
+ 172   4                                      PinLampBlink=TRUE;
+ 173   4                              }
+ 174   3                              else if(debugtime==10)
+ 175   3                              {
+ 176   4                                      PinLampBlink=FALSE;
+ 177   4                                      debugtime=0;
+C51 COMPILER V6.23a  MAIN                                                                  11/24/2002 21:27:04 PAGE 4   
+
+ 178   4                              }
+ 179   3                              
+ 180   3                              RegNewAngle=XPulse*XPulse+YPulse*YPulse;
+ 181   3      //                      RegNewAngle=(int)sqrt((float)RegNewAngle);
+ 182   3                              
+ 183   3                              temp=RegNewAngle-RegAngle;
+ 184   3                              if(temp>HALFMAXSTEPS)
+ 185   3                              {
+ 186   4                                      temp=temp-MAXSTEPS;
+ 187   4                              }
+ 188   3                              else if(temp<-HALFMAXSTEPS)
+ 189   3                              {
+ 190   4                                      temp=temp+MAXSTEPS;
+ 191   4                              }
+ 192   3                              
+ 193   3                              if(temp>0)
+ 194   3                              {
+ 195   4                                      FuncRotate(ConstClockWise,temp,&RegAngle);
+ 196   4                              }
+ 197   3                              if(temp<0)
+ 198   3                              {
+ 199   4                                      FuncRotate(ConstAntiClock,-temp,&RegAngle);}
+ 200   3                      }
+ 201   2                      
+ 202   2                      if(workmode==1) 
+ 203   2                      {
+ 204   3                              send((char*)&RegAngle,2);
+ 205   3                      }
+ 206   2                      else if(workmode==2) 
+ 207   2                      {
+ 208   3                              send((char*)&RegAngle,2);
+ 209   3                              send((char*)&XPulse,4);
+ 210   3                              send((char*)&YPulse,4);
+ 211   3                      }
+ 212   2                      
+ 213   2                      EvTimer=FALSE;
+ 214   2              }
+ 215   1      }
+ 216          
+ 217          
+ 218          
+ 219          void initial(void)
+ 220          {
+ 221   1              
+ 222   1              //  IP=0x08;              //定义T1中断优先
+ 223   1              //  IE=0x87;              //允许中断0、1、定时器0
+ 224   1              //  TCON=0x05;            //外部中断为负边沿中断
+ 225   1              
+ 226   1              IP=0x10;              //定义串口为高优先级中断
+ 227   1              IE=0x97;              //允许串口、中断0、1、定时器0
+ 228   1              TCON=0x05;
+ 229   1              
+ 230   1              //  TMOD=0x01;            //定时器0以十六位定时/计数器方式工作
+ 231   1              TMOD=0x21;            //定时器1为自动装入(auto-load)方式
+ 232   1              //  TMOD=0x22;            //定时器1为自动装入(auto-load)方式
+ 233   1              //  TH0=0xD8;             //10ms产生中断
+ 234   1              //  TL0=0xEF;
+ 235   1              TH0=0xB1;             //10ms产生中断 24Mhz
+ 236   1              TL0=0xE0;
+ 237   1              //  TH0=0x4E;             //10ms产生中断 24Mhz
+ 238   1              //  TL0=0x20;
+ 239   1              //  TH0=0xFF;             //10ms产生中断 24Mhz
+C51 COMPILER V6.23a  MAIN                                                                  11/24/2002 21:27:04 PAGE 5   
+
+ 240   1              //  TL0=0x80;
+ 241   1              //  TH0=0xff;             //10ms产生中断 24Mhz
+ 242   1              //  TL0=0x3f;
+ 243   1              //  TH0=0x00;
+ 244   1              //  TL0=0x00;             //
+ 245   1              TR0=1;
+ 246   1              
+ 247   1              
+ 248   1              PCON=0;               //SMOD(PCON.7)=1时，baudrate doubled.//smod=1 (11M晶振时为0)
+ 249   1              
+ 250   1              SCON=0xD0;            //串行口工作方式 : 9位UART, 波特率可变
+ 251   1              TH1=0xf3;
+ 252   1              TL1=0xf3;             //
+ 253   1              PCON=0x80|PCON; //  SMOD=1;             //波特率设置 : 9600 baud(E8--24MHZ)
+ 254   1              //SMOD=0=4.8kbps
+ 255   1              //th1=tl1=fd,smod=0 ,=19.2kbps
+ 256   1              TR1=1;                //启动定时器1
+ 257   1              
+ 258   1              
+ 259   1              XPulse=0;
+ 260   1              YPulse=0;
+ 261   1              XPulseTemp=0;
+ 262   1              YPulseTemp=0;
+ 263   1              
+ 264   1      }
+ 265          
+ 266          void send(char *temp,int j)
+ 267          {
+ 268   1              int i=0;
+ 269   1              LampComm=TRUE;
+ 270   1              EA=0;
+ 271   1              for(i=0;i<=j-1;i++)
+ 272   1              {
+ 273   2                      ACC=*(temp+i);
+ 274   2                      TB8=P;
+ 275   2                      SBUF=ACC;
+ 276   2                      while(TI==0);
+ 277   2                      TI=0;
+ 278   2              }
+ 279   1              EA=1;
+ 280   1              LampComm=FALSE;
+ 281   1      }
+ 282          
+ 283          int FuncRotate(bit BClockWise,int step,int *PRegAngle)
+ 284          {
+ 285   1              
+ 286   1              PinRotIndicator=TRUE;
+ 287   1              if (BClockWise)
+ 288   1          {
+ 289   2                      PinDrvAntiClock=INVALID;
+ 290   2                      *PRegAngle+=step;
+ 291   2                      if (*PRegAngle>=MAXSTEPS) *PRegAngle-=MAXSTEPS;
+ 292   2          }
+ 293   1              else
+ 294   1          {
+ 295   2                      PinDrvAntiClock=VALID;
+ 296   2                      *PRegAngle-=step;
+ 297   2                      if (*PRegAngle<0) *PRegAngle+=MAXSTEPS;
+ 298   2          }
+ 299   1              
+ 300   1              
+ 301   1              while(step)
+C51 COMPILER V6.23a  MAIN                                                                  11/24/2002 21:27:04 PAGE 6   
+
+ 302   1          {
+ 303   2                      PinDriver=INVALID;
+ 304   2                      delay(delaycount);
+ 305   2                      PinDriver=VALID;
+ 306   2                      delay(delaycount);
+ 307   2                      --step;
+ 308   2          }
+ 309   1              PinRotIndicator=FALSE;
+ 310   1              return(TRUE);
+ 311   1              
+ 312   1              
+ 313   1      }
+ 314          void delay(int i)
+ 315          {
+ 316   1              int j=0;
+ 317   1              i=i*DELAY_VALVE;
+ 318   1              
+ 319   1              while (j<i)j++;
+ 320   1              
+ 321   1      }
+ 322          
+ 323          void XPulse_INT(void) interrupt 2
+ 324          {
+ 325   1              EX0=0;
+ 326   1              
+ 327   1              if(PinXClockWise)   XPulseTemp++;
+ 328   1              else XPulseTemp--;
+ 329   1              
+ 330   1              EX0=1;
+ 331   1      }
+ 332          void  YPulse_INT(void)  interrupt 0
+ 333          {
+ 334   1              EX1=0;
+ 335   1              
+ 336   1              if(PinYClockWise) YPulseTemp++;
+ 337   1              else YPulseTemp--;
+ 338   1              
+ 339   1              EX1=1;
+ 340   1      }
+ 341          
+ 342          void  TIMER(void)  interrupt 1
+ 343          {
+ 344   1              TH0=0xB1;             //10ms产生中断 24Mhz
+ 345   1              TL0=0xE0;
+ 346   1              
+ 347   1              counter10ms++;
+ 348   1              //  if(counter10ms==5)
+ 349   1              //    PinLampBlink=TRUE;
+ 350   1              
+ 351   1              if(counter10ms>=30)
+ 352   1          {
+ 353   2                      counter10ms=0;
+ 354   2                      if(EvTimer==TRUE){while(1){LampFatalError=TRUE;}}//for debug use
+ 355   2                      EvTimer=TRUE;
+ 356   2                      //       PinLampBlink=FALSE;
+ 357   2                      XPulse=XPulseTemp;
+ 358   2                      YPulse=YPulseTemp;
+ 359   2                      XPulseTemp=0;
+ 360   2                      YPulseTemp=0;
+ 361   2          }
+ 362   1      }
+ 363          
+C51 COMPILER V6.23a  MAIN                                                                  11/24/2002 21:27:04 PAGE 7   
+
+ 364          
+ 365          
+ 366          void Rcv_INT(void) interrupt 4
+ 367          {
+ 368   1              LampComm=TRUE;
+ 369   1              if(RI)
+ 370   1              {
+ 371   2                      ACC=SBUF;
+ 372   2                      if(P==RB8)
+ 373   2                      {
+ 374   3                              rcvdata=ACC;
+ 375   3                              EvRcv=TRUE;
+ 376   3                      }
+ 377   2                      
+ 378   2                      RI=0;
+ 379   2                      
+ 380   2              }
+ 381   1              LampComm=FALSE;
+ 382   1      }
+ 383          
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)

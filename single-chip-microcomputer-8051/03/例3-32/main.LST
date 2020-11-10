@@ -1,0 +1,101 @@
+C51 COMPILER V6.23a  MAIN                                                                  11/20/2002 01:21:01 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c LARGE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <REG52.H>                /* special function register declarations   */
+   2                                            /* for the intended 8051 derivative         */
+   3          
+   4          #include <stdlib.h>
+   5          //#include <alloc.h>
+   6          #include <string.h>
+   7          #include <stdio.h>
+   8          
+   9          #ifdef MONITOR51                         /* Debugging with Monitor-51 needs   */
+              char code reserve [3] _at_ 0x23;         /* space for serial interrupt if     */
+              #endif                                   /* Stop Exection with Serial Intr.   */
+  12                                                   /* is enabled                        */
+  13          /*------------------------------------------------
+  14          The main C function.  Program execution starts
+  15          here after stack initialization.
+  16          ------------------------------------------------*/
+  17          void main (void) {
+  18   1      
+  19   1              char *binary(char *ptr[],char *str,int n);/* 函数声明*/
+  20   1              char *ptr1[5],*temp;
+  21   1              int i;
+  22   1      /*------------------------------------------------
+  23   1      Setup the serial port for 1200 baud at 16MHz.
+  24   1      ------------------------------------------------*/
+  25   1      #ifndef MONITOR51
+  26   1          SCON  = 0x50;                       /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  27   1          TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
+  28   1          TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
+  29   1          TR1   = 1;                  /* TR1:  timer 1 run                          */
+  30   1          TI    = 1;                  /* TI:   set TI to send first char of UART    */
+  31   1      #endif
+  32   1      /*------------------------------------------------
+  33   1      Note that an embedded program never exits (because
+  34   1      there is no operating system to return to).  It
+  35   1      must loop and execute forever.
+  36   1      ------------------------------------------------*/
+  37   1              init_mempool (0x1000,0x500);                                    /*初始化内存池*/        
+  38   1              for (i=0;i<5;i++)
+  39   1              {
+  40   2                      ptr1[i]=malloc(20);/*按字典顺序输入字符串*/
+  41   2                      gets(ptr1[i],20);
+  42   2              }
+  43   1              printf("\n");
+  44   1              printf("original string:\n");
+  45   1              for(i= 0 ; i < 5 ; i++)
+  46   1                      printf("%s\n",ptr1[i]) ;
+  47   1              printf("input search string:\n");
+  48   1              temp=malloc(20) ;
+  49   1              gets(temp,20);/*输入被查找字符串*/
+  50   1              i=5 ;
+  51   1              temp=binary(ptr1,temp,i );/*调用查找函数*/
+  52   1              if (temp) printf("succesful-----%s\n" ,temp);
+  53   1              else printf("no succesful!\n");
+  54   1              return;
+  55   1          while (1) {};
+C51 COMPILER V6.23a  MAIN                                                                  11/20/2002 01:21:01 PAGE 2   
+
+  56   1      }
+  57          
+  58          char *binary(char *ptr[],char *str,int n)/*定义返回字符指针的函数*/
+  59          {/*折半查找*/
+  60   1              int hig,low,mid;
+  61   1              low=0;
+  62   1              hig=n-1;
+  63   1              while(low<=hig)
+  64   1              {
+  65   2                      mid=(low+hig)/2 ;
+  66   2                      if (strcmp(str,ptr[mid])<0)
+  67   2                              hig=mid-1 ;
+  68   2                      else if(strcmp(str,ptr[mid])>0)
+  69   2                              low=mid+1 ;
+  70   2                      else return(str);/*查帐成功，返回被查字符串*/
+  71   2              }
+  72   1              return NULL;/*查找失败，返回空指针*/
+  73   1      }
+  74          
+  75          
+  76          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    652    ----
+   CONSTANT SIZE    =     79    ----
+   XDATA SIZE       =   ----      34
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

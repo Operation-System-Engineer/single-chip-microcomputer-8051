@@ -1,0 +1,476 @@
+C51 COMPILER V6.23a  HOUR                                                                  09/08/2003 17:01:40 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE HOUR
+NO OBJECT MODULE REQUESTED
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE hour.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #pragma SRC
+   2          #include <stdio.h>
+   3          #include <reg51.h>
+   4          
+   5          
+   6          #define         TRUE                    1
+   7          #define         FALSE                   0
+   8          
+   9          #define         DELAY_VALUE             3
+  10          #define         DELAY_VALUE_EXTRA       10100
+  11          
+  12          
+  13          
+  14          #define         PinDrvKey1      P1_0
+  15          #define         PinDrvKey2      P1_1
+  16          #define         PinDrvKey3      P1_2
+  17          #define         PinDrvKey4      P1_3            
+  18          //键盘扫描的驱动线
+  19          
+  20          
+  21          #define         PinScanKey1     P1_4
+  22          #define         PinScanKey2     P1_5
+  23          #define         PinScanKey3     P1_6
+  24          #define         PinScanKey4     P1_7            
+  25          //键盘扫描的信号获取线
+  26          
+  27          #define         PinSegA         P2_0    
+  28          #define         PinSegB         P2_1
+  29          #define         PinSegC         P2_2
+  30          #define         PinSegD         P2_3            
+  31          //七段码的数据线
+  32          
+  33          #define         PinSelectA      P2_4
+  34          #define         PinSelectB      P2_5
+  35          #define         PinSelectC      P2_6            
+  36          //选择器的数据位
+  37          
+  38          #define         PinSelectCS     P2_4            
+  39          //选择器的片选位
+  40          
+  41          #define         LedSelect0      0x80
+  42          #define         LedSelect1      0x90
+  43          #define         LedSelect2      0xa0
+  44          #define         LedSelect3      0xb0
+  45          #define         LedSelect4      0xc0
+  46          #define         LedSelect5      0xd0
+  47          
+  48          #define         PinLamp         P0_0            
+  49          //指示灯驱动管脚
+  50          #define         PinSpeaker      P0_1            
+  51          //蜂鸣器驱动管脚
+  52          
+  53          sbit            P0_0=P0^0;
+  54          sbit            P0_1=P0^1;
+  55          sbit            P0_2=P0^2;
+C51 COMPILER V6.23a  HOUR                                                                  09/08/2003 17:01:40 PAGE 2   
+
+  56          sbit            P0_3=P0^3;
+  57          sbit            P0_4=P0^4;
+  58          sbit            P0_5=P0^5;
+  59          sbit            P0_6=P0^6;
+  60          sbit            P0_7=P0^7;
+  61          
+  62          sbit            P1_0=P1^0;
+  63          sbit            P1_1=P1^1;
+  64          sbit            P1_2=P1^2;
+  65          sbit            P1_3=P1^3;
+  66          sbit            P1_4=P1^4;
+  67          sbit            P1_5=P1^5;
+  68          sbit            P1_6=P1^6;
+  69          sbit            P1_7=P1^7;
+  70          
+  71          sbit            P2_0=P2^0;
+  72          sbit            P2_1=P2^1;
+  73          sbit            P2_2=P2^2;
+  74          sbit            P2_3=P2^3;
+  75          sbit            P2_4=P2^4;
+  76          sbit            P2_5=P2^5;
+  77          sbit            P2_6=P2^6;
+  78          sbit            P2_7=P2^7;
+  79          
+  80          
+  81          void initial(void);              
+  82          //初始化子程序
+  83          void delay(short i);             
+  84          //延时子程序
+  85          void display(unsigned char i,unsigned char num);
+  86          //显示子程序，其中变量i,num含义为在第i个数码管显示数字num.
+  87          unsigned char keyscan(void);
+  88          //键盘扫描子程序
+  89          void updatee(void);
+  90          
+  91          unsigned char h1=0;
+  92          unsigned char h0=0;
+  93          unsigned char m1=0;
+  94          unsigned char m0=0;
+  95          unsigned char s1=0;
+  96          unsigned char s0=0;
+  97          unsigned char seth1=0;
+  98          unsigned char seth0=0;
+  99          unsigned char setm1=0;
+ 100          unsigned char setm0=0;
+ 101          unsigned char sets1=0;
+ 102          unsigned char sets0=0;  //设定闹钟的闹定时间,设定为闹钟时间，闹铃时间定为1分钟
+ 103          
+ 104          void main(void)
+ 105          {
+ 106   1              unsigned char status;
+ 107   1              unsigned char keyword;
+ 108   1              initial();
+ 109   1              //键盘驱动信号，发光二极管，以及蜂鸣器都设在无效状态
+ 110   1              for(;;)
+ 111   1              {
+ 112   2                      switch(status)
+ 113   2                      {
+ 114   3                      case 0:
+ 115   3                              keyword=keyscan();
+ 116   3                              if(keyword==16)
+ 117   3                              {
+C51 COMPILER V6.23a  HOUR                                                                  09/08/2003 17:01:40 PAGE 3   
+
+ 118   4                                      if(h1==seth1&&h0==seth0&&m1==setm1&&m0==setm0)
+ 119   4                                      {
+ 120   5                                              PinSpeaker=FALSE;
+ 121   5                                              delay(DELAY_VALUE);
+ 122   5                                              PinSpeaker=TRUE;     //到达闹钟定时时间，蜂鸣器响
+ 123   5                                      }
+ 124   4                                      else
+ 125   4                                              delay(DELAY_VALUE_EXTRA);
+ 126   4                                      updatee();
+ 127   4                              }
+ 128   3                              else
+ 129   3                                      if(keyword==11)status=1; //0状态为计时状态，1状态为停止状态
+ 130   3                                      else 
+ 131   3                                      {
+ 132   4                                              PinSpeaker=FALSE;
+ 133   4                                              delay(DELAY_VALUE);
+ 134   4                                              PinSpeaker=TRUE;     //输入有错，蜂鸣器响
+ 135   4                                      }
+ 136   3                                      break;
+ 137   3                      case 1:
+ 138   3                              keyword=keyscan();
+ 139   3                              if(keyword==10)status=0;
+ 140   3                              else if(keyword==12)status=2;//2状态为设置初值状态；
+ 141   3                              else if(keyword==13){h0=0;
+ 142   4                              h1=0;
+ 143   4                              s0=0;
+ 144   4                              s1=0;
+ 145   4                              m0=0;
+ 146   4                              m1=0;}//清零
+ 147   3                              else if(keyword==14)status=3;//3状态为设置闹钟时间状态；
+ 148   3                              else
+ 149   3                              {
+ 150   4                                      PinSpeaker=FALSE;
+ 151   4                                      delay(DELAY_VALUE);
+ 152   4                                      PinSpeaker=TRUE;     //输入有错，蜂鸣器响                       
+ 153   4                              }
+ 154   3                              break;
+ 155   3                      case 2:
+ 156   3                              keyword=keyscan();
+ 157   3                              if(keyword==10&&s1<=5&&m1<=5&&(h1*10+h0)<24)
+ 158   3                                      status=0;
+ 159   3                              else if(keyword==11&&s1<=5&&m1<=5&&(h1*10+h0)<24)
+ 160   3                                      status=1;
+ 161   3                              else if(keyword<10&&keyword>=0) //输入的是数字键
+ 162   3                              {
+ 163   4                                      h1=h0;
+ 164   4                                      h0=m1;
+ 165   4                                      m1=m0;
+ 166   4                                      m0=s1;
+ 167   4                                      s1=s0;
+ 168   4                                      s0=keyword;
+ 169   4                                      updatee();                 //输入的数字键从低位起往左移
+ 170   4                              }
+ 171   3                              else
+ 172   3                              {
+ 173   4                                      PinSpeaker=FALSE;
+ 174   4                                      delay(DELAY_VALUE);
+ 175   4                                      PinSpeaker=TRUE;     //输入有错，蜂鸣器响                       
+ 176   4                              }
+ 177   3                      case 3:
+ 178   3                              keyword=keyscan();
+ 179   3                              if(keyword==10&&sets1<=5&&setm1<=5&&(seth1*10+seth0)<24)
+C51 COMPILER V6.23a  HOUR                                                                  09/08/2003 17:01:40 PAGE 4   
+
+ 180   3                                      status=0;
+ 181   3                              else if(keyword==11&&sets1<=5&&setm1<=5&&(seth1*10+seth0)<24)
+ 182   3                                      status=1;
+ 183   3                              else if(keyword<10&&keyword>=0) //输入的是数字键
+ 184   3                              {
+ 185   4                                      seth1=seth0;
+ 186   4                                      seth0=setm1;
+ 187   4                                      setm1=setm0;
+ 188   4                                      setm0=sets1;
+ 189   4                                      sets1=sets0;
+ 190   4                                      sets0=keyword;
+ 191   4                                      updatee();                 //输入的数字键从低位起往左移
+ 192   4                              }
+ 193   3                              else
+ 194   3                              {
+ 195   4                                      PinSpeaker=FALSE;
+ 196   4                                      delay(DELAY_VALUE);
+ 197   4                                      PinSpeaker=TRUE;     //输入有错，蜂鸣器响                       
+ 198   4                              }
+ 199   3                              
+ 200   3                      }       
+ 201   2              }
+ 202   1              
+ 203   1      }
+ 204          
+ 205          void initial(void)
+ 206          {
+ 207   1              P1_0=FALSE;
+ 208   1              P1_1=FALSE;
+ 209   1              P1_2=FALSE;
+ 210   1              P1_3=FALSE;                     //键盘驱动信号都设为低,避免干扰。  
+ 211   1              P0_0=TRUE;                      //发光二极管设为不亮
+ 212   1              P0_1=TRUE;                      //蜂鸣器不响
+ 213   1      }
+ 214          
+ 215          void delay(short i)     //延迟子程序，为精确计时，需要用汇编语言来做。R6R7刚好存的是i的值
+ 216          {
+ 217   1      short ii;
+ 218   1      ii=i;
+ 219   1      #pragma asm
+ 220   1      X_delay:
+ 221   1              USING   0
+ 222   1              CLR     A
+ 223   1              MOV     R4,A
+ 224   1              MOV     R5,A
+ 225   1      XC0025:
+ 226   1              CLR     C
+ 227   1              MOV     A,R5
+ 228   1              SUBB    A,R7
+ 229   1              MOV     A,R6
+ 230   1              XRL     A,#080H
+ 231   1              MOV     R0,A
+ 232   1              MOV     A,R4
+ 233   1              XRL     A,#080H
+ 234   1              SUBB    A,R0
+ 235   1              JNC     XC0028
+ 236   1              INC     R5
+ 237   1              CJNE    R5,#00H,XC0069
+ 238   1              INC     R4
+ 239   1      XC0069:
+ 240   1              SJMP    XC0025
+ 241   1      XC0028:
+C51 COMPILER V6.23a  HOUR                                                                  09/08/2003 17:01:40 PAGE 5   
+
+ 242   1      #pragma endasm
+ 243   1      }
+ 244          
+ 245          void display(unsigned char i,unsigned char num)
+ 246          {
+ 247   1              if(num >= 0 && num <=9)
+ 248   1              {switch(i)
+ 249   2              { case 0:P2= LedSelect0 | num;  
+ 250   3              //LedSelect0的高四位为选择第0个数码管的逻辑，低四位则为数码管显示的数字。
+ 251   3              break;
+ 252   3                case 1:P2= LedSelect1 | num;
+ 253   3                        //LedSelect1的高四位为选择第1个数码管的逻辑，低四位则为数码管显示的数字。
+ 254   3                        break;
+ 255   3                case 2:P2= LedSelect2 | num;
+ 256   3                        //LedSelect2的高四位为选择第2个数码管的逻辑，低四位则为数码管显示的数字。
+ 257   3                        break;
+ 258   3                case 3:P2= LedSelect3 | num;
+ 259   3                        //LedSelect3的高四位为选择第3个数码管的逻辑，低四位则为数码管显示的数字。
+ 260   3                        break;
+ 261   3                case 4:P2= LedSelect4 | num;
+ 262   3                        //LedSelect4的高四位为选择第4个数码管的逻辑，低四位则为数码管显示的数字。
+ 263   3                        break;
+ 264   3                case 5:P2= LedSelect5 | num;
+ 265   3                        //LedSelect5的高四位为选择第5个数码管的逻辑，低四位则为数码管显示的数字。
+ 266   3                        break;
+ 267   3                default:break;
+ 268   3              }
+ 269   2              }
+ 270   1      }
+ 271          
+ 272          unsigned char keyscan()
+ 273          {
+ 274   1              PinDrvKey1=TRUE;
+ 275   1              if(PinScanKey1==TRUE)
+ 276   1                      PinLamp=FALSE;
+ 277   1              PinSpeaker=FALSE;
+ 278   1              delay(DELAY_VALUE);
+ 279   1              PinLamp=TRUE;
+ 280   1              PinSpeaker=TRUE;
+ 281   1              return 1;
+ 282   1              if(PinScanKey2==TRUE)
+ 283   1                      PinLamp=FALSE;
+ 284   1              PinSpeaker=FALSE;
+ 285   1              delay(DELAY_VALUE);
+ 286   1              PinLamp=TRUE;
+ 287   1              PinSpeaker=TRUE;
+ 288   1              return 5;
+ 289   1              if(PinScanKey1==TRUE)
+ 290   1                      PinLamp=FALSE;
+ 291   1              PinSpeaker=FALSE;
+ 292   1              delay(DELAY_VALUE);
+ 293   1              PinLamp=TRUE;
+ 294   1              PinSpeaker=TRUE;
+ 295   1              return 9;
+ 296   1              if(PinScanKey1==TRUE)
+ 297   1                      PinLamp=FALSE;
+ 298   1              PinSpeaker=FALSE;
+ 299   1              delay(DELAY_VALUE);
+ 300   1              PinLamp=TRUE;
+ 301   1              PinSpeaker=TRUE;
+ 302   1              return 12;
+ 303   1              PinDrvKey1=FALSE;       //扫描第一列
+C51 COMPILER V6.23a  HOUR                                                                  09/08/2003 17:01:40 PAGE 6   
+
+ 304   1              PinDrvKey2=TRUE;
+ 305   1              if(PinScanKey1==TRUE)
+ 306   1                      PinLamp=FALSE;
+ 307   1              PinSpeaker=FALSE;
+ 308   1              delay(DELAY_VALUE);
+ 309   1              PinLamp=TRUE;
+ 310   1              PinSpeaker=TRUE;
+ 311   1              return 2;
+ 312   1              if(PinScanKey2==TRUE)
+ 313   1                      PinLamp=FALSE;
+ 314   1              PinSpeaker=FALSE;
+ 315   1              delay(DELAY_VALUE);
+ 316   1              PinLamp=TRUE;
+ 317   1              PinSpeaker=TRUE;
+ 318   1              return 6;
+ 319   1              if(PinScanKey1==TRUE)
+ 320   1                      PinLamp=FALSE;
+ 321   1              PinSpeaker=FALSE;
+ 322   1              delay(DELAY_VALUE);
+ 323   1              PinLamp=TRUE;
+ 324   1              PinSpeaker=TRUE;
+ 325   1              return 0;
+ 326   1              if(PinScanKey1==TRUE)
+ 327   1                      PinLamp=FALSE;
+ 328   1              PinSpeaker=FALSE;
+ 329   1              delay(DELAY_VALUE);
+ 330   1              PinLamp=TRUE;
+ 331   1              PinSpeaker=TRUE;
+ 332   1              return 13;
+ 333   1              PinDrvKey2=FALSE;       //扫描第二列
+ 334   1              PinDrvKey3=TRUE;
+ 335   1              if(PinScanKey1==TRUE)
+ 336   1                      PinLamp=FALSE;
+ 337   1              PinSpeaker=FALSE;
+ 338   1              delay(DELAY_VALUE);
+ 339   1              PinLamp=TRUE;
+ 340   1              PinSpeaker=TRUE;
+ 341   1              return 3;
+ 342   1              if(PinScanKey2==TRUE)
+ 343   1                      PinLamp=FALSE;
+ 344   1              PinSpeaker=FALSE;
+ 345   1              delay(DELAY_VALUE);
+ 346   1              PinLamp=TRUE;
+ 347   1              PinSpeaker=TRUE;
+ 348   1              return 7;
+ 349   1              if(PinScanKey1==TRUE)
+ 350   1                      PinLamp=FALSE;
+ 351   1              PinSpeaker=FALSE;
+ 352   1              delay(DELAY_VALUE);
+ 353   1              PinLamp=TRUE;
+ 354   1              PinSpeaker=TRUE;
+ 355   1              return 10;
+ 356   1              if(PinScanKey1==TRUE)
+ 357   1                      PinLamp=FALSE;
+ 358   1              PinSpeaker=FALSE;
+ 359   1              delay(DELAY_VALUE);
+ 360   1              PinLamp=TRUE;
+ 361   1              PinSpeaker=TRUE;
+ 362   1              return 14;
+ 363   1              PinDrvKey3=FALSE;       //扫描第三列
+ 364   1              PinDrvKey4=TRUE;
+ 365   1              if(PinScanKey1==TRUE)
+C51 COMPILER V6.23a  HOUR                                                                  09/08/2003 17:01:40 PAGE 7   
+
+ 366   1                      PinLamp=FALSE;
+ 367   1              PinSpeaker=FALSE;
+ 368   1              delay(DELAY_VALUE);
+ 369   1              PinLamp=TRUE;
+ 370   1              PinSpeaker=TRUE;
+ 371   1              return 4;
+ 372   1              if(PinScanKey2==TRUE)
+ 373   1                      PinLamp=FALSE;
+ 374   1              PinSpeaker=FALSE;
+ 375   1              delay(DELAY_VALUE);
+ 376   1              PinLamp=TRUE;
+ 377   1              PinSpeaker=TRUE;
+ 378   1              return 8;
+ 379   1              if(PinScanKey1==TRUE)
+ 380   1                      PinLamp=FALSE;
+ 381   1              PinSpeaker=FALSE;
+ 382   1              delay(DELAY_VALUE);
+ 383   1              PinLamp=TRUE;
+ 384   1              PinSpeaker=TRUE;
+ 385   1              return 11;
+ 386   1              if(PinScanKey1==TRUE)
+ 387   1                      PinLamp=FALSE;
+ 388   1              PinSpeaker=FALSE;
+ 389   1              delay(DELAY_VALUE);
+ 390   1              PinLamp=TRUE;
+ 391   1              PinSpeaker=TRUE;
+ 392   1              return 15;
+ 393   1              PinDrvKey3=FALSE;       //扫描第四列
+ 394   1              return 16;
+ 395   1      }
+ 396          
+ 397          void updatee()
+ 398          {
+ 399   1              if(s0==9)       //如果10ms位需要进位，则进入语句
+ 400   1              {
+ 401   2                      s0=0;
+ 402   2                      if(s1==5)       //如果100ms位需要进位，则进入语句
+ 403   2                      {
+ 404   3                              s1=0;
+ 405   3                              if(m0==9)       //如果1sec位需要进位，则进入语句
+ 406   3                              {
+ 407   4                                      m0=0;
+ 408   4                                      if(m1==5)       //如果10sec位需要进位，则进入语句
+ 409   4                                      {
+ 410   5                                              m1=0;
+ 411   5                                              if(h0==9&&h1<=1)
+ 412   5                                              {h0=0;
+ 413   6                                              h1+=1;}
+ 414   5                                              else if(h0==3&&h1==2)
+ 415   5                                              {h0=0;
+ 416   6                                              h1=0;}
+ 417   5                                              else h0+=1;
+ 418   5                                      }
+ 419   4                                      else m1+=1;
+ 420   4                              }
+ 421   3                              else m0+=1;
+ 422   3                      }
+ 423   2                      else s1+=1;
+ 424   2              }
+ 425   1              else s0+=1;
+ 426   1              display(0,s0);
+ 427   1              delay(DELAY_VALUE);
+C51 COMPILER V6.23a  HOUR                                                                  09/08/2003 17:01:40 PAGE 8   
+
+ 428   1              display(1,s1);
+ 429   1              delay(DELAY_VALUE);
+ 430   1              display(2,m0);
+ 431   1              delay(DELAY_VALUE);
+ 432   1              display(3,m1);
+ 433   1              delay(DELAY_VALUE);
+ 434   1              display(4,h0);
+ 435   1              delay(DELAY_VALUE);
+ 436   1              display(5,h1);
+ 437   1              delay(DELAY_VALUE); //以上语句则在数码管上显示各个数字
+ 438   1              
+ 439   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    915    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

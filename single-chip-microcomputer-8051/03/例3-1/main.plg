@@ -1,0 +1,222 @@
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(20): error C202: 'MAXLINE': undefined identifier
+.\MAIN.C(20): error C136: invalid dimension size: [0]
+.\MAIN.C(37): error C202: 'MAXLINE': undefined identifier
+compiling function.c...
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  PATTERN
+    MODULE:  function.obj (FUNCTION)
+
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  PATTERN
+    MODULE:  function.obj (FUNCTION)
+
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  PATTERN
+    MODULE:  function.obj (FUNCTION)
+
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  PATTERN
+    MODULE:  function.obj (FUNCTION)
+
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  PATTERN
+    MODULE:  function.obj (FUNCTION)
+
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(38): warning C206: 'getline': missing function-prototype
+.\MAIN.C(38): error C267: 'getline': requires ANSI-style prototype
+.\MAIN.C(39): warning C206: 'strindex': missing function-prototype
+.\MAIN.C(39): error C202: 'pattern': undefined identifier
+.\MAIN.C(49): error C231: 'getline': redefinition
+.\MAIN.C(61): error C231: 'strindex': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  007AH
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(40): warning C206: 'getline': missing function-prototype
+.\MAIN.C(40): error C267: 'getline': requires ANSI-style prototype
+.\MAIN.C(41): warning C206: 'strindex': missing function-prototype
+.\MAIN.C(41): error C202: 'pattern': undefined identifier
+compiling function.c...
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  PATTERN
+    MODULE:  function.obj (FUNCTION)
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(41): error C202: 'pattern': undefined identifier
+compiling function.c...
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(41): error C202: 'pattern': undefined identifier
+compiling function.c...
+Target not created
+Build target 'Target 1'
+compiling main.c...
+.\MAIN.C(41): error C202: 'pattern': undefined identifier
+compiling function.c...
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  PATTERN
+    MODULE:  function.obj (FUNCTION)
+
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+compiling function.c...
+linking...
+"main" - 0 Error(s), 0 Warning(s).

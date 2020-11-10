@@ -1,0 +1,199 @@
+C51 COMPILER V6.23a  WITHPC                                                                09/08/2003 17:02:34 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE WITHPC
+NO OBJECT MODULE REQUESTED
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE withPC.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #pragma SRC
+   2          #include <stdio.h>
+   3          #include <reg51.h>
+   4          #define         TRUE                    1
+   5          #define         FALSE                   0
+   6          
+   7          #define         LampComm        P0_0
+   8          //以上语句定义主机正在通讯闪灯信号
+   9          #define         SelectComm1     P0_1
+  10          #define         SelectComm2     P0_2
+  11          #define         SelectComm3     P0_3
+  12          #define         SelectComm4     P0_4
+  13          #define         SelectComm5     P0_5
+  14          #define         SelectComm6     P0_6
+  15          //以上语句定义主机通讯的从机号
+  16          #define         MACHINECOMM_OK   0x11  
+  17          //以上语句定义主机通讯传送握手信号
+  18          #define         MACHINECOMM_RET 0x88    
+  19          //以上语句定义从机回复通讯握手信号
+  20          #define MACHINECOMM_DATAHEAD    0x5a 
+  21          //以上语句定义数据包的头
+  22          #define MACHINECOMM_DATAEND     0xa5 
+  23          //以上语句定义数据包的尾
+  24          
+  25          #define         DELAY_VALUE     3
+  26          
+  27          sbit            P0_0=P0^0;
+  28          sbit            P0_1=P0^1;
+  29          sbit            P0_2=P0^2;
+  30          sbit            P0_3=P0^3;
+  31          sbit            P0_4=P0^4;
+  32          sbit            P0_5=P0^5;
+  33          sbit            P0_6=P0^6;
+  34          sbit            P0_7=P0^7;
+  35          
+  36          sbit            P1_0=P1^0;
+  37          sbit            P1_1=P1^1;
+  38          sbit            P1_2=P1^2;
+  39          sbit            P1_3=P1^3;
+  40          sbit            P1_4=P1^4;
+  41          sbit            P1_5=P1^5;
+  42          sbit            P1_6=P1^6;
+  43          sbit            P1_7=P1^7;
+  44          
+  45          sbit            P2_0=P2^0;
+  46          sbit            P2_1=P2^1;
+  47          sbit            P2_2=P2^2;
+  48          sbit            P2_3=P2^3;
+  49          sbit            P2_4=P2^4;
+  50          sbit            P2_5=P2^5;
+  51          sbit            P2_6=P2^6;
+  52          sbit            P2_7=P2^7;
+  53          
+  54          sbit            P3_2=P3^2;
+  55          sbit            P3_3=P3^3;
+C51 COMPILER V6.23a  WITHPC                                                                09/08/2003 17:02:34 PAGE 2   
+
+  56          
+  57          
+  58          bit EvRcv=FALSE;                        //是否收到串行数据的标志位
+  59          
+  60          unsigned char rcvdata=0;                //从串口存储接收的变量
+  61          void send(char *temp,int j);            //发送子程序
+  62          void initial(void);                     //初始化子程序
+  63          void delay(short i);                    //延时子程序
+  64          
+  65          void main(void)
+  66          {
+  67   1              unsigned char datacomm[6],datarecv[6];
+  68   1              unsigned char count=0,datahand;
+  69   1              datahand=MACHINECOMM_RET;
+  70   1              datacomm[0]=MACHINECOMM_DATAHEAD;
+  71   1              datacomm[5]=MACHINECOMM_DATAEND;
+  72   1              datacomm[1]='w';
+  73   1              datacomm[2]='o';
+  74   1              datacomm[3]='r';
+  75   1              datacomm[4]='k';
+  76   1              initial();
+  77   1              SelectComm6=1;//选择与PC机进行通信。
+  78   1              while(1)
+  79   1              {
+  80   2                      if(EvRcv)//如果接收到主机端发送过来的握手信号
+  81   2                      {
+  82   3                              if(rcvdata==MACHINECOMM_OK)
+  83   3                              {   LampComm=TRUE;
+  84   4                              delay(DELAY_VALUE);
+  85   4                              LampComm=FALSE;
+  86   4                              }       //指示灯闪烁            
+  87   3                              EvRcv=FALSE;
+  88   3                              break;//退出等待
+  89   3                      }
+  90   2                      send(&datahand,1);//返回一个握手信号
+  91   2                      break;
+  92   2              }
+  93   1              for(;;){while(1)
+  94   2              {if(EvRcv){
+  95   4                      datarecv[count]=rcvdata;
+  96   4                      count++;
+  97   4                      EvRcv=FALSE;
+  98   4              }
+  99   3              if(count==5)break;//如果已经收到六个数据，则认为是收到一个数据包
+ 100   3              }//接收一个数据包
+ 101   2              if(datarecv[0]==MACHINECOMM_DATAHEAD&&datarecv[5]==MACHINECOMM_DATAEND)
+ 102   2                      send(datacomm,6);//如果数据包正确，则返回一个数据包；
+ 103   2              }
+ 104   1      }
+ 105          
+ 106          void initial()          //初始化子程序
+ 107          {
+ 108   1              IP=0x10;              //定义串口为高优先级中断
+ 109   1              IE=0x97;              //允许串口、中断0、1、定时器0
+ 110   1              TCON=0x05;
+ 111   1              
+ 112   1              TMOD=0x21;            //定时器1为自动装入(auto-load)方式
+ 113   1              PCON=0;               //SMOD(PCON.7)=1时，波特率翻倍.//smod=1 (晶振为11.0592M时为0)
+ 114   1              
+ 115   1              SCON=0xD0;            //串行口工作方式 : 9位UART, 波特率可变
+ 116   1              TH1=0xf3;
+ 117   1              TL1=0xf3;             //
+C51 COMPILER V6.23a  WITHPC                                                                09/08/2003 17:02:34 PAGE 3   
+
+ 118   1              PCON=0x80|PCON; //SMOD=1;               //波特率设置 : 9600 baud(E8--24MHZ)
+ 119   1              //SMOD=0=4.8kbps
+ 120   1              //th1=tl1=fd,smod=0 ,=19.2kbps
+ 121   1              TR1=1;                //启动定时器1
+ 122   1              SelectComm1=0;
+ 123   1              SelectComm2=0;
+ 124   1              SelectComm3=0;
+ 125   1              SelectComm4=0;
+ 126   1              SelectComm5=0;
+ 127   1              SelectComm6=0;
+ 128   1      }
+ 129          
+ 130          void send(unsigned char *temp,int j)
+ 131          {
+ 132   1              int i=0;
+ 133   1              LampComm=TRUE;
+ 134   1              EA=0;
+ 135   1              for(i=0;i<=j-1;i++)     //按发送数据的长度来发送数据
+ 136   1              {
+ 137   2                      ACC=*(temp+i);
+ 138   2                      TB8=P;
+ 139   2                      SBUF=ACC;       //发送数据
+ 140   2                      while(TI==0);   //发送数据完毕时，TI会自动置高
+ 141   2                      TI=0;           //发送数据完毕，将TI清零，准备下一次发送
+ 142   2              }
+ 143   1              EA=1;
+ 144   1              LampComm=FALSE;
+ 145   1      }
+ 146          
+ 147          void Rcv_INT(void) interrupt 1
+ 148          //串口中断优先级为1
+ 149          {
+ 150   1              LampComm=TRUE;
+ 151   1              if(RI)          //如果收到数据则进行下面的操作
+ 152   1              {
+ 153   2                      ACC=SBUF;               //将串行通信的缓存中的数据存入寄存器A
+ 154   2                      if(P==RB8)
+ 155   2                      {
+ 156   3                              rcvdata=ACC;    //将寄存器A中的数据存入变量rcvdata
+ 157   3                              EvRcv=TRUE;     //将已经接收到数据的标志位置高
+ 158   3                      }
+ 159   2                      RI=0;           //RI清零
+ 160   2              }
+ 161   1              LampComm=FALSE;
+ 162   1      }
+ 163          
+ 164          //延时子程序
+ 165          void delay(int i)
+ 166          {
+ 167   1              int j=0;
+ 168   1              i=i*DELAY_VALUE;
+ 169   1              while (j<i)j++;
+ 170   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    289    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1      19
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V6.23a  WITHPC                                                                09/08/2003 17:02:34 PAGE 4   
+
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

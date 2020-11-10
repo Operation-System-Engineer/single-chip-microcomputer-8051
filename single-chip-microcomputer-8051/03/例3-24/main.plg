@@ -1,0 +1,90 @@
+Build target 'Target 1'
+compiling main.c...
+C:\KEIL\C51\INC\STDIO.H(24): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(25): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(26): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(26): warning C209: '_ungetchar': too few actual parameters
+C:\KEIL\C51\INC\STDIO.H(27): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(27): warning C209: '_putchar': too few actual parameters
+C:\KEIL\C51\INC\STDIO.H(28): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(28): warning C209: '_printf': too few actual parameters
+C:\KEIL\C51\INC\STDIO.H(29): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(29): warning C209: '_sprintf': too few actual parameters
+C:\KEIL\C51\INC\STDIO.H(29): error C141: syntax error near ','
+C:\KEIL\C51\INC\STDIO.H(30): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(30): warning C209: '_vprintf': too few actual parameters
+C:\KEIL\C51\INC\STDIO.H(30): error C141: syntax error near ')'
+C:\KEIL\C51\INC\STDIO.H(31): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(31): warning C209: '_vsprintf': too few actual parameters
+C:\KEIL\C51\INC\STDIO.H(31): error C141: syntax error near ','
+C:\KEIL\C51\INC\STDIO.H(31): error C141: syntax error near ')'
+C:\KEIL\C51\INC\STDIO.H(32): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(32): error C141: syntax error near 'char'
+C:\KEIL\C51\INC\STDIO.H(32): warning C209: '_gets': too few actual parameters
+C:\KEIL\C51\INC\STDIO.H(32): error C202: 'n': undefined identifier
+C:\KEIL\C51\INC\STDIO.H(33): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(34): error C141: syntax error near 'extern'
+C:\KEIL\C51\INC\STDIO.H(34): error C141: syntax error near ','
+C:\KEIL\C51\INC\STDIO.H(35): error C141: syntax error near 'extern'
+MAIN.C(33): error C141: syntax error near '{'
+MAIN.C(48): error C141: syntax error near 'int'
+MAIN.C(48): warning C209: '_max_arr': too few actual parameters
+MAIN.C(48): error C202: 'p1': undefined identifier
+MAIN.C(48): error C141: syntax error near 'int'
+MAIN.C(48): error C141: syntax error near 'int'
+MAIN.C(48): error C141: syntax error near ')'
+MAIN.C(53): error C202: 'p1': undefined identifier
+MAIN.C(53): error C202: 'p1': undefined identifier
+MAIN.C(54): error C202: 'n': undefined identifier
+MAIN.C(55): error C202: 'b': undefined identifier
+MAIN.C(55): error C202: 'p1': undefined identifier
+MAIN.C(55): error C202: 'p2': undefined identifier
+MAIN.C(58): error C141: syntax error near ''
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(51): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(51): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(51): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(51): error C193: '<': bad operand type
+MAIN.C(51): error C141: syntax error near ')'
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(45): warning C280: 'n': unreferenced local variable
+linking...
+Program Size: data=15.2 xdata=81 code=2864
+"main" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(51): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(51): error C193: '<=': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(45): warning C280: 'n': unreferenced local variable
+linking...
+Program Size: data=15.2 xdata=81 code=2874
+"main" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=15.2 xdata=81 code=2869
+"main" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=15.2 xdata=81 code=2869
+"main" - 0 Error(s), 0 Warning(s).

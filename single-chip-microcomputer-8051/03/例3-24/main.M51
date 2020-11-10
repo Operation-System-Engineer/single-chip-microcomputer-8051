@@ -1,0 +1,356 @@
+BL51 BANKED LINKER/LOCATER V4.23                                                        11/13/2002  23:24:53  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V4.23, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE main.obj TO main CODE (0X0000-0X3FFF) XDATA (0X0000-0X3FFF)
+
+
+MEMORY MODEL: LARGE
+
+
+INPUT MODULES INCLUDED:
+  main.obj (MAIN)
+  C:\KEIL\C51\LIB\C51L.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?SIDIV)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?ILDPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?ILDOPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?ISTPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (PRINTF)
+  C:\KEIL\C51\LIB\C51L.LIB (SCANF)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CLDPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CLDOPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CSTPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?UIDIV)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?LNEG)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?LSTPTR)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDXDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PLDIXDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PILDXDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?PSTXDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?CCASE)
+  C:\KEIL\C51\LIB\C51L.LIB (PUTCHAR)
+  C:\KEIL\C51\LIB\C51L.LIB (GETCHAR)
+  C:\KEIL\C51\LIB\C51L.LIB (UNGETC)
+  C:\KEIL\C51\LIB\C51L.LIB (ISSPACE)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?LSTIDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?LSTXDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (?C?LSTPDATA)
+  C:\KEIL\C51\LIB\C51L.LIB (_GETKEY)
+
+
+LINK MAP OF MODULE:  main (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0005H     UNIT         _DATA_GROUP_
+                    000DH     0013H                  *** GAP ***
+            BIT     0020H.0   0001H.1   UNIT         _BIT_GROUP_
+            BIT     0021H.1   0000H.1   UNIT         ?BI?GETCHAR
+                    0021H.2   0000H.6                *** GAP ***
+            IDATA   0022H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0050H     UNIT         _XDATA_GROUP_
+            XDATA   0050H     0001H     UNIT         ?XD?GETCHAR
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/13/2002  23:24:53  PAGE 2
+
+
+            CODE    0003H     0365H     UNIT         ?PR?PRINTF?PRINTF
+            CODE    0368H     0322H     UNIT         ?PR?SCANF?SCANF
+            CODE    068AH     0217H     UNIT         ?C?LIB_CODE
+            CODE    08A1H     011EH     UNIT         ?PR?MAIN?MAIN
+            CODE    09BFH     00EFH     UNIT         ?PR?_MAX_ARR?MAIN
+            CODE    0AAEH     0027H     UNIT         ?PR?PUTCHAR?PUTCHAR
+            CODE    0AD5H     001AH     UNIT         ?CO?MAIN
+            CODE    0AEFH     0014H     UNIT         ?PR?GETCHAR?GETCHAR
+            CODE    0B03H     0014H     UNIT         ?PR?_ISSPACE?ISSPACE
+            CODE    0B17H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0B23H     000AH     UNIT         ?PR?_GETKEY?_GETKEY
+            CODE    0B2DH     0008H     UNIT         ?PR?GETCHAR?UNGETCHAR
+
+
+
+OVERLAY MAP OF MODULE:   main (MAIN)
+
+
+SEGMENT                           BIT_GROUP          DATA_GROUP          XDATA_GROUP
+  +--> CALLED SEGMENT          START    LENGTH     START    LENGTH     START    LENGTH
+--------------------------------------------------------------------------------------
+?C_C51STARTUP                  -----    -----      -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN                  -----    -----      -----    -----      0000H    0022H
+  +--> ?CO?MAIN
+  +--> ?PR?SCANF?SCANF
+  +--> ?PR?_MAX_ARR?MAIN
+  +--> ?PR?PRINTF?PRINTF
+
+?PR?SCANF?SCANF                0020H.0  0000H.6    0008H    0005H      0022H    002EH
+  +--> ?PR?GETCHAR?UNGETCHAR
+  +--> ?PR?_ISSPACE?ISSPACE
+  +--> ?PR?GETCHAR?GETCHAR
+
+?PR?GETCHAR?GETCHAR            -----    -----      -----    -----      -----    -----
+  +--> ?PR?_GETKEY?_GETKEY
+  +--> ?PR?PUTCHAR?PUTCHAR
+
+?PR?_MAX_ARR?MAIN              -----    -----      -----    -----      0022H    000DH
+
+?PR?PRINTF?PRINTF              0020H.0  0001H.1    0008H    0005H      0022H    0028H
+  +--> ?PR?PUTCHAR?PUTCHAR
+
+
+
+SYMBOL TABLE OF MODULE:  main (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00B0H.4       PUBLIC        T0
+  B:00D0H.6       PUBLIC        AC
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/13/2002  23:24:53  PAGE 3
+
+
+  B:00B0H.5       PUBLIC        T1
+  B:0090H.0       PUBLIC        T2
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+  B:00C8H.6       PUBLIC        EXF2
+  B:00B0H.7       PUBLIC        RD
+  B:00A8H.4       PUBLIC        ES
+  D:00B8H         PUBLIC        IP
+  B:0098H.0       PUBLIC        RI
+  B:00B0H.2       PUBLIC        INT0
+  B:00D0H.7       PUBLIC        CY
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+  B:00B8H.4       PUBLIC        PS
+  B:0090H.1       PUBLIC        T2EX
+  B:00D0H.2       PUBLIC        OV
+  C:08A1H         PUBLIC        main
+  B:00C8H.1       PUBLIC        C_T2
+  B:00B0H.6       PUBLIC        WR
+  B:00C8H.5       PUBLIC        RCLK
+  B:00C8H.4       PUBLIC        TCLK
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:0088H.1       PUBLIC        IE0
+  B:0088H.3       PUBLIC        IE1
+  B:00C8H.0       PUBLIC        CP_RL2
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:00A8H.5       PUBLIC        ET2
+  B:0088H.7       PUBLIC        TF1
+  B:00C8H.7       PUBLIC        TF2
+  B:0098H.2       PUBLIC        RB8
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  D:008DH         PUBLIC        TH1
+  C:09BFH         PUBLIC        _max_arr
+  B:0098H.3       PUBLIC        TB8
+  B:00A8H.2       PUBLIC        EX1
+  B:0088H.2       PUBLIC        IT1
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  B:0098H.5       PUBLIC        SM2
+  B:00B8H.1       PUBLIC        PT0
+  B:00B8H.3       PUBLIC        PT1
+  B:00D0H.3       PUBLIC        RS0
+  B:00B8H.5       PUBLIC        PT2
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  B:0088H.6       PUBLIC        TR1
+  B:00C8H.2       PUBLIC        TR2
+  B:00B8H.0       PUBLIC        PX0
+  B:00B8H.2       PUBLIC        PX1
+  B:00C8H.3       PUBLIC        EXEN2
+  B:0098H.4       PUBLIC        REN
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/13/2002  23:24:53  PAGE 4
+
+
+  D:00C8H         PUBLIC        T2CON
+  B:00B0H.0       PUBLIC        RXD
+  B:00B0H.1       PUBLIC        TXD
+  B:00D0H.5       PUBLIC        F0
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  -------         DO            
+  X:0000H         SYMBOL        a
+  D:0001H         SYMBOL        ptr
+  X:0018H         SYMBOL        i
+  X:001AH         SYMBOL        j
+  X:001CH         SYMBOL        max
+  X:001EH         SYMBOL        maxi
+  X:0020H         SYMBOL        maxj
+  -------         ENDDO         
+  C:08A1H         LINE#         14
+  C:08A1H         LINE#         23
+  C:08A4H         LINE#         24
+  C:08A7H         LINE#         25
+  C:08AAH         LINE#         26
+  C:08ACH         LINE#         27
+  C:08AEH         LINE#         34
+  C:08B5H         LINE#         35
+  C:08CEH         LINE#         36
+  C:0939H         LINE#         37
+  C:093FH         LINE#         38
+  C:0965H         LINE#         39
+  C:097DH         LINE#         40
+  C:0990H         LINE#         41
+  C:09BDH         LINE#         42
+  -------         ENDPROC       MAIN
+  -------         PROC          _MAX_ARR
+  X:0022H         SYMBOL        b
+  X:0025H         SYMBOL        p1
+  X:0028H         SYMBOL        p2
+  X:002BH         SYMBOL        n
+  -------         DO            
+  X:002DH         SYMBOL        i
+  -------         ENDDO         
+  C:09BFH         LINE#         45
+  C:09CAH         LINE#         48
+  C:09CAH         LINE#         50
+  C:09F1H         LINE#         51
+  C:0A16H         LINE#         52
+  C:0AADH         LINE#         53
+  -------         ENDPROC       _MAX_ARR
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?SIDIV
+  C:068AH         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?ILDPTR
+  C:06C0H         PUBLIC        ?C?ILDPTR
+  -------         ENDMOD        ?C?ILDPTR
+
+  -------         MODULE        ?C?ILDOPTR
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/13/2002  23:24:53  PAGE 5
+
+
+  C:06EBH         PUBLIC        ?C?ILDOPTR
+  -------         ENDMOD        ?C?ILDOPTR
+
+  -------         MODULE        ?C?ISTPTR
+  C:0723H         PUBLIC        ?C?ISTPTR
+  -------         ENDMOD        ?C?ISTPTR
+
+  -------         MODULE        PRINTF
+  X:0022H         PUBLIC        ?_PRINTF517?BYTE
+  X:0022H         PUBLIC        ?_PRINTF?BYTE
+  X:0022H         PUBLIC        ?_SPRINTF517?BYTE
+  X:0022H         PUBLIC        ?_SPRINTF?BYTE
+  C:006EH         PUBLIC        _PRINTF
+  C:006EH         PUBLIC        _PRINTF517
+  C:0068H         PUBLIC        _SPRINTF
+  C:0068H         PUBLIC        _SPRINTF517
+  -------         ENDMOD        PRINTF
+
+  -------         MODULE        SCANF
+  X:0022H         PUBLIC        ?_SCANF517?BYTE
+  X:0022H         PUBLIC        ?_SCANF?BYTE
+  X:0022H         PUBLIC        ?_SSCANF517?BYTE
+  X:0022H         PUBLIC        ?_SSCANF?BYTE
+  C:03F5H         PUBLIC        _SCANF
+  C:03F5H         PUBLIC        _SCANF517
+  C:03F1H         PUBLIC        _SSCANF
+  C:03F1H         PUBLIC        _SSCANF517
+  -------         ENDMOD        SCANF
+
+  -------         MODULE        ?C?CLDPTR
+  C:0742H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CLDOPTR
+  C:075BH         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?CSTPTR
+  C:0788H         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        ?C?UIDIV
+  C:079AH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?LNEG
+  C:07EFH         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?LSTPTR
+  C:07FDH         PUBLIC        ?C?LSTPTR
+  -------         ENDMOD        ?C?LSTPTR
+
+  -------         MODULE        ?C?PLDXDATA
+  C:0817H         PUBLIC        ?C?PLDXDATA
+  -------         ENDMOD        ?C?PLDXDATA
+
+BL51 BANKED LINKER/LOCATER V4.23                                                      11/13/2002  23:24:53  PAGE 6
+
+
+  -------         MODULE        ?C?PLDIXDATA
+  C:0820H         PUBLIC        ?C?PLDIXDATA
+  -------         ENDMOD        ?C?PLDIXDATA
+
+  -------         MODULE        ?C?PILDXDATA
+  C:0837H         PUBLIC        ?C?PILDXDATA
+  -------         ENDMOD        ?C?PILDXDATA
+
+  -------         MODULE        ?C?PSTXDATA
+  C:084EH         PUBLIC        ?C?PSTXDATA
+  -------         ENDMOD        ?C?PSTXDATA
+
+  -------         MODULE        ?C?CCASE
+  C:0857H         PUBLIC        ?C?CCASE
+  -------         ENDMOD        ?C?CCASE
+
+  -------         MODULE        PUTCHAR
+  C:0AAEH         PUBLIC        _PUTCHAR
+  -------         ENDMOD        PUTCHAR
+
+  -------         MODULE        GETCHAR
+  B:0021H.1       PUBLIC        ?C?CHARLOADED
+  X:0050H         PUBLIC        ?_UNGETCHAR?BYTE
+  C:0AEFH         PUBLIC        GETCHAR
+  -------         ENDMOD        GETCHAR
+
+  -------         MODULE        UNGETC
+  C:0B2DH         PUBLIC        _UNGETCHAR
+  -------         ENDMOD        UNGETC
+
+  -------         MODULE        ISSPACE
+  C:0B03H         PUBLIC        _isspace
+  -------         ENDMOD        ISSPACE
+
+  -------         MODULE        ?C?LSTIDATA
+  C:087DH         PUBLIC        ?C?LSTIDATA
+  -------         ENDMOD        ?C?LSTIDATA
+
+  -------         MODULE        ?C?LSTXDATA
+  C:0889H         PUBLIC        ?C?LSTXDATA
+  -------         ENDMOD        ?C?LSTXDATA
+
+  -------         MODULE        ?C?LSTPDATA
+  C:0895H         PUBLIC        ?C?LSTPDATA
+  -------         ENDMOD        ?C?LSTPDATA
+
+  -------         MODULE        _GETKEY
+  C:0B23H         PUBLIC        _GETKEY
+  -------         ENDMOD        _GETKEY
+
+Program Size: data=15.2 xdata=81 code=2869
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

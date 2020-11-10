@@ -1,0 +1,114 @@
+C51 COMPILER V6.23a  MAIN                                                                  11/20/2002 14:12:44 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c LARGE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <REG52.H>                /* special function register declarations   */
+   2                                            /* for the intended 8051 derivative         */
+   3          
+   4          #include <stdlib.h>
+   5          #include <string.h>
+   6          #include <stdio.h>
+   7          
+   8          #ifdef MONITOR51                         /* Debugging with Monitor-51 needs   */
+              char code reserve [3] _at_ 0x23;         /* space for serial interrupt if     */
+              #endif                                   /* Stop Exection with Serial Intr.   */
+  11                                                   /* is enabled                        */
+  12          /*------------------------------------------------
+  13          The main C function.  Program execution starts
+  14          here after stack initialization.
+  15          ------------------------------------------------*/
+  16          void main (void) {
+  17   1      
+  18   1              int binary(char *ptr[],char *str,int n);/*查找函数声明*/
+  19   1              void insert(char *ptr[],char *str,int n,int i);/*插入函数声明*/
+  20   1              char *temp,*ptr1[6];
+  21   1              int i;
+  22   1      /*------------------------------------------------
+  23   1      Setup the serial port for 1200 baud at 16MHz.
+  24   1      ------------------------------------------------*/
+  25   1      #ifndef MONITOR51
+  26   1          SCON  = 0x50;                       /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  27   1          TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
+  28   1          TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
+  29   1          TR1   = 1;                  /* TR1:  timer 1 run                          */
+  30   1          TI    = 1;                  /* TI:   set TI to send first char of UART    */
+  31   1      #endif
+  32   1      /*------------------------------------------------
+  33   1      Note that an embedded program never exits (because
+  34   1      there is no operating system to return to).  It
+  35   1      must loop and execute forever.
+  36   1      ------------------------------------------------*/
+  37   1              init_mempool(0x1000,0x500);
+  38   1              for (i=0;i<5;i++)
+  39   1              {
+  40   2                      ptr1[i]=malloc(20);/*为指针分配地址后*/
+  41   2                      gets(ptr1[i],20);/*输入字符串*/
+  42   2              }
+  43   1              ptr1[5]=malloc(20);
+  44   1              printf("\n" ) ;
+  45   1              printf("original string:\n");
+  46   1              for(i=0;i<5;i++)/*输出指针数组各字符串*/
+  47   1                      printf("%s\n",ptr1[i]) ;
+  48   1              printf("input search string:\n");
+  49   1              temp=malloc(20) ;
+  50   1              gets(temp,20);/*输入被插字符串*/
+  51   1              i=binary(ptr1,temp,5);/*寻找插入位置i */
+  52   1              printf("i=%d\n",i) ;
+  53   1              insert(ptr1,temp,5,i) ;/*在插入位置i 处插入字符串*/
+  54   1              printf("output strings:\n");
+  55   1              for(i=0;i<6;i++)/*输出指针数组的全部字符串*/
+C51 COMPILER V6.23a  MAIN                                                                  11/20/2002 14:12:44 PAGE 2   
+
+  56   1                      printf("%s\n",ptr1[i]) ;
+  57   1          while (1) {};
+  58   1      }
+  59          
+  60          int binary(char *ptr[],char *str,int n)
+  61          {/*折半查找插入位置*/
+  62   1              int hig,low,mid;
+  63   1              low = 0 ;
+  64   1              hig= n - 1 ;
+  65   1              if (strcmp(str,ptr[0])<0) return 0;
+  66   1              /*若插入字符串比字符串数组的第0个小，则插入位置为0 */
+  67   1              if (strcmp(str,ptr[hig])>0) return n;
+  68   1              /*若插入字符串比字符串数组的最后一个大，则应插入字符串数组的尾部*/
+  69   1              while(low<=hig)
+  70   1              {
+  71   2                      mid=(low+hig)/2;
+  72   2                      if (strcmp(str,ptr[mid])<0)
+  73   2                              hig=mid-1;
+  74   2                      else if(strcmp(str,ptr[mid])>0)
+  75   2                              low=mid+1;
+  76   2                      else return(mid);/*插入字符串与字符串数组的某个字符串相同*/
+  77   2              }
+  78   1              return low;/*插入的位置在字符串数组中间*/
+  79   1      }
+  80          void insert(char *ptr[],char *str,int n,int i)
+  81          {
+  82   1              int j;
+  83   1              for (j=n;j>i;j--)/*将插入位置之后的字符串后移*/
+  84   1                      strcpy(ptr[j],ptr[j-1]) ;
+  85   1              strcpy(ptr[i],str);/*将被插字符串按字典顺序插入字符串数组*/
+  86   1      }
+  87          
+  88          
+  89          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1094    ----
+   CONSTANT SIZE    =     69    ----
+   XDATA SIZE       =   ----      49
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

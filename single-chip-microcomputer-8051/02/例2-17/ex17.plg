@@ -1,0 +1,36 @@
+Build target 'Target 1'
+Target has no object modules
+Target not created
+Build target 'Target 1'
+compiling ex17.c...
+.\EX17.C(36): error C202: 't': undefined identifier
+.\EX17.C(40): error C202: 't': undefined identifier
+.\EX17.C(42): error C202: 't': undefined identifier
+.\EX17.C(45): error C202: 't': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling ex17.c...
+.\EX17.C(36): error C202: 't': undefined identifier
+.\EX17.C(40): error C202: 't': undefined identifier
+.\EX17.C(42): error C202: 't': undefined identifier
+.\EX17.C(45): error C202: 't': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling ex17.c...
+.\EX17.C(40): warning C206: 'fabs': missing function-prototype
+.\EX17.C(40): error C267: 'fabs': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling ex17.c...
+linking...
+
+BL51 BANKED LINKER/LOCATER V4.13 - SN: Eval Version
+COPYRIGHT KEIL ELEKTRONIK GmbH 1987 - 2001
+"ex17.obj" 
+TO "ex17" 
+
+
+*** FATAL ERROR L210: I/O ERROR ON INPUT FILE:
+    EXCEPTION 0021H: PATH OR FILE NOT FOUND
+    FILE: C:\KEIL\C51\LIB\C51FPS.LIB
+Target not created

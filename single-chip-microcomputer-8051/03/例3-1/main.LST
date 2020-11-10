@@ -1,0 +1,266 @@
+C51 COMPILER V6.02  MAIN                                                                   09/15/2002 23:41:50 PAGE 1   
+
+
+C51 COMPILER V6.02, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE .\main.c LARGE DEBUG OBJECTEXTEND CODE SYMBOLS PREPRINT
+
+stmt level    source
+
+   1          #include <REG52.H>                /* special function register declarations   */
+   2                                            /* for the intended 8051 derivative         */
+   3          
+   4          #include <stdio.h>                /* prototype declarations for I/O functions */
+   5          
+   6          #include "def.h"
+   7          
+   8          #ifdef MONITOR51                         /* Debugging with Monitor-51 needs   */
+              char code reserve [3] _at_ 0x23;         /* space for serial interrupt if     */
+              #endif                                   /* Stop Exection with Serial Intr.   */
+  11                                                   /* is enabled                        */
+  12          
+  13          
+  14          										 
+  15          #define MAXLINE 100 /*最大输入行长度*/
+  16          char pattern[] = "ould"; /*要查找的模式*/
+  17          									
+  18          /*------------------------------------------------
+  19          The main C function.  Program execution starts
+  20          here after stack initialization.
+  21          ------------------------------------------------*/
+  22          void main (void) {
+  23   1      
+  24   1      	char line[MAXLINE];
+  25   1      	int found = 0;
+  26   1      /*------------------------------------------------
+  27   1      Setup the serial port for 1200 baud at 16MHz.
+  28   1      ------------------------------------------------*/
+  29   1      #ifndef MONITOR51
+  30   1          SCON  = 0x50;		        /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  31   1          TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
+  32   1          TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
+  33   1          TR1   = 1;                  /* TR1:  timer 1 run                          */
+  34   1          TI    = 1;                  /* TI:   set TI to send first char of UART    */
+  35   1      #endif
+  36   1      /*------------------------------------------------
+  37   1      Note that an embedded program never exits (because
+  38   1      there is no operating system to return to).  It
+  39   1      must loop and execute forever.
+  40   1      ------------------------------------------------*/
+  41   1      	while ( getline(line, MAXLINE) > 0 )
+  42   1      		if ( strindex(line, pattern) >= 0 ) {
+  43   2      			printf( "%s", line);
+  44   2      			found++;
+  45   2      		}
+  46   1      	printf("\n%d match found",found);
+  47   1          while (1) {};
+  48   1      }
+  49          
+  50          
+C51 COMPILER V6.02  MAIN                                                                   09/15/2002 23:41:50 PAGE 2   
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+
+             ; FUNCTION main (BEGIN)
+                                           ; SOURCE LINE # 22
+                                           ; SOURCE LINE # 25
+0000 E4                CLR     A
+0001 900000      R     MOV     DPTR,#found
+0004 F0                MOVX    @DPTR,A
+0005 A3                INC     DPTR
+0006 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 30
+0007 759850            MOV     SCON,#050H
+                                           ; SOURCE LINE # 31
+000A 438920            ORL     TMOD,#020H
+                                           ; SOURCE LINE # 32
+000D 758DDD            MOV     TH1,#0DDH
+                                           ; SOURCE LINE # 33
+0010 D28E              SETB    TR1
+                                           ; SOURCE LINE # 34
+0012 D299              SETB    TI
+0014         ?C0001:
+                                           ; SOURCE LINE # 41
+0014 7B01              MOV     R3,#01H
+0016 7A00        R     MOV     R2,#HIGH line
+0018 7900        R     MOV     R1,#LOW line
+001A 7D64              MOV     R5,#064H
+001C 7C00              MOV     R4,#00H
+001E 120000      E     LCALL   _getline
+0021 D3                SETB    C
+0022 EF                MOV     A,R7
+0023 9400              SUBB    A,#00H
+0025 EE                MOV     A,R6
+0026 6480              XRL     A,#080H
+0028 9480              SUBB    A,#080H
+002A 4046              JC      ?C0002
+                                           ; SOURCE LINE # 42
+002C 900000      E     MOV     DPTR,#?_strindex?BYTE+03H
+002F 7401              MOV     A,#01H
+0031 F0                MOVX    @DPTR,A
+0032 A3                INC     DPTR
+0033 7400        R     MOV     A,#HIGH pattern
+0035 F0                MOVX    @DPTR,A
+0036 A3                INC     DPTR
+0037 7400        R     MOV     A,#LOW pattern
+0039 F0                MOVX    @DPTR,A
+003A 7B01              MOV     R3,#01H
+003C 7A00        R     MOV     R2,#HIGH line
+003E 7900        R     MOV     R1,#LOW line
+0040 120000      E     LCALL   _strindex
+0043 C3                CLR     C
+0044 EE                MOV     A,R6
+0045 6480              XRL     A,#080H
+0047 9480              SUBB    A,#080H
+0049 40C9              JC      ?C0001
+                                           ; SOURCE LINE # 43
+004B 900000      E     MOV     DPTR,#?_printf?BYTE+03H
+004E 7401              MOV     A,#01H
+0050 F0                MOVX    @DPTR,A
+0051 A3                INC     DPTR
+0052 7400        R     MOV     A,#HIGH line
+0054 F0                MOVX    @DPTR,A
+C51 COMPILER V6.02  MAIN                                                                   09/15/2002 23:41:50 PAGE 3   
+
+0055 A3                INC     DPTR
+0056 7400        R     MOV     A,#LOW line
+0058 F0                MOVX    @DPTR,A
+0059 7BFF              MOV     R3,#0FFH
+005B 7A00        R     MOV     R2,#HIGH ?SC_0
+005D 7900        R     MOV     R1,#LOW ?SC_0
+005F 120000      E     LCALL   _printf
+                                           ; SOURCE LINE # 44
+0062 900000      R     MOV     DPTR,#found+01H
+0065 E0                MOVX    A,@DPTR
+0066 04                INC     A
+0067 F0                MOVX    @DPTR,A
+0068 70AA              JNZ     ?C0001
+006A 900000      R     MOV     DPTR,#found
+006D E0                MOVX    A,@DPTR
+006E 04                INC     A
+006F F0                MOVX    @DPTR,A
+0070         ?C0007:
+                                           ; SOURCE LINE # 45
+0070 80A2              SJMP    ?C0001
+0072         ?C0002:
+                                           ; SOURCE LINE # 46
+0072 7BFF              MOV     R3,#0FFH
+0074 7A00        R     MOV     R2,#HIGH ?SC_3
+0076 7900        R     MOV     R1,#LOW ?SC_3
+0078 900000      R     MOV     DPTR,#found
+007B E0                MOVX    A,@DPTR
+007C FF                MOV     R7,A
+007D A3                INC     DPTR
+007E E0                MOVX    A,@DPTR
+007F 900000      E     MOV     DPTR,#?_printf?BYTE+03H
+0082 CF                XCH     A,R7
+0083 F0                MOVX    @DPTR,A
+0084 A3                INC     DPTR
+0085 EF                MOV     A,R7
+0086 F0                MOVX    @DPTR,A
+0087 120000      E     LCALL   _printf
+008A         ?C0004:
+                                           ; SOURCE LINE # 47
+008A 80FE              SJMP    ?C0004
+                                           ; SOURCE LINE # 48
+             ; FUNCTION main (END)
+
+C51 COMPILER V6.02  MAIN                                                                   09/15/2002 23:41:50 PAGE 4   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+P1 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0090H  1
+pattern. . . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    0000H  5
+P3 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B0H  1
+T0 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+AC . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D6H  1
+T1 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B5H  1
+T2 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0090H  1
+EA . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AFH  1
+IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+EXF2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CEH  1
+RD . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B7H  1
+ES . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ACH  1
+IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+RI . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0098H  1
+INT0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B2H  1
+CY . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D7H  1
+TI . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0099H  1
+INT1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B3H  1
+PS . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BCH  1
+T2EX . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+OV . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D2H  1
+main . . . . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  line . . . . . . . . . . . . . . . .  AUTO     XDATA  ARRAY    0000H  100
+  found. . . . . . . . . . . . . . . .  AUTO     XDATA  INT      0064H  2
+C_T2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C9H  1
+WR . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B6H  1
+RCLK . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CDH  1
+TCLK . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CCH  1
+SCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+TMOD . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0089H  1
+TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
+IE0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0089H  1
+IE1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008BH  1
+CP_RL2 . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+ET0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A9H  1
+ET1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ABH  1
+TF0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008DH  1
+ET2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ADH  1
+TF1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008FH  1
+_getline . . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
+TF2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CFH  1
+RB8. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009AH  1
+EX0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A8H  1
+IT0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0088H  1
+TH1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008DH  1
+TB8. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009BH  1
+EX1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AAH  1
+IT1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008AH  1
+P. . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D0H  1
+SM0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+SM1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009EH  1
+SM2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009DH  1
+PT0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B9H  1
+PT1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BBH  1
+RS0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D3H  1
+_strindex. . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
+C51 COMPILER V6.02  MAIN                                                                   09/15/2002 23:41:50 PAGE 5   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+PT2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BDH  1
+TR0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008CH  1
+RS1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D4H  1
+TR1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008EH  1
+TR2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CAH  1
+PX0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B8H  1
+PX1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BAH  1
+EXEN2. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CBH  1
+REN. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009CH  1
+T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+RXD. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B0H  1
+TXD. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B1H  1
+F0 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D5H  1
+_printf. . . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
+PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    140    ----
+   CONSTANT SIZE    =     19    ----
+   XDATA SIZE       =      5     102
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

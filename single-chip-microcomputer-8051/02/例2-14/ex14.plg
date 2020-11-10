@@ -1,0 +1,13 @@
+Build target 'Target 1'
+Target has no object modules
+Target not created
+Build target 'Target 1'
+compiling ex14.c...
+.\EX14.C(57): error C141: syntax error near 'day', expected '('
+.\EX14.C(58): error C141: syntax error near 'printf'
+.\EX14.C(59): error C141: syntax error near 'else'
+Target not created
+Build target 'Target 1'
+compiling ex14.c...
+linking...
+"ex14" - 0 Error(s), 0 Warning(s).

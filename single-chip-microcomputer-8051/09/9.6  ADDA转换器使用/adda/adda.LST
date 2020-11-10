@@ -1,0 +1,150 @@
+C51 COMPILER V6.23a  ADDA                                                                  09/08/2003 17:02:21 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE ADDA
+OBJECT MODULE PLACED IN adda.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE adda.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          //#pragma SRC
+   2          #include <stdio.h>
+   3          #include <reg51.h>
+   4          
+   5          
+   6          #define         TRUE                    1
+   7          #define         FALSE                   0
+   8          
+   9          #define         DELAY_VALUE             3
+  10          
+  11          #define         ATODHIGH   0x0700       //00000111
+  12          #define         ATODLOW    0x0F00       //00001111
+  13          #define         DTOAHIGH   0x1100       //00010001
+  14          #define         DTOALOW    0x1200       //00010010
+  15          #define         ADDARATE        1.1304
+  16          #define         STEPLENGTH      3
+  17          
+  18          #define         PinLamp         P1_0            //指示灯驱动管脚
+  19          #define         PinSpeaker      P1_1            //蜂鸣器驱动管脚
+  20          #define         PinADStatus     P1_2            //AD的状态显示
+  21          #define         PinADCS         P2_4            //AD的选中信号
+  22          #define         XBYTE ((unsigned char volatile xdata*) 0)
+  23          
+  24          sbit            P0_0=P0^0;
+  25          sbit            P0_1=P0^1;
+  26          sbit            P0_2=P0^2;
+  27          sbit            P0_3=P0^3;
+  28          sbit            P0_4=P0^4;
+  29          sbit            P0_5=P0^5;
+  30          sbit            P0_6=P0^6;
+  31          sbit            P0_7=P0^7;
+  32          
+  33          sbit            P1_0=P1^0;
+  34          sbit            P1_1=P1^1;
+  35          sbit            P1_2=P1^2;
+  36          sbit            P1_3=P1^3;
+  37          sbit            P1_4=P1^4;
+  38          sbit            P1_5=P1^5;
+  39          sbit            P1_6=P1^6;
+  40          sbit            P1_7=P1^7;
+  41          
+  42          sbit            P2_0=P2^0;
+  43          sbit            P2_1=P2^1;
+  44          sbit            P2_2=P2^2;
+  45          sbit            P2_3=P2^3;
+  46          sbit            P2_4=P2^4;
+  47          sbit            P2_5=P2^5;
+  48          sbit            P2_6=P2^6;
+  49          sbit            P2_7=P2^7;
+  50          
+  51          
+  52          void initial(void);              //初始化子程序
+  53          void delay(unsigned char i);
+  54          void sendda(unsigned short ab);
+  55          unsigned short getad(void);
+C51 COMPILER V6.23a  ADDA                                                                  09/08/2003 17:02:21 PAGE 2   
+
+  56          unsigned short serdate(void);
+  57          
+  58          void main(void)
+  59          {
+  60   1      unsigned short refint=0,aint=0;
+  61   1      initial();                      
+  62   1      while(1)
+  63   1      {
+  64   2      refint=serdate();
+  65   2      aint=getad();
+  66   2      if(aint>=refint)
+  67   2      {
+  68   3              aint-=STEPLENGTH;
+  69   3              }
+  70   2      else if(aint<refint)
+  71   2      {
+  72   3              aint+=STEPLENGTH;
+  73   3              }
+  74   2      sendda(aint);
+  75   2      }
+  76   1      }
+  77          
+  78          
+  79          void initial(void)
+  80          {
+  81   1      P1_0=TRUE;                      //发光二极管设为不亮
+  82   1      P1_1=TRUE;                      //蜂鸣器不叫
+  83   1      }
+  84          
+  85          void delay(unsigned char i)     //延迟子程序
+  86          {
+  87   1        short j=0;
+  88   1        short k=0;
+  89   1        k=i*DELAY_VALUE;
+  90   1        while (j<k)j++;
+  91   1      }
+  92          
+  93          void sendda(unsigned short ab)
+  94          {
+  95   1      
+  96   1      XBYTE[DTOAHIGH]=(unsigned char)(ab/256);
+  97   1      delay(DELAY_VALUE);
+  98   1      XBYTE[DTOALOW]=ab-(unsigned short)((unsigned char)(ab/256)*256);
+  99   1      delay(DELAY_VALUE);
+ 100   1      }
+ 101          
+ 102          unsigned short getad(void)
+ 103          {
+ 104   1      unsigned short ab;
+ 105   1      unsigned char tmp1,tmp2;        
+ 106   1      PinADCS=TRUE;
+ 107   1      PinADStatus=TRUE;
+ 108   1      while(PinADStatus==TRUE);
+ 109   1      tmp1=XBYTE[ATODHIGH];
+ 110   1      tmp2=XBYTE[ATODLOW];
+ 111   1      ab=(unsigned short)tmp1*256+(unsigned short)tmp2;
+ 112   1      return ab;
+ 113   1      }
+ 114          
+ 115          unsigned short serdate(void)
+ 116          {
+ 117   1      unsigned short ab;
+C51 COMPILER V6.23a  ADDA                                                                  09/08/2003 17:02:21 PAGE 3   
+
+ 118   1      unsigned char tmp1,tmp2;
+ 119   1      tmp1 = XBYTE[DTOAHIGH];
+ 120   1      tmp2 = XBYTE[DTOALOW];
+ 121   1      ab=(unsigned short)(((float)tmp1*256+(float)tmp2)*ADDARATE);
+ 122   1      return ab;
+ 123   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    239    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,21 @@
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DELAY?MAIN
+
+Program Size: data=15.2 xdata=248 code=6759
+"main" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DELAY?MAIN
+
+Program Size: data=15.2 xdata=248 code=6759
+"main" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=15.2 xdata=248 code=6745
+"main" - 0 Error(s), 0 Warning(s).

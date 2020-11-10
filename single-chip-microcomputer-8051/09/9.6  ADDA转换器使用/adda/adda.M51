@@ -1,0 +1,273 @@
+BL51 BANKED LINKER/LOCATER V4.23                                                        09/08/2003  17:02:21  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V4.23, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE adda.obj TO adda RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  adda.obj (ADDA)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FPADD)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FCAST)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?CASTF)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?LNEG)
+
+
+LINK MAP OF MODULE:  adda (ADDA)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0006H     UNIT         _DATA_GROUP_
+            IDATA   000EH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     02CBH     UNIT         ?C?LIB_CODE
+            CODE    02CEH     004EH     UNIT         ?PR?MAIN?ADDA
+            CODE    031CH     0043H     UNIT         ?PR?SERDATE?ADDA
+            CODE    035FH     0020H     UNIT         ?PR?_DELAY?ADDA
+            CODE    037FH     001DH     UNIT         ?PR?_SENDDA?ADDA
+            CODE    039CH     001CH     UNIT         ?PR?GETAD?ADDA
+            CODE    03B8H     000CH     UNIT         ?C_C51STARTUP
+            CODE    03C4H     0005H     UNIT         ?PR?INITIAL?ADDA
+
+
+
+OVERLAY MAP OF MODULE:   adda (ADDA)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?ADDA
+
+?PR?MAIN?ADDA                  0008H    0004H
+  +--> ?PR?INITIAL?ADDA
+  +--> ?PR?SERDATE?ADDA
+  +--> ?PR?GETAD?ADDA
+  +--> ?PR?_SENDDA?ADDA
+
+?PR?SERDATE?ADDA               000CH    0001H
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:21  PAGE 2
+
+
+
+?PR?_SENDDA?ADDA               000CH    0002H
+  +--> ?PR?_DELAY?ADDA
+
+
+
+SYMBOL TABLE OF MODULE:  adda (ADDA)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ADDA
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  B:00B0H.4       PUBLIC        T0
+  B:00D0H.6       PUBLIC        AC
+  B:00B0H.5       PUBLIC        T1
+  B:00A8H.7       PUBLIC        EA
+  C:039CH         PUBLIC        getad
+  B:0080H.0       PUBLIC        P0_0
+  B:0090H.0       PUBLIC        P1_0
+  B:0080H.1       PUBLIC        P0_1
+  B:00A0H.0       PUBLIC        P2_0
+  B:0090H.1       PUBLIC        P1_1
+  B:0080H.2       PUBLIC        P0_2
+  B:00A0H.1       PUBLIC        P2_1
+  B:0090H.2       PUBLIC        P1_2
+  B:0080H.3       PUBLIC        P0_3
+  B:00A0H.2       PUBLIC        P2_2
+  B:0090H.3       PUBLIC        P1_3
+  B:0080H.4       PUBLIC        P0_4
+  B:00A0H.3       PUBLIC        P2_3
+  B:0090H.4       PUBLIC        P1_4
+  B:0080H.5       PUBLIC        P0_5
+  B:00A0H.4       PUBLIC        P2_4
+  B:0090H.5       PUBLIC        P1_5
+  B:0080H.6       PUBLIC        P0_6
+  B:00B0H.7       PUBLIC        RD
+  B:00A0H.5       PUBLIC        P2_5
+  B:0090H.6       PUBLIC        P1_6
+  B:0080H.7       PUBLIC        P0_7
+  B:00A0H.6       PUBLIC        P2_6
+  B:0090H.7       PUBLIC        P1_7
+  B:00A8H.4       PUBLIC        ES
+  B:00A0H.7       PUBLIC        P2_7
+  B:0098H.0       PUBLIC        RI
+  B:00B0H.2       PUBLIC        INT0
+  B:00D0H.7       PUBLIC        CY
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+  B:00B8H.4       PUBLIC        PS
+  B:00D0H.2       PUBLIC        OV
+  C:02CEH         PUBLIC        main
+  B:00B0H.6       PUBLIC        WR
+  B:0088H.1       PUBLIC        IE0
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:21  PAGE 3
+
+
+  B:0088H.3       PUBLIC        IE1
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:0088H.7       PUBLIC        TF1
+  B:0098H.2       PUBLIC        RB8
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  B:0098H.3       PUBLIC        TB8
+  B:00A8H.2       PUBLIC        EX1
+  B:0088H.2       PUBLIC        IT1
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  C:037FH         PUBLIC        _sendda
+  B:0098H.5       PUBLIC        SM2
+  B:00B8H.1       PUBLIC        PT0
+  B:00B8H.3       PUBLIC        PT1
+  B:00D0H.3       PUBLIC        RS0
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  B:0088H.6       PUBLIC        TR1
+  B:00B8H.0       PUBLIC        PX0
+  B:00B8H.2       PUBLIC        PX1
+  B:0098H.4       PUBLIC        REN
+  C:031CH         PUBLIC        serdate
+  C:03C4H         PUBLIC        initial
+  B:00B0H.0       PUBLIC        RXD
+  B:00B0H.1       PUBLIC        TXD
+  C:035FH         PUBLIC        _delay
+  B:00D0H.5       PUBLIC        F0
+  -------         PROC          MAIN
+  -------         DO            
+  D:0008H         SYMBOL        refint
+  D:000AH         SYMBOL        aint
+  -------         ENDDO         
+  C:02CEH         LINE#         58
+  C:02CEH         LINE#         59
+  C:02CEH         LINE#         60
+  C:02D7H         LINE#         61
+  C:02DAH         LINE#         62
+  C:02DAH         LINE#         63
+  C:02DAH         LINE#         64
+  C:02E1H         LINE#         65
+  C:02E8H         LINE#         66
+  C:02F3H         LINE#         67
+  C:02F3H         LINE#         68
+  C:02FBH         LINE#         69
+  C:02FDH         LINE#         70
+  C:0308H         LINE#         71
+  C:0308H         LINE#         72
+  C:0313H         LINE#         73
+  C:0313H         LINE#         74
+  C:031AH         LINE#         75
+  -------         ENDPROC       MAIN
+  -------         PROC          INITIAL
+  C:03C4H         LINE#         79
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:21  PAGE 4
+
+
+  C:03C4H         LINE#         80
+  C:03C4H         LINE#         81
+  C:03C6H         LINE#         82
+  C:03C8H         LINE#         83
+  -------         ENDPROC       INITIAL
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        i
+  -------         DO            
+  D:0004H         SYMBOL        j
+  D:0002H         SYMBOL        k
+  -------         ENDDO         
+  C:035FH         LINE#         85
+  C:035FH         LINE#         86
+  C:035FH         LINE#         87
+  C:0362H         LINE#         88
+  C:0362H         LINE#         89
+  C:036AH         LINE#         90
+  C:037EH         LINE#         91
+  -------         ENDPROC       _DELAY
+  -------         PROC          _SENDDA
+  D:000CH         SYMBOL        ab
+  C:037FH         LINE#         93
+  C:0383H         LINE#         94
+  C:0383H         LINE#         96
+  C:0389H         LINE#         97
+  C:038EH         LINE#         98
+  C:0397H         LINE#         99
+  -------         ENDPROC       _SENDDA
+  -------         PROC          GETAD
+  -------         DO            
+  D:0006H         SYMBOL        ab
+  D:0007H         SYMBOL        tmp1
+  D:0005H         SYMBOL        tmp2
+  -------         ENDDO         
+  C:039CH         LINE#         102
+  C:039CH         LINE#         103
+  C:039CH         LINE#         106
+  C:039EH         LINE#         107
+  C:03A0H         LINE#         108
+  C:03A3H         LINE#         109
+  C:03A8H         LINE#         110
+  C:03ADH         LINE#         111
+  C:03B7H         LINE#         112
+  C:03B7H         LINE#         113
+  -------         ENDPROC       GETAD
+  -------         PROC          SERDATE
+  -------         DO            
+  D:0006H         SYMBOL        ab
+  D:0007H         SYMBOL        tmp1
+  D:000CH         SYMBOL        tmp2
+  -------         ENDDO         
+  C:031CH         LINE#         115
+  C:031CH         LINE#         116
+  C:031CH         LINE#         119
+  C:0321H         LINE#         120
+  C:0327H         LINE#         121
+  C:035EH         LINE#         122
+BL51 BANKED LINKER/LOCATER V4.23                                                      09/08/2003  17:02:21  PAGE 5
+
+
+  C:035EH         LINE#         123
+  -------         ENDPROC       SERDATE
+  -------         ENDMOD        ADDA
+
+  -------         MODULE        ?C?FPADD
+  C:000AH         PUBLIC        ?C?FPADD
+  C:0006H         PUBLIC        ?C?FPSUB
+  -------         ENDMOD        ?C?FPADD
+
+  -------         MODULE        ?C?FPMUL
+  C:00FBH         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FCAST
+  C:020BH         PUBLIC        ?C?FCASTC
+  C:0206H         PUBLIC        ?C?FCASTI
+  C:0201H         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:023FH         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?LNEG
+  C:02C0H         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+Program Size: data=15.0 xdata=0 code=969
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

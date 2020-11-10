@@ -1,0 +1,19 @@
+Build target 'Target 1'
+compiling ex18.c...
+.\EX18.C(46): warning C206: 'fabs': missing function-prototype
+.\EX18.C(46): error C267: 'fabs': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling ex18.c...
+linking...
+
+BL51 BANKED LINKER/LOCATER V4.13 - SN: Eval Version
+COPYRIGHT KEIL ELEKTRONIK GmbH 1987 - 2001
+"ex18.obj" 
+TO "ex18" 
+
+
+*** FATAL ERROR L210: I/O ERROR ON INPUT FILE:
+    EXCEPTION 0021H: PATH OR FILE NOT FOUND
+    FILE: C:\KEIL\C51\LIB\C51FPS.LIB
+Target not created

@@ -1,0 +1,63 @@
+C51 COMPILER V6.23a  EX07                                                                  11/05/2002 20:43:27 PAGE 1   
+
+
+C51 COMPILER V6.23a, COMPILATION OF MODULE EX07
+OBJECT MODULE PLACED IN ex07.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ex07.c DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <REG52.H>                /* special function register declarations   */
+   2                                            /* for the intended 8051 derivative         */
+   3          
+   4          #include <stdio.h>                /* prototype declarations for I/O functions */
+   5          
+   6          
+   7          #ifdef MONITOR51                         /* Debugging with Monitor-51 needs   */
+              char code reserve [3] _at_ 0x23;         /* space for serial interrupt if     */
+              #endif                                   /* Stop Exection with Serial Intr.   */
+  10                                                   /* is enabled                        */
+  11          
+  12          
+  13          /*------------------------------------------------
+  14          The main C function.  Program execution starts
+  15          here after stack initialization.
+  16          ------------------------------------------------*/
+  17          void main (void) {
+  18   1      
+  19   1      char c1,c2;
+  20   1      /*------------------------------------------------
+  21   1      Setup the serial port for 1200 baud at 16MHz.
+  22   1      ------------------------------------------------*/
+  23   1      #ifndef MONITOR51
+  24   1          SCON  = 0x50;                       /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  25   1          TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
+  26   1          TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
+  27   1          TR1   = 1;                  /* TR1:  timer 1 run                          */
+  28   1          TI    = 1;                  /* TI:   set TI to send first char of UART    */
+  29   1      #endif
+  30   1      
+  31   1      /*------------------------------------------------
+  32   1      Note that an embedded program never exits (because
+  33   1      there is no operating system to return to).  It
+  34   1      must loop and execute forever.
+  35   1      ------------------------------------------------*/
+  36   1              c1 = 97 ; c2 = 98 ;
+  37   1              printf("%c %c",c1,c2);
+  38   1              while (1) {};
+  39   1      }
+  40          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     30    ----
+   CONSTANT SIZE    =      6    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

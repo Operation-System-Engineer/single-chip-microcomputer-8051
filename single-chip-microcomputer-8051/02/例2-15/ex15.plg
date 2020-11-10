@@ -1,0 +1,64 @@
+Build target 'Target 1'
+Target has no object modules
+Target not created
+Build target 'Target 1'
+compiling ex15.c...
+.\EX15.C(51): warning C206: 'sqrt': missing function-prototype
+.\EX15.C(51): error C267: 'sqrt': requires ANSI-style prototype
+.\EX15.C(54): error C100: unprintable character 0xAC skipped
+.\EX15.C(54): error C141: syntax error near '£x1'
+.\EX15.C(62): warning C206: 'abs': missing function-prototype
+Target not created
+Build target 'Target 1'
+compiling ex15.c...
+.\EX15.C(54): error C100: unprintable character 0xAC skipped
+.\EX15.C(54): error C141: syntax error near '£x1'
+Target not created
+Build target 'Target 1'
+compiling ex15.c...
+.\EX15.C(54): error C100: unprintable character 0xAC skipped
+.\EX15.C(54): error C141: syntax error near '£x1'
+Target not created
+Build target 'Target 1'
+compiling ex15.c...
+.\EX15.C(54): error C100: unprintable character 0xAC skipped
+.\EX15.C(54): error C141: syntax error near '£x1'
+Target not created
+Build target 'Target 1'
+compiling ex15.c...
+linking...
+
+BL51 BANKED LINKER/LOCATER V4.13 - SN: Eval Version
+COPYRIGHT KEIL ELEKTRONIK GmbH 1987 - 2001
+"ex15.obj" 
+TO "ex15" 
+
+
+*** FATAL ERROR L210: I/O ERROR ON INPUT FILE:
+    EXCEPTION 0021H: PATH OR FILE NOT FOUND
+    FILE: C:\KEIL\C51\LIB\C51FPS.LIB
+Target not created
+Build target 'Target 1'
+compiling ex15.c...
+.\EX15.C(54): error C100: unprintable character 0xAC skipped
+.\EX15.C(54): error C141: syntax error near '£x1'
+Target not created
+Build target 'Target 1'
+compiling ex15.c...
+.\EX15.C(54): error C100: unprintable character 0xAC skipped
+.\EX15.C(54): error C141: syntax error near '£x1'
+Target not created
+Build target 'Target 1'
+compiling ex15.c...
+linking...
+
+BL51 BANKED LINKER/LOCATER V4.13 - SN: Eval Version
+COPYRIGHT KEIL ELEKTRONIK GmbH 1987 - 2001
+"ex15.obj" 
+TO "ex15" 
+
+
+*** FATAL ERROR L210: I/O ERROR ON INPUT FILE:
+    EXCEPTION 0021H: PATH OR FILE NOT FOUND
+    FILE: C:\KEIL\C51\LIB\C51FPS.LIB
+Target not created

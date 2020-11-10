@@ -1,0 +1,836 @@
+; keyboard.SRC generated from: keyboard.c
+
+$NOMOD51
+
+NAME	KEYBOARD
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+T0	BIT	0B0H.4
+AC	BIT	0D0H.6
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+IE	DATA	0A8H
+P0_0	BIT	080H.0
+P1_0	BIT	090H.0
+P0_1	BIT	080H.1
+P2_0	BIT	0A0H.0
+P1_1	BIT	090H.1
+P0_2	BIT	080H.2
+P2_1	BIT	0A0H.1
+P1_2	BIT	090H.2
+P0_3	BIT	080H.3
+P2_2	BIT	0A0H.2
+P1_3	BIT	090H.3
+P0_4	BIT	080H.4
+P2_3	BIT	0A0H.3
+P1_4	BIT	090H.4
+P0_5	BIT	080H.5
+P2_4	BIT	0A0H.4
+P1_5	BIT	090H.5
+P0_6	BIT	080H.6
+RD	BIT	0B0H.7
+P2_5	BIT	0A0H.5
+P1_6	BIT	090H.6
+P0_7	BIT	080H.7
+P2_6	BIT	0A0H.6
+P1_7	BIT	090H.7
+ES	BIT	0A8H.4
+P2_7	BIT	0A0H.7
+IP	DATA	0B8H
+RI	BIT	098H.0
+INT0	BIT	0B0H.2
+CY	BIT	0D0H.7
+TI	BIT	098H.1
+INT1	BIT	0B0H.3
+PS	BIT	0B8H.4
+SP	DATA	081H
+OV	BIT	0D0H.2
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+TMOD	DATA	089H
+TCON	DATA	088H
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+ACC	DATA	0E0H
+ET0	BIT	0A8H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+TB8	BIT	098H.3
+EX1	BIT	0A8H.2
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+PT1	BIT	0B8H.3
+RS0	BIT	0D0H.3
+TR0	BIT	088H.4
+RS1	BIT	0D0H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?main?KEYBOARD    SEGMENT CODE 
+?DT?main?KEYBOARD    SEGMENT DATA OVERLAYABLE 
+?PR?initial?KEYBOARD SEGMENT CODE 
+?PR?keyscan?KEYBOARD SEGMENT CODE 
+?PR?_delay?KEYBOARD  SEGMENT CODE 
+	EXTRN	CODE (?C_STARTUP)
+	EXTRN	CODE (?C?IMUL)
+	PUBLIC	_delay
+	PUBLIC	keyscan
+	PUBLIC	initial
+	PUBLIC	main
+
+	RSEG  ?DT?main?KEYBOARD
+?main?BYTE:
+    keyword?040:   DS   1
+; #pragma SRC
+; #include <stdio.h>
+; #include <reg51.h>
+; 
+; 
+; #define		TRUE			1
+; #define		FALSE			0
+; 
+; #define		DELAY_VALUE		3
+; 
+; 
+; 
+; 
+; #define    	PinDrvKey1	P1_0
+; #define		PinDrvKey2	P1_1
+; #define		PinDrvKey3	P1_2
+; #define    	PinDrvKey4	P1_3		//键盘扫描的驱动线
+; 
+; 
+; #define    	PinScanKey1	P1_4
+; #define    	PinScanKey2	P1_5
+; #define    	PinScanKey3	P1_6
+; #define    	PinScanKey4	P1_7		//键盘扫描的信号获取线
+; 
+; #define		PinLamp		P0_0		//指示灯驱动管脚
+; #define		PinSpeaker	P0_1		//蜂鸣器驱动管脚
+; 
+; sbit		P0_0=P0^0;
+; sbit		P0_1=P0^1;
+; sbit		P0_2=P0^2;
+; sbit		P0_3=P0^3;
+; sbit		P0_4=P0^4;
+; sbit		P0_5=P0^5;
+; sbit		P0_6=P0^6;
+; sbit		P0_7=P0^7;
+; 
+; sbit		P1_0=P1^0;
+; sbit		P1_1=P1^1;
+; sbit		P1_2=P1^2;
+; sbit		P1_3=P1^3;
+; sbit		P1_4=P1^4;
+; sbit		P1_5=P1^5;
+; sbit		P1_6=P1^6;
+; sbit		P1_7=P1^7;
+; 
+; sbit		P2_0=P2^0;
+; sbit		P2_1=P2^1;
+; sbit		P2_2=P2^2;
+; sbit		P2_3=P2^3;
+; sbit		P2_4=P2^4;
+; sbit		P2_5=P2^5;
+; sbit		P2_6=P2^6;
+; sbit		P2_7=P2^7;
+; 
+; 
+; void initial(void);              //初始化子程序
+; void delay(short i);
+; unsigned char keyscan(void);
+; 
+; void main(void)
+
+	RSEG  ?PR?main?KEYBOARD
+main:
+	USING	0
+			; SOURCE LINE # 60
+; {
+			; SOURCE LINE # 61
+; 	
+; 	unsigned char keyword;
+; 	
+; 	initial();			//键盘驱动信号都设为低
+			; SOURCE LINE # 65
+	LCALL	initial
+; 	
+; 	keyword=keyscan();
+			; SOURCE LINE # 67
+	LCALL	keyscan
+	MOV  	keyword?040,R7
+; 	
+; }
+			; SOURCE LINE # 69
+	RET  	
+; END OF main
+
+; 
+; void initial(void)
+
+	RSEG  ?PR?initial?KEYBOARD
+initial:
+			; SOURCE LINE # 71
+; {
+			; SOURCE LINE # 72
+; 	P1_0=FALSE;
+			; SOURCE LINE # 73
+	CLR  	P1_0
+; 	P1_1=FALSE;
+			; SOURCE LINE # 74
+	CLR  	P1_1
+; 	P1_2=FALSE;
+			; SOURCE LINE # 75
+	CLR  	P1_2
+; 	P1_3=FALSE;			//键盘驱动信号都设为低
+			; SOURCE LINE # 76
+	CLR  	P1_3
+; 	P0_0=TRUE;			//发光二极管设为不亮
+			; SOURCE LINE # 77
+	SETB 	P0_0
+; 	P0_1=TRUE;			//蜂鸣器不叫
+			; SOURCE LINE # 78
+	SETB 	P0_1
+; }
+			; SOURCE LINE # 79
+	RET  	
+; END OF initial
+
+; 
+; unsigned char keyscan()
+
+	RSEG  ?PR?keyscan?KEYBOARD
+keyscan:
+	USING	0
+			; SOURCE LINE # 81
+; {
+			; SOURCE LINE # 82
+; PinDrvKey1=TRUE;
+			; SOURCE LINE # 83
+	SETB 	P1_0
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 84
+	JNB  	P1_4,?C0003
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 85
+	CLR  	P0_0
+?C0003:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 86
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 87
+	LCALL	L?0056
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 88
+	SETB 	P0_0
+; 	PinSpeaker=TRUE;
+			; SOURCE LINE # 89
+	SETB 	P0_1
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 90
+	JNB  	P1_4,?C0004
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 91
+	LCALL	L?0058
+; if(PinScanKey1==TRUE)			
+			; SOURCE LINE # 92
+	JNB  	P1_4,?C0004
+; 	return 1;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 93
+	MOV  	R7,#01H
+	RET  	
+?C0004:
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 94
+	JNB  	P1_5,?C0007
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 95
+	CLR  	P0_0
+?C0007:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 96
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 97
+	LCALL	L?0056
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 98
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 99
+	SETB 	P0_1
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 100
+	JNB  	P1_5,?C0008
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 101
+	LCALL	L?0058
+; if(PinScanKey2==TRUE)			
+			; SOURCE LINE # 102
+	JNB  	P1_5,?C0008
+; 	return 5;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 103
+	MOV  	R7,#05H
+	RET  	
+?C0008:
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 104
+	JNB  	P1_6,?C0010
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 105
+	CLR  	P0_0
+?C0010:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 106
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 107
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 108
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 109
+	SETB 	P0_1
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 110
+	JNB  	P1_6,?C0011
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 111
+	LCALL	L?0058
+; if(PinScanKey3==TRUE)			
+			; SOURCE LINE # 112
+	JNB  	P1_6,?C0011
+; 	return 9;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 113
+	MOV  	R7,#09H
+	RET  	
+?C0011:
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 114
+	JNB  	P1_7,?C0013
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 115
+	CLR  	P0_0
+?C0013:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 116
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 117
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 118
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 119
+	SETB 	P0_1
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 120
+	JNB  	P1_5,?C0014
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 121
+	LCALL	L?0058
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 122
+	JNB  	P1_5,?C0014
+; 	return 12;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 123
+	MOV  	R7,#0CH
+	RET  	
+?C0014:
+; PinDrvKey1=FALSE;				//以上语句扫描第一列
+			; SOURCE LINE # 124
+	CLR  	P1_0
+; PinDrvKey2=TRUE;
+			; SOURCE LINE # 125
+	SETB 	P1_1
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 126
+	JNB  	P1_4,?C0016
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 127
+	CLR  	P0_0
+?C0016:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 128
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 129
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 130
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 131
+	SETB 	P0_1
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 132
+	JNB  	P1_4,?C0017
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 133
+	LCALL	L?0058
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 134
+	JNB  	P1_4,?C0017
+; 	return 2;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 135
+	MOV  	R7,#02H
+	RET  	
+?C0017:
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 136
+	JNB  	P1_5,?C0019
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 137
+	CLR  	P0_0
+?C0019:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 138
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 139
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 140
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 141
+	SETB 	P0_1
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 142
+	JNB  	P1_5,?C0020
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 143
+	LCALL	L?0058
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 144
+	JNB  	P1_5,?C0020
+; 	return 6;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 145
+	MOV  	R7,#06H
+	RET  	
+?C0020:
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 146
+	JNB  	P1_6,?C0022
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 147
+	CLR  	P0_0
+?C0022:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 148
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 149
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 150
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 151
+	SETB 	P0_1
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 152
+	JNB  	P1_6,?C0023
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 153
+	LCALL	L?0058
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 154
+	JNB  	P1_6,?C0023
+; 	return 0;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 155
+	MOV  	R7,#00H
+	RET  	
+?C0023:
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 156
+	JNB  	P1_7,?C0025
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 157
+	CLR  	P0_0
+?C0025:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 158
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 159
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 160
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 161
+	SETB 	P0_1
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 162
+	JNB  	P1_7,?C0026
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 163
+	LCALL	L?0058
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 164
+	JNB  	P1_7,?C0026
+; 	return 13;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 165
+	MOV  	R7,#0DH
+	RET  	
+?C0026:
+; PinDrvKey2=FALSE;				//以上语句扫描第二列
+			; SOURCE LINE # 166
+	CLR  	P1_1
+; PinDrvKey3=TRUE;
+			; SOURCE LINE # 167
+	SETB 	P1_2
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 168
+	JNB  	P1_4,?C0028
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 169
+	CLR  	P0_0
+?C0028:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 170
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 171
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 172
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 173
+	SETB 	P0_1
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 174
+	JNB  	P1_4,?C0029
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 175
+	LCALL	L?0058
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 176
+	JNB  	P1_4,?C0029
+; 	return 3;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 177
+	MOV  	R7,#03H
+	RET  	
+?C0029:
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 178
+	JNB  	P1_5,?C0031
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 179
+	CLR  	P0_0
+?C0031:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 180
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 181
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 182
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 183
+	SETB 	P0_1
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 184
+	JNB  	P1_5,?C0032
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 185
+	LCALL	L?0058
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 186
+	JNB  	P1_5,?C0032
+; 	return 7;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 187
+	MOV  	R7,#07H
+	RET  	
+?C0032:
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 188
+	JNB  	P1_6,?C0034
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 189
+	CLR  	P0_0
+?C0034:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 190
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 191
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 192
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 193
+	SETB 	P0_1
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 194
+	JNB  	P1_6,?C0035
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 195
+	LCALL	L?0058
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 196
+	JNB  	P1_6,?C0035
+; 	return 10;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 197
+	MOV  	R7,#0AH
+	RET  	
+?C0035:
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 198
+	JNB  	P1_7,?C0037
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 199
+	CLR  	P0_0
+?C0037:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 200
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 201
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 202
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 203
+	SETB 	P0_1
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 204
+	JNB  	P1_7,?C0038
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 205
+	LCALL	L?0058
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 206
+	JNB  	P1_7,?C0038
+; 	return 14;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 207
+	MOV  	R7,#0EH
+	RET  	
+?C0038:
+; PinDrvKey3=FALSE;				//以上语句扫描第三列
+			; SOURCE LINE # 208
+	CLR  	P1_2
+; PinDrvKey4=TRUE;
+			; SOURCE LINE # 209
+	SETB 	P1_3
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 210
+	JNB  	P1_7,?C0040
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 211
+	CLR  	P0_0
+?C0040:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 212
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 213
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 214
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 215
+	SETB 	P0_1
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 216
+	JNB  	P1_4,?C0041
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 217
+	LCALL	L?0058
+; if(PinScanKey1==TRUE)
+			; SOURCE LINE # 218
+	JNB  	P1_4,?C0041
+; 	return 4;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 219
+	MOV  	R7,#04H
+	RET  	
+?C0041:
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 220
+	JNB  	P1_5,?C0043
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 221
+	CLR  	P0_0
+?C0043:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 222
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 223
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 224
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 225
+	SETB 	P0_1
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 226
+	JNB  	P1_5,?C0044
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 227
+	LCALL	L?0058
+; if(PinScanKey2==TRUE)
+			; SOURCE LINE # 228
+	JNB  	P1_5,?C0044
+; 	return 8;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 229
+	MOV  	R7,#08H
+	RET  	
+?C0044:
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 230
+	JNB  	P1_6,?C0046
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 231
+	CLR  	P0_0
+?C0046:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 232
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 233
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 234
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 235
+	SETB 	P0_1
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 236
+	JNB  	P1_6,?C0047
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 237
+	LCALL	L?0058
+; if(PinScanKey3==TRUE)
+			; SOURCE LINE # 238
+	JNB  	P1_6,?C0047
+; 	return 11;}					//确认确实有按键信号，返回键值
+			; SOURCE LINE # 239
+	MOV  	R7,#0BH
+	RET  	
+?C0047:
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 240
+	JNB  	P1_7,?C0049
+; 	PinLamp=FALSE;
+			; SOURCE LINE # 241
+	CLR  	P0_0
+?C0049:
+; 	PinSpeaker=FALSE;
+			; SOURCE LINE # 242
+; 	delay(DELAY_VALUE);		//如果判断有信号，则延时一次
+			; SOURCE LINE # 243
+	LCALL	L?0057
+; 	PinLamp=TRUE;
+			; SOURCE LINE # 244
+	SETB 	P0_0
+; 	PinSpeaker=TRUE; 
+			; SOURCE LINE # 245
+	SETB 	P0_1
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 246
+	JNB  	P1_7,?C0050
+; { delay(DELAY_VALUE);			//假如判断还有信号，则再延时
+			; SOURCE LINE # 247
+	LCALL	L?0058
+; if(PinScanKey4==TRUE)
+			; SOURCE LINE # 248
+	JNB  	P1_7,?C0050
+; 	return 15;}					//假如判断还有信号，则再延时
+			; SOURCE LINE # 249
+	MOV  	R7,#0FH
+	RET  	
+?C0050:
+; PinDrvKey3=FALSE;				//以上语句扫描第四列
+			; SOURCE LINE # 250
+	CLR  	P1_2
+; return 16;
+			; SOURCE LINE # 251
+	MOV  	R7,#010H
+; }
+			; SOURCE LINE # 252
+?C0006:
+	RET  	
+; END OF keyscan
+
+; 
+; 
+; void delay(short i)
+
+	RSEG  ?PR?_delay?KEYBOARD
+L?0056:
+	USING	0
+L?0057:
+	CLR  	P0_1
+L?0058:
+	MOV  	R7,#03H
+	MOV  	R6,#00H
+_delay:
+	USING	0
+			; SOURCE LINE # 255
+;---- Variable 'i?341' assigned to Register 'R6/R7' ----
+; {
+			; SOURCE LINE # 256
+; 	int j=0;
+			; SOURCE LINE # 257
+;---- Variable 'j?342' assigned to Register 'R2/R3' ----
+	CLR  	A
+	MOV  	R3,A
+	MOV  	R2,A
+; 	int k=0;
+			; SOURCE LINE # 258
+;---- Variable 'k?343' assigned to Register 'R4/R5' ----
+	MOV  	R4,A
+; 	k=i*DELAY_VALUE;
+			; SOURCE LINE # 259
+	MOV  	R5,#03H
+	LCALL	?C?IMUL
+	MOV  	R4,AR6
+	MOV  	R5,AR7
+?C0052:
+; 	while (j<k)j++;
+			; SOURCE LINE # 260
+	CLR  	C
+	MOV  	A,R3
+	SUBB 	A,R5
+	MOV  	A,R4
+	XRL  	A,#080H
+	MOV  	R0,A
+	MOV  	A,R2
+	XRL  	A,#080H
+	SUBB 	A,R0
+	JNC  	?C0054
+	INC  	R3
+	CJNE 	R3,#00H,?C0055
+	INC  	R2
+?C0055:
+	SJMP 	?C0052
+; }
+			; SOURCE LINE # 261
+?C0054:
+	RET  	
+; END OF _delay
+
+	END

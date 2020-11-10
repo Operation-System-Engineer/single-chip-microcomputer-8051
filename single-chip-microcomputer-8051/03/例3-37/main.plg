@@ -1,0 +1,16 @@
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_INIT_MEMPOOL?INIT_MEM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?C_INITSEG
+
+Program Size: data=15.2 xdata=58 code=2948
+"main" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=15.2 xdata=58 code=3088
+"main" - 0 Error(s), 0 Warning(s).

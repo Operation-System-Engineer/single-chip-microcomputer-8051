@@ -1,0 +1,119 @@
+C51 COMPILER V6.02  MAIN                                                                   09/22/2002 23:57:13 PAGE 1   
+
+
+C51 COMPILER V6.02, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE .\main.c LARGE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <REG52.H>                /* special function register declarations   */
+   2                                            /* for the intended 8051 derivative         */
+   3          
+   4          #include <stdio.h>                /* prototype declarations for I/O functions */
+   5          #include <string.h>
+   6          #include <ctype.h>
+   7          #include <stdlib.h>
+   8          
+   9          #ifdef MONITOR51                         /* Debugging with Monitor-51 needs   */
+              char code reserve [3] _at_ 0x23;         /* space for serial interrupt if     */
+              #endif                                   /* Stop Exection with Serial Intr.   */
+  12                                                   /* is enabled                        */
+  13          #define classes 3
+  14          #define grades 30
+  15          
+  16          
+  17          
+  18          
+  19          void disp_grades(int g[ ][grades]) /*显示学生成绩*/
+  20          {
+  21   1      int t ,i ;
+  22   1      for(t=0; t<classes; ++t) {
+  23   2      printf("class # %d:\n",t + 1 ) ;
+  24   2      for(i=0;i<grades;++i)
+  25   2      printf("grade for student #%d is %d\n",i+1,g [t][i] ) ;
+  26   2      }
+  27   1      }
+  28          int get_grades(int num)
+  29          {
+  30   1      char s[80];
+  31   1      printf("enter grade for student # %d:\n",num+1) ;
+  32   1      scanf("%s",s);/*输入成绩*/
+  33   1      return(atoi(s));
+  34   1      }
+  35          
+  36          void enter_grades(int a[][grades])
+  37          {
+  38   1      int t, i;
+  39   1      for (t=0;t<classes;t++)
+  40   1      {
+  41   2      printf (" class #%d:\n",t+1);
+  42   2      for (i=0; i<grades; i++)
+  43   2      a[t][i]=get_grades(i);
+  44   2      }
+  45   1      }
+  46          
+  47          /*------------------------------------------------
+  48          The main C function.  Program execution starts
+  49          here after stack initialization.
+  50          ------------------------------------------------*/
+  51          void main (void) {
+  52   1      
+  53   1      int a[classes][grades];/*定义二维数组，每行存放一个班学生成绩 */
+  54   1      char ch;
+  55   1      /*------------------------------------------------
+C51 COMPILER V6.02  MAIN                                                                   09/22/2002 23:57:13 PAGE 2   
+
+  56   1      Setup the serial port for 1200 baud at 16MHz.
+  57   1      ------------------------------------------------*/
+  58   1      #ifndef MONITOR51
+  59   1          SCON  = 0x50;		        /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  60   1          TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
+  61   1          TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
+  62   1          TR1   = 1;                  /* TR1:  timer 1 run                          */
+  63   1          TI    = 1;                  /* TI:   set TI to send first char of UART    */
+  64   1      #endif
+  65   1      /*------------------------------------------------
+  66   1      Note that an embedded program never exits (because
+  67   1      there is no operating system to return to).  It
+  68   1      must loop and execute forever.
+  69   1      ------------------------------------------------*/
+  70   1      for( ; ;)
+  71   1      {
+  72   2      do { /*菜单显示*/
+  73   3      printf("(E)nter grades\n");
+  74   3      printf("(R)eport grades\n");
+  75   3      printf("(Q)uit\n");
+  76   3      ch=toupper(getchar()); /*将键盘输入字符转换大写*/
+  77   3      } while(ch!='E' && ch!='R' && ch!='Q');
+  78   2      switch(ch)
+  79   2      {
+  80   3      case 'E':
+  81   3      enter_grades(a);
+  82   3      break;
+  83   3      case 'R':
+  84   3      disp_grades(a);
+  85   3      break;
+  86   3      case 'Q':printf("Quit This Program");
+  87   3      while(1);
+  88   3      }
+  89   2      }
+  90   1          while (1) {};
+  91   1      }
+  92          
+  93          
+  94          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    543    ----
+   CONSTANT SIZE    =    148    ----
+   XDATA SIZE       =   ----     274
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

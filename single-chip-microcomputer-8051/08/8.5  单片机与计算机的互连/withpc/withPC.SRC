@@ -1,0 +1,602 @@
+; withPC.SRC generated from: withPC.c
+
+$NOMOD51
+
+NAME	WITHPC
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+T0	BIT	0B0H.4
+AC	BIT	0D0H.6
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+IE	DATA	0A8H
+P0_0	BIT	080H.0
+P1_0	BIT	090H.0
+P0_1	BIT	080H.1
+P2_0	BIT	0A0H.0
+P1_1	BIT	090H.1
+P0_2	BIT	080H.2
+P2_1	BIT	0A0H.1
+P1_2	BIT	090H.2
+P0_3	BIT	080H.3
+P2_2	BIT	0A0H.2
+P1_3	BIT	090H.3
+P0_4	BIT	080H.4
+P3_2	BIT	0B0H.2
+P2_3	BIT	0A0H.3
+P1_4	BIT	090H.4
+P0_5	BIT	080H.5
+P3_3	BIT	0B0H.3
+P2_4	BIT	0A0H.4
+P1_5	BIT	090H.5
+P0_6	BIT	080H.6
+RD	BIT	0B0H.7
+P2_5	BIT	0A0H.5
+P1_6	BIT	090H.6
+P0_7	BIT	080H.7
+P2_6	BIT	0A0H.6
+P1_7	BIT	090H.7
+ES	BIT	0A8H.4
+P2_7	BIT	0A0H.7
+IP	DATA	0B8H
+RI	BIT	098H.0
+INT0	BIT	0B0H.2
+CY	BIT	0D0H.7
+TI	BIT	098H.1
+INT1	BIT	0B0H.3
+PS	BIT	0B8H.4
+SP	DATA	081H
+OV	BIT	0D0H.2
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+TMOD	DATA	089H
+TCON	DATA	088H
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+ACC	DATA	0E0H
+ET0	BIT	0A8H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+TB8	BIT	098H.3
+EX1	BIT	0A8H.2
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+PT1	BIT	0B8H.3
+RS0	BIT	0D0H.3
+TR0	BIT	088H.4
+RS1	BIT	0D0H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?main?WITHPC      SEGMENT CODE 
+?DT?main?WITHPC      SEGMENT DATA OVERLAYABLE 
+?PR?initial?WITHPC   SEGMENT CODE 
+?PR?_send?WITHPC     SEGMENT CODE 
+?DT?_send?WITHPC     SEGMENT DATA OVERLAYABLE 
+?PR?Rcv_INT?WITHPC   SEGMENT CODE 
+?PR?_delay?WITHPC    SEGMENT CODE 
+?C_INITSEG           SEGMENT CODE 
+?BI?WITHPC           SEGMENT BIT 
+?DT?WITHPC           SEGMENT DATA 
+	EXTRN	CODE (?C_STARTUP)
+	EXTRN	CODE (?C?CLDOPTR)
+	EXTRN	CODE (?C?IMUL)
+	PUBLIC	rcvdata
+	PUBLIC	EvRcv
+	PUBLIC	_delay
+	PUBLIC	Rcv_INT
+	PUBLIC	_send
+	PUBLIC	initial
+	PUBLIC	main
+
+	RSEG  ?DT?_send?WITHPC
+?_send?BYTE:
+       temp?244:   DS   3
+          j?245:   DS   2
+
+	RSEG  ?DT?main?WITHPC
+?main?BYTE:
+   datacomm?040:   DS   6
+   datarecv?041:   DS   6
+      count?042:   DS   1
+   datahand?043:   DS   1
+
+	RSEG  ?BI?WITHPC
+          EvRcv:   DBIT   1
+
+	RSEG  ?DT?WITHPC
+        rcvdata:   DS   1
+
+	RSEG  ?C_INITSEG
+	DB	0C1H, EvRcv + 000H	; bit-init
+
+	DB	001H
+	DB	rcvdata
+	DB	000H
+
+; #pragma SRC
+; #include <stdio.h>
+; #include <reg51.h>
+; #define		TRUE			1
+; #define		FALSE			0
+; 
+; #define		LampComm	P0_0
+; //以上语句定义主机正在通讯闪灯信号
+; #define		SelectComm1	P0_1
+; #define		SelectComm2	P0_2
+; #define		SelectComm3	P0_3
+; #define		SelectComm4	P0_4
+; #define		SelectComm5	P0_5
+; #define		SelectComm6	P0_6
+; //以上语句定义主机通讯的从机号
+; #define 	MACHINECOMM_OK 	 0x11  
+; //以上语句定义主机通讯传送握手信号
+; #define 	MACHINECOMM_RET 0x88    
+; //以上语句定义从机回复通讯握手信号
+; #define MACHINECOMM_DATAHEAD 	0x5a 
+; //以上语句定义数据包的头
+; #define MACHINECOMM_DATAEND 	0xa5 
+; //以上语句定义数据包的尾
+; 
+; #define		DELAY_VALUE	3
+; 
+; sbit		P0_0=P0^0;
+; sbit		P0_1=P0^1;
+; sbit		P0_2=P0^2;
+; sbit		P0_3=P0^3;
+; sbit		P0_4=P0^4;
+; sbit		P0_5=P0^5;
+; sbit		P0_6=P0^6;
+; sbit		P0_7=P0^7;
+; 
+; sbit		P1_0=P1^0;
+; sbit		P1_1=P1^1;
+; sbit		P1_2=P1^2;
+; sbit		P1_3=P1^3;
+; sbit		P1_4=P1^4;
+; sbit		P1_5=P1^5;
+; sbit		P1_6=P1^6;
+; sbit		P1_7=P1^7;
+; 
+; sbit		P2_0=P2^0;
+; sbit		P2_1=P2^1;
+; sbit		P2_2=P2^2;
+; sbit		P2_3=P2^3;
+; sbit		P2_4=P2^4;
+; sbit		P2_5=P2^5;
+; sbit		P2_6=P2^6;
+; sbit		P2_7=P2^7;
+; 
+; sbit		P3_2=P3^2;
+; sbit		P3_3=P3^3;
+; 
+; 
+; bit EvRcv=FALSE;			//是否收到串行数据的标志位
+; 
+; unsigned char rcvdata=0;		//从串口存储接收的变量
+; void send(char *temp,int j);		//发送子程序
+; void initial(void);     		//初始化子程序
+; void delay(short i);			//延时子程序
+; 
+; void main(void)
+
+	RSEG  ?PR?main?WITHPC
+main:
+	USING	0
+			; SOURCE LINE # 65
+; {
+			; SOURCE LINE # 66
+; 	unsigned char datacomm[6],datarecv[6];
+; 	unsigned char count=0,datahand;
+			; SOURCE LINE # 68
+	CLR  	A
+	MOV  	count?042,A
+; 	datahand=MACHINECOMM_RET;
+			; SOURCE LINE # 69
+	MOV  	datahand?043,#088H
+; 	datacomm[0]=MACHINECOMM_DATAHEAD;
+			; SOURCE LINE # 70
+	MOV  	datacomm?040,#05AH
+; 	datacomm[5]=MACHINECOMM_DATAEND;
+			; SOURCE LINE # 71
+	MOV  	datacomm?040+05H,#0A5H
+; 	datacomm[1]='w';
+			; SOURCE LINE # 72
+	MOV  	datacomm?040+01H,#077H
+; 	datacomm[2]='o';
+			; SOURCE LINE # 73
+	MOV  	datacomm?040+02H,#06FH
+; 	datacomm[3]='r';
+			; SOURCE LINE # 74
+	MOV  	datacomm?040+03H,#072H
+; 	datacomm[4]='k';
+			; SOURCE LINE # 75
+	MOV  	datacomm?040+04H,#06BH
+; 	initial();
+			; SOURCE LINE # 76
+	LCALL	initial
+; 	SelectComm6=1;//选择与PC机进行通信。
+			; SOURCE LINE # 77
+	SETB 	P0_6
+?C0001:
+; 	while(1)
+			; SOURCE LINE # 78
+; 	{
+			; SOURCE LINE # 79
+; 		if(EvRcv)//如果接收到主机端发送过来的握手信号
+			; SOURCE LINE # 80
+	JNB  	EvRcv,?C0003
+; 		{
+			; SOURCE LINE # 81
+; 			if(rcvdata==MACHINECOMM_OK)
+			; SOURCE LINE # 82
+	MOV  	A,rcvdata
+	CJNE 	A,#011H,?C0004
+; 			{   LampComm=TRUE;
+			; SOURCE LINE # 83
+	SETB 	P0_0
+; 			delay(DELAY_VALUE);
+			; SOURCE LINE # 84
+	MOV  	R7,#03H
+	MOV  	R6,#00H
+	LCALL	_delay
+; 			LampComm=FALSE;
+			; SOURCE LINE # 85
+	CLR  	P0_0
+; 			}	//指示灯闪烁		
+			; SOURCE LINE # 86
+?C0004:
+; 			EvRcv=FALSE;
+			; SOURCE LINE # 87
+	CLR  	EvRcv
+; 			break;//退出等待
+			; SOURCE LINE # 88
+	SJMP 	?C0007
+; 		}
+			; SOURCE LINE # 89
+?C0003:
+; 		send(&datahand,1);//返回一个握手信号
+			; SOURCE LINE # 90
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (datahand?043)
+	MOV  	R1,#LOW (datahand?043)
+	MOV  	R5,#01H
+	MOV  	R4,#00H
+	LCALL	_send
+; 		break;
+			; SOURCE LINE # 91
+; 	}
+			; SOURCE LINE # 92
+; 	for(;;){while(1)
+			; SOURCE LINE # 93
+?C0007:
+; 	{if(EvRcv){
+			; SOURCE LINE # 94
+	JNB  	EvRcv,?C0009
+; 		datarecv[count]=rcvdata;
+			; SOURCE LINE # 95
+	MOV  	A,#LOW (datarecv?041)
+	ADD  	A,count?042
+	MOV  	R0,A
+	MOV  	@R0,rcvdata
+; 		count++;
+			; SOURCE LINE # 96
+	INC  	count?042
+; 		EvRcv=FALSE;
+			; SOURCE LINE # 97
+	CLR  	EvRcv
+; 	}
+			; SOURCE LINE # 98
+?C0009:
+; 	if(count==5)break;//如果已经收到六个数据，则认为是收到一个数据包
+			; SOURCE LINE # 99
+	MOV  	A,count?042
+	CJNE 	A,#05H,?C0007
+; 	}//接收一个数据包
+			; SOURCE LINE # 100
+?C0008:
+; 	if(datarecv[0]==MACHINECOMM_DATAHEAD&&datarecv[5]==MACHINECOMM_DATAEND)
+			; SOURCE LINE # 101
+	MOV  	A,datarecv?041
+	CJNE 	A,#05AH,?C0007
+	MOV  	A,datarecv?041+05H
+	CJNE 	A,#0A5H,?C0007
+; 		send(datacomm,6);//如果数据包正确，则返回一个数据包；
+			; SOURCE LINE # 102
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (datacomm?040)
+	MOV  	R1,#LOW (datacomm?040)
+	MOV  	R5,#06H
+	MOV  	R4,#00H
+	LCALL	_send
+; 	}
+			; SOURCE LINE # 103
+	SJMP 	?C0007
+; END OF main
+
+; }
+; 
+; void initial()		//初始化子程序
+
+	RSEG  ?PR?initial?WITHPC
+initial:
+			; SOURCE LINE # 106
+; {
+			; SOURCE LINE # 107
+; 	IP=0x10;              //定义串口为高优先级中断
+			; SOURCE LINE # 108
+	MOV  	IP,#010H
+; 	IE=0x97;              //允许串口、中断0、1、定时器0
+			; SOURCE LINE # 109
+	MOV  	IE,#097H
+; 	TCON=0x05;
+			; SOURCE LINE # 110
+	MOV  	TCON,#05H
+; 	
+; 	TMOD=0x21;            //定时器1为自动装入(auto-load)方式
+			; SOURCE LINE # 112
+	MOV  	TMOD,#021H
+; 	PCON=0;               //SMOD(PCON.7)=1时，波特率翻倍.//smod=1 (晶振为11.0592M时为0)
+			; SOURCE LINE # 113
+	CLR  	A
+	MOV  	PCON,A
+; 	
+; 	SCON=0xD0;            //串行口工作方式 : 9位UART, 波特率可变
+			; SOURCE LINE # 115
+	MOV  	SCON,#0D0H
+; 	TH1=0xf3;
+			; SOURCE LINE # 116
+	MOV  	TH1,#0F3H
+; 	TL1=0xf3;             //
+			; SOURCE LINE # 117
+	MOV  	TL1,#0F3H
+; 	PCON=0x80|PCON;	//SMOD=1;		//波特率设置 : 9600 baud(E8--24MHZ)
+			; SOURCE LINE # 118
+	ORL  	PCON,#080H
+; 	//SMOD=0=4.8kbps
+; 	//th1=tl1=fd,smod=0 ,=19.2kbps
+; 	TR1=1;                //启动定时器1
+			; SOURCE LINE # 121
+	SETB 	TR1
+; 	SelectComm1=0;
+			; SOURCE LINE # 122
+	CLR  	P0_1
+; 	SelectComm2=0;
+			; SOURCE LINE # 123
+	CLR  	P0_2
+; 	SelectComm3=0;
+			; SOURCE LINE # 124
+	CLR  	P0_3
+; 	SelectComm4=0;
+			; SOURCE LINE # 125
+	CLR  	P0_4
+; 	SelectComm5=0;
+			; SOURCE LINE # 126
+	CLR  	P0_5
+; 	SelectComm6=0;
+			; SOURCE LINE # 127
+	CLR  	P0_6
+; }
+			; SOURCE LINE # 128
+	RET  	
+; END OF initial
+
+; 
+; void send(unsigned char *temp,int j)
+
+	RSEG  ?PR?_send?WITHPC
+_send:
+	USING	0
+			; SOURCE LINE # 130
+	MOV  	temp?244,R3
+	MOV  	temp?244+01H,R2
+	MOV  	temp?244+02H,R1
+	MOV  	j?245,R4
+	MOV  	j?245+01H,R5
+; {
+			; SOURCE LINE # 131
+; 	int i=0;
+			; SOURCE LINE # 132
+;---- Variable 'i?246' assigned to Register 'R6/R7' ----
+	CLR  	A
+	MOV  	R7,A
+	MOV  	R6,A
+; 	LampComm=TRUE;
+			; SOURCE LINE # 133
+	SETB 	P0_0
+; 	EA=0;
+			; SOURCE LINE # 134
+	CLR  	EA
+; 	for(i=0;i<=j-1;i++)	//按发送数据的长度来发送数据
+			; SOURCE LINE # 135
+?C0014:
+	MOV  	A,j?245+01H
+	ADD  	A,#0FFH
+	MOV  	R5,A
+	MOV  	A,j?245
+	ADDC 	A,#0FFH
+	MOV  	R4,A
+	SETB 	C
+	MOV  	A,R7
+	SUBB 	A,R5
+	MOV  	A,R4
+	XRL  	A,#080H
+	MOV  	R0,A
+	MOV  	A,R6
+	XRL  	A,#080H
+	SUBB 	A,R0
+	JNC  	?C0015
+; 	{
+			; SOURCE LINE # 136
+; 		ACC=*(temp+i);
+			; SOURCE LINE # 137
+	MOV  	R3,temp?244
+	MOV  	R2,temp?244+01H
+	MOV  	R1,temp?244+02H
+	MOV  	DPL,R7
+	MOV  	DPH,R6
+	LCALL	?C?CLDOPTR
+; 		TB8=P;
+			; SOURCE LINE # 138
+	MOV  	C,P
+	MOV  	TB8,C
+; 		SBUF=ACC;	//发送数据
+			; SOURCE LINE # 139
+	MOV  	SBUF,A
+?C0017:
+; 		while(TI==0);	//发送数据完毕时，TI会自动置高
+			; SOURCE LINE # 140
+	JNB  	TI,?C0017
+?C0018:
+; 		TI=0;		//发送数据完毕，将TI清零，准备下一次发送
+			; SOURCE LINE # 141
+	CLR  	TI
+; 	}
+			; SOURCE LINE # 142
+	INC  	R7
+	CJNE 	R7,#00H,?C0026
+	INC  	R6
+?C0026:
+	SJMP 	?C0014
+?C0015:
+; 	EA=1;
+			; SOURCE LINE # 143
+	SETB 	EA
+; 	LampComm=FALSE;
+			; SOURCE LINE # 144
+	CLR  	P0_0
+; }
+			; SOURCE LINE # 145
+	RET  	
+; END OF _send
+
+CSEG	AT	0000BH
+	LJMP	Rcv_INT
+
+; 
+; void Rcv_INT(void) interrupt 1
+
+	RSEG  ?PR?Rcv_INT?WITHPC
+	USING	0
+Rcv_INT:
+	PUSH 	ACC
+	PUSH 	PSW
+			; SOURCE LINE # 147
+; //串口中断优先级为1
+; {
+; 	LampComm=TRUE;
+			; SOURCE LINE # 150
+	SETB 	P0_0
+; 	if(RI)		//如果收到数据则进行下面的操作
+			; SOURCE LINE # 151
+	JNB  	RI,?C0020
+; 	{
+			; SOURCE LINE # 152
+; 		ACC=SBUF;		//将串行通信的缓存中的数据存入寄存器A
+			; SOURCE LINE # 153
+	MOV  	A,SBUF
+; 		if(P==RB8)
+			; SOURCE LINE # 154
+	MOV  	C,P
+	JNB  	RB8,?C0027
+	CPL  	C
+?C0027:
+	JC   	?C0021
+; 		{
+			; SOURCE LINE # 155
+; 			rcvdata=ACC;	//将寄存器A中的数据存入变量rcvdata
+			; SOURCE LINE # 156
+	MOV  	rcvdata,A
+; 			EvRcv=TRUE;	//将已经接收到数据的标志位置高
+			; SOURCE LINE # 157
+	SETB 	EvRcv
+; 		}
+			; SOURCE LINE # 158
+?C0021:
+; 		RI=0;		//RI清零
+			; SOURCE LINE # 159
+	CLR  	RI
+; 	}
+			; SOURCE LINE # 160
+?C0020:
+; 	LampComm=FALSE;
+			; SOURCE LINE # 161
+	CLR  	P0_0
+; }
+			; SOURCE LINE # 162
+	POP  	PSW
+	POP  	ACC
+	RETI 	
+; END OF Rcv_INT
+
+; 
+; //延时子程序
+; void delay(int i)
+
+	RSEG  ?PR?_delay?WITHPC
+_delay:
+	USING	0
+			; SOURCE LINE # 165
+;---- Variable 'i?447' assigned to Register 'R6/R7' ----
+; {
+			; SOURCE LINE # 166
+; 	int j=0;
+			; SOURCE LINE # 167
+;---- Variable 'j?448' assigned to Register 'R2/R3' ----
+	CLR  	A
+	MOV  	R3,A
+	MOV  	R2,A
+; 	i=i*DELAY_VALUE;
+			; SOURCE LINE # 168
+	MOV  	R4,A
+	MOV  	R5,#03H
+	LCALL	?C?IMUL
+?C0023:
+; 	while (j<i)j++;
+			; SOURCE LINE # 169
+	CLR  	C
+	MOV  	A,R3
+	SUBB 	A,R7
+	MOV  	A,R6
+	XRL  	A,#080H
+	MOV  	R0,A
+	MOV  	A,R2
+	XRL  	A,#080H
+	SUBB 	A,R0
+	JNC  	?C0025
+	INC  	R3
+	CJNE 	R3,#00H,?C0028
+	INC  	R2
+?C0028:
+	SJMP 	?C0023
+; }			; SOURCE LINE # 170
+?C0025:
+	RET  	
+; END OF _delay
+
+	END

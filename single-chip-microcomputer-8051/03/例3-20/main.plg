@@ -1,0 +1,16 @@
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(44): error C141: syntax error near '='
+MAIN.C(44): error C141: syntax error near ')'
+MAIN.C(45): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(44): error C141: syntax error near ')'
+MAIN.C(45): error C193: '<': bad operand type
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=15.2 xdata=72 code=2480
+"main" - 0 Error(s), 0 Warning(s).
